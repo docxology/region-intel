@@ -115,3 +115,11 @@ and `bun run validate` is authoritative.
 `fixture-credentials.test.ts` checks the published capture tree without printing
 matched values, proves detection using a nested synthetic credential-bearing file,
 and preserves real permit-catalog parsing with sanitized browser configuration.
+
+## Regional corpus acceptance
+
+`regional-corpus.test.ts` covers complete multi-batch promotion, replay of a
+committed journal marked interrupted, real cancellation after an earlier batch
+commits, reverse rollback after a later write failure, protected roots, profile
+and source custody, public edition replay and native static code-search rendering.
+It preserves unrelated producer files and tests injected markup as literal text.

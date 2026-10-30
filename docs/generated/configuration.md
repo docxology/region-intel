@@ -60,7 +60,7 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `HOME` | [src/browser_smoke.ts:30](../../src/browser_smoke.ts#L30) | `process.env.HOME` | `"~"` |
 | `HOME` | [src/browser_smoke.ts:31](../../src/browser_smoke.ts#L31) | `process.env.HOME` | `"~"` |
 | `HOME` | [src/browser.ts:55](../../src/browser.ts#L55) | `process.env.HOME` | `""` |
-| `HOST` | [src/regional_cli.ts:179](../../src/regional_cli.ts#L179) | `process.env.HOST` | `"127.0.0.1"` |
+| `HOST` | [src/regional_cli.ts:190](../../src/regional_cli.ts#L190) | `process.env.HOST` | `"127.0.0.1"` |
 | `LIFEOS_CUSTOMIZATIONS_DIR` | [scripts/lifeos-bridge.ts:19](../../scripts/lifeos-bridge.ts#L19) | `process.env.LIFEOS_CUSTOMIZATIONS_DIR` | `join(home, ".claude", "LIFEOS", "USER", "CUSTOMIZATIONS", "SKILLS", "LocalIntelligence")` |
 | `LIFEOS_DATA_DIR` | [scripts/lifeos-bridge.ts:21](../../scripts/lifeos-bridge.ts#L21) | `process.env.LIFEOS_DATA_DIR` | `join(home, ".claude", "LIFEOS", "MEMORY", "DATA", "LocalIntelligence")` |
 | `LLM_PREFLIGHT_TIMEOUT_MS` | [src/llm/config.ts:50](../../src/llm/config.ts#L50) | `process.env.LLM_PREFLIGHT_TIMEOUT_MS` | `"5000"` |
@@ -98,7 +98,7 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `PLAYWRIGHT_EXECUTABLE_PATH` | [src/browser_smoke.ts:25](../../src/browser_smoke.ts#L25) | `process.env.PLAYWRIGHT_EXECUTABLE_PATH` | not declared at this read |
 | `PORT` | [src/browser_smoke.ts:49](../../src/browser_smoke.ts#L49) | `process.env.PORT` | `"3999"` |
 | `PORT` | [src/gui/server.ts:12](../../src/gui/server.ts#L12) | `process.env.PORT` | `"3000"` |
-| `PORT` | [src/regional_cli.ts:179](../../src/regional_cli.ts#L179) | `process.env.PORT` | `3000` |
+| `PORT` | [src/regional_cli.ts:190](../../src/regional_cli.ts#L190) | `process.env.PORT` | `3000` |
 | `PUSH_CONTACT_EMAIL` | [src/notifications/push.ts:19](../../src/notifications/push.ts#L19) | `env("PUSH_CONTACT_EMAIL")` | not declared at this read |
 | `PUSH_CONTACT_EMAIL` | [src/notifications/push.ts:49](../../src/notifications/push.ts#L49) | `env("PUSH_CONTACT_EMAIL")` | not declared at this read |
 | `PUSH_PRIVATE_KEY` | [src/notifications/push.ts:19](../../src/notifications/push.ts#L19) | `env("PUSH_PRIVATE_KEY")` | not declared at this read |
@@ -121,7 +121,7 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `REGION_ROOT` | [scripts/scheduler-plan.ts:6](../../scripts/scheduler-plan.ts#L6) | `process.env.REGION_ROOT` | `resolve(import.meta.dir, "..")` |
 | `REGION_ROOT` | [scripts/scheduler-plan.ts:13](../../scripts/scheduler-plan.ts#L13) | `process.env.REGION_ROOT` | `resolve(import.meta.dir, "..")` |
 | `REGION_ROOT` | [src/regional_cli.ts:17](../../src/regional_cli.ts#L17) | `process.env.REGION_ROOT` | not declared at this read |
-| `REGION_ROOT` | [src/regional_cli.ts:202](../../src/regional_cli.ts#L202) | `process.env.REGION_ROOT` | `process.cwd()` |
+| `REGION_ROOT` | [src/regional_cli.ts:213](../../src/regional_cli.ts#L213) | `process.env.REGION_ROOT` | `process.cwd()` |
 | `REPO_OUTPUT_DIR` | [scripts/lifeos-bridge.ts:16](../../scripts/lifeos-bridge.ts#L16) | `process.env.REPO_OUTPUT_DIR` | `outputRoot()` |
 | `RERANK_ENABLED` | [src/llm/config.ts:98](../../src/llm/config.ts#L98) | `process.env.RERANK_ENABLED` | not declared at this read |
 | `RERANK_TOP_N` | [src/llm/config.ts:101](../../src/llm/config.ts#L101) | `process.env.RERANK_TOP_N` | `"5"` |

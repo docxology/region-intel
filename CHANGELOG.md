@@ -1,5 +1,13 @@
 # Shared-platform extraction
 
+## Unreleased — regional corpus publication
+
+- Add shared source-bound corpus checks, recoverable promotion and public seed selection for thin regional deployments.
+- Compose existing bounded transactions; restore earlier batches under an independent cleanup deadline after cancellation or later failure.
+- Reject overlapping candidate/active/seed roots and protected repository destinations.
+- Publish accepted alternate-region municipal editions with static code search, download hashes and exact member/byte replay validation.
+- Exercise multi-batch and cancellation failures with real files and search markup with a native browser.
+
 ## Unreleased — captured fixture hygiene
 
 - Remove unrelated browser-map credential configuration from the MyGov offline capture.

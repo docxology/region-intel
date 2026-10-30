@@ -118,5 +118,9 @@ authoritative strict TypeScript, test, contract, and generated-output gate.
 
 `deployment.ts` validates consumer identity, policy, roots and monitor admission.
 `regional_cli.ts` owns shared command dispatch and regional acquisition/publication.
+`regional_corpus.ts` checks full source-bound editions, promotes them in bounded
+recoverable batches and seeds public code editions. Its cancellation cleanup has
+an independent deadline; candidate, active, seed and protected repository roots
+are checked before writes.
 `regional_surface.ts` projects public observations and renders regional pages.
 The package CLI requires a consumer `region.json`; importing modules never starts a process.

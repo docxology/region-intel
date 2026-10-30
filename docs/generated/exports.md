@@ -1189,8 +1189,12 @@ Qualified source exports, independent of similarly named symbols in other module
 | [src/region_config.ts:42](../../src/region_config.ts#L42) | `WatchBox` | type | `ffb63d0fa7b1351cf17171043c1c9d2dbacc1c6598398e3f35802fefd768a549` |
 | [src/region_config.ts:287](../../src/region_config.ts#L287) | `withRegionConfig` | function | `754dd1f86a4c879af19626c8f3872ccc7cd8ed9d50dfa4ced2c45beb80861ad4` |
 | [src/regional_cli.ts:8](../../src/regional_cli.ts#L8) | `runRegionalCli` | function | `192242c2b55e12cf614c1fb2dfacd42482d720766fcd7c7b16630f2ea809b0e0` |
-| [src/regional_surface.ts:16](../../src/regional_surface.ts#L16) | `regionalObservations` | function | `30b0a1596b071cee22a827b85281977ab245ff3a1057cff07990ad60aec19db7` |
-| [src/regional_surface.ts:6](../../src/regional_surface.ts#L6) | `renderRegionalSurface` | function | `9e3720b0691aaa4dffbebc3d54fb3553125f912b927240d3ca24010357d935d1` |
+| [src/regional_corpus.ts:104](../../src/regional_corpus.ts#L104) | `checkRegionalCorpus` | function | `94b14fb10039ab672e278095339c86d9e24f4825cd4e77fdf28542ef48fae8fb` |
+| [src/regional_corpus.ts:138](../../src/regional_corpus.ts#L138) | `promoteRegionalCorpus` | function | `25164903be09d82ef1e8424ce5f81d510dd614f9eeb90f6b31d9a4b72922eb73` |
+| [src/regional_corpus.ts:210](../../src/regional_corpus.ts#L210) | `regionalCorpusPublication` | function | `ea5809d01329ac84fb07addebdfff082dffc5caa98a861387a7d77b5fc6940c2` |
+| [src/regional_corpus.ts:207](../../src/regional_corpus.ts#L207) | `seedRegionalCorpus` | function | `d041cf334ed289f0a446f0bcb6be3e88cba0b6e2dacb323ac0922ef7f21e3c2d` |
+| [src/regional_surface.ts:51](../../src/regional_surface.ts#L51) | `regionalObservations` | function | `30b0a1596b071cee22a827b85281977ab245ff3a1057cff07990ad60aec19db7` |
+| [src/regional_surface.ts:6](../../src/regional_surface.ts#L6) | `renderRegionalSurface` | function | `863122a97b83054c39db127695d293e5fe7dd43fdd8c4daa26a10d24265f5e45` |
 | [src/release_checks.ts:5](../../src/release_checks.ts#L5) | `CoverageSummary` | type | `b47a4529b04d35f25088e9df301beea866b2c3064eabf16e781962ee8604b9d8` |
 | [src/release_checks.ts:8](../../src/release_checks.ts#L8) | `parseCoverageSummary` | function | `4f2ea37d99e4916c361438fdecec740a089cb19fc075e38877ff9d2b74283b9a` |
 | [src/release_checks.ts:30](../../src/release_checks.ts#L30) | `runFencedCommand` | function | `869c8e920b1b8e261b37ec87ac14c1a4680a822ec2ae26ea26ebfafa2420acce` |

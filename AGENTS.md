@@ -2,14 +2,19 @@
 
 ## What this is
 
-A Bun/TypeScript civic-intelligence platform for Crescent City, CA. It scrapes,
-verifies, exports, and queries the municipal code from ecode360.com, monitors
-20 real-time alert streams (8 core + 12 extended incl. USCG broadcasts), provides
-RAG chat via Ollama/OpenRouter + Chroma, and publishes a bounded snapshot to
-GitHub Pages at quadruplicate.org. See [README.md](README.md) for the full
-feature map. The application and checks use Bun/TypeScript. A thin Python
-adapter invokes Bun for the external manuscript renderer; it is not an
-application runtime or test runner.
+A shared Bun/TypeScript regional civic-intelligence platform. It owns provider
+adapters, acquisition/verification, custody, search/RAG, analysis, publication,
+tests, method documentation and manuscript tooling. Thin regional repositories
+select identity, sources, eligible monitors, evidence roots and operating policy
+through `region-deployment/v1`. They import the shared runner instead of copying
+implementation. See [deployment methods](docs/deployments.md).
+
+Crescent City is the retained reference preset (including the authored
+Quadruplicate GUI/Pages); Davis is an independent inland deployment. The
+architecture below describes the reference preset, not universal geographic
+coverage. Alternate regions require configured source policies and independent
+corpus/vector/output identities. All tests/application commands use Bun. The
+Python manuscript adapter only invokes the external renderer.
 
 ## Architecture
 
@@ -49,6 +54,7 @@ src/                            # Shared platform and compatibility preset
 deployment.ts                   # Strict regional deployment admission and root ownership
 regional_cli.ts                 # Shared command dispatcher for thin consumer repositories
 regional_surface.ts             # Configured public dashboard and Pages publication
+regional_corpus.ts              # Verified regional corpus promotion, seed selection and public code edition
 types.ts                        # All TypeScript interfaces
 civic_profile.ts                # Validated jurisdiction identity, fingerprints and output ownership
 region_config.ts                # Generic regional-adapter configuration (region-config/v1) + canonical fingerprint

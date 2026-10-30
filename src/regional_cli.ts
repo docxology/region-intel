@@ -33,6 +33,14 @@ export async function runRegionalCli(options: {
       } finally {process.removeListener("SIGTERM",stop);process.removeListener("SIGINT",stop);}
       return;
     }
+    if(["corpus:check","corpus:promote"].includes(command) || command==="pages:seed" && !(await import("./civic_profile.js")).isCrescentCityProfile(d.profile)) {
+      const position=rest.indexOf("--source"),source=position>=0?rest[position+1]:undefined;
+      if(rest.length && (rest.length!==2||position!==0||!source||source.startsWith("--")))throw new Error("Expected --source <consumer-relative candidate root>");
+      const corpus=await import("./regional_corpus.js");
+      if(command==="corpus:promote"&&!source)throw new Error("corpus:promote requires --source");
+      const result=command==="corpus:check"?await corpus.checkRegionalCorpus(d,source):command==="corpus:promote"?await corpus.promoteRegionalCorpus(d,source!):await corpus.seedRegionalCorpus(d,source);
+      console.log(JSON.stringify(result,null,2));return;
+    }
     if (command === "validate") {
         const manifest = await Bun.file(join(packageRoot, "package.json")).json();
         if (manifest.name !== "region-intel")
@@ -150,22 +158,25 @@ export async function runRegionalCli(options: {
         return;
     }
     if (command === "pages:export") {
-        const destination = deploymentPath(d.root, ".pages"), observations = await regionalObservations(d), html = renderRegionalSurface(d, observations);
-        const receipt = { schemaVersion: "regional-pages/v1", profile: d.profile, sources: d.config.sources, enabledMonitors: d.config.enabledMonitors, observations, htmlSha256: new Bun.CryptoHasher("sha256").update(html).digest("hex") };
+        const destination = deploymentPath(d.root, ".pages"), observations = await regionalObservations(d), corpus = await (await import("./regional_corpus.js")).regionalCorpusPublication(d), html = renderRegionalSurface(d, observations, {corpus:corpus.summary});
+        const receipt = { schemaVersion: "regional-pages/v1", profile: d.profile, sources: d.config.sources, enabledMonitors: d.config.enabledMonitors, observations, corpus:corpus.summary, htmlSha256: new Bun.CryptoHasher("sha256").update(html).digest("hex") };
         const staging = await mkdtemp(join(d.root,".pages-build-"));
         await writeTextAtomic(join(staging,"index.html"),html);
+        for(const [name,bytes] of Object.entries(corpus.files))await writeTextAtomic(join(staging,name),bytes);
         await writeTextAtomic(join(staging,"region.json"),JSON.stringify(receipt,null,2));
         await promotePublicationDirectory(staging,destination);
         return;
     }
     if (command === "pages:validate") {
-        const target = deploymentPath(d.root, rest.find(a => !a.startsWith("--")) ?? ".pages"), observations = await regionalObservations(d), expectedHtml = renderRegionalSurface(d, observations);
-        const expected = { schemaVersion: "regional-pages/v1", profile: d.profile, sources: d.config.sources, enabledMonitors: d.config.enabledMonitors, observations, htmlSha256: new Bun.CryptoHasher("sha256").update(expectedHtml).digest("hex") };
+        const target = deploymentPath(d.root, rest.find(a => !a.startsWith("--")) ?? ".pages"), observations = await regionalObservations(d), corpus=await (await import("./regional_corpus.js")).regionalCorpusPublication(d), expectedHtml = renderRegionalSurface(d, observations,{corpus:corpus.summary});
+        const expected = { schemaVersion: "regional-pages/v1", profile: d.profile, sources: d.config.sources, enabledMonitors: d.config.enabledMonitors, observations, corpus:corpus.summary, htmlSha256: new Bun.CryptoHasher("sha256").update(expectedHtml).digest("hex") };
         const entries = await readdir(target,{withFileTypes:true});
-        if(entries.length!==2 || entries.some(entry=>!entry.isFile()||entry.isSymbolicLink()||!["region.json","index.html"].includes(entry.name))) throw new Error("Unexpected regional publication member");
+        const expectedNames=["region.json","index.html",...Object.keys(corpus.files)];
+        if(entries.length!==expectedNames.length || entries.some(entry=>!entry.isFile()||entry.isSymbolicLink()||!expectedNames.includes(entry.name))) throw new Error("Unexpected regional publication member");
         const {captureArtifactBytes}=await import("./artifact_custody.js");
         const decode=(bytes:Uint8Array)=>new TextDecoder("utf-8",{fatal:true}).decode(bytes);
         const region=decode(await captureArtifactBytes(join(target,"region.json"),8*1024*1024)),html=decode(await captureArtifactBytes(join(target,"index.html"),8*1024*1024));
+        for(const [name,bytes] of Object.entries(corpus.files))if(decode(await captureArtifactBytes(join(target,name),16_000_000))!==bytes)throw new Error("Published municipal corpus differs from verified source");
         if (region !== JSON.stringify(expected, null, 2) || html !== expectedHtml)
             throw new Error("Published regional bytes differ from configured source-derived edition");
         console.log("Regional Pages exact-byte source replay passed");

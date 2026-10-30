@@ -73,7 +73,9 @@
     "test:pages-readers": "bun run tests/pages-readers.browser.ts",
     "civic:profile": "bun run src/civic_profile.ts",
     "region:config": "bun run src/region_config.ts",
-    "region": "bun run src/regional_cli.ts"
+    "region": "bun run src/regional_cli.ts",
+    "corpus:check": "bun run src/regional_cli.ts corpus:check",
+    "corpus:promote": "bun run src/regional_cli.ts corpus:promote"
   },
   "dependencies": {
     "@xmldom/xmldom": "^0.8.11",

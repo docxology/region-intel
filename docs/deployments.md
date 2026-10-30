@@ -4,8 +4,9 @@ A thin deployment contains `region.json`, configuration JSON, a pinned
 `region-intel` dependency and `scripts/region.ts`:
 
 ```ts
+import { fileURLToPath } from "node:url";
 import { runRegionalCli } from "region-intel/cli";
-await runRegionalCli({ root: new URL("../", import.meta.url).pathname, args: Bun.argv.slice(2) });
+await runRegionalCli({ root: fileURLToPath(new URL("../", import.meta.url)), args: Bun.argv.slice(2) });
 ```
 
 The versioned `region-deployment/v1` document selects `civicProfile`,
@@ -49,3 +50,38 @@ the resulting `bun.lock`. Re-run consumer acceptance for both regions and the
 shared gate for that core SHA. An upgrade must not silently reuse a data root
 bound to a different profile. No mutable branch or local `file:` dependency is
 used in published deployment manifests.
+
+## Candidate acquisition and accepted corpus publication
+
+Use a separate deployment configuration such as `region.candidate.json` whose
+output directory is a sibling of active output. Run acquisition, verification
+and export there before touching the active corpus. Interrupted candidates remain
+unaccepted; the current public seed stays intact.
+
+The shared corpus methods validate the selected profile, complete TOC/article
+membership, retained raw-source extraction custody, exact manifest/TOC/article
+hash binding and the recorded live verification planes. Promotion preserves
+unrelated producer state. Existing bounded artifact transactions are composed
+with a recoverable journal, metadata last and reverse rollback; their individual
+limits are not bypassed. Neither offline-only checks nor a fabricated report
+qualifies a source edition.
+
+A verified public code edition can be seeded and exported by the generic regional
+Pages renderer. Static search and code downloads derive from that accepted edition;
+partial candidate data is never merged into a public snapshot.
+
+From a consumer, run:
+
+```sh
+bun run corpus:check -- --source .corpus-candidates/reviewed-edition
+bun run corpus:promote -- --source .corpus-candidates/reviewed-edition
+bun run pages:seed
+bun run pages:export
+bun run pages:validate
+```
+
+Promotion rejects overlapping candidate/active/seed roots and protected source,
+configuration and Git directories. Failure restores earlier committed batches;
+cancellation cleanup uses its own 60 s deadline. An interrupted process retains a
+journal for the next promotion to recover before accepting new data. Provider access,
+legal sufficiency and complete all-page currentness remain separate evidence.
