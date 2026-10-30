@@ -109,3 +109,9 @@ and `bun run validate` is authoritative.
 ## Shared deployment acceptance
 
 `deployment.test.ts` exercises configured consumer entrypoints, exact publication replay, public DTO privacy, selected monitors and cross-region rejection using real files, subprocesses and local HTTP.
+
+## Captured credential hygiene
+
+`fixture-credentials.test.ts` checks the published capture tree without printing
+matched values, proves detection using a nested synthetic credential-bearing file,
+and preserves real permit-catalog parsing with sanitized browser configuration.

@@ -1,5 +1,11 @@
 # Shared-platform extraction
 
+## Unreleased — captured fixture hygiene
+
+- Remove unrelated browser-map credential configuration from the MyGov offline capture.
+- Add a bounded capture publication guard with a failing synthetic control; parsed permit catalog stays unchanged.
+- Current-tree removal does not revoke the upstream credential or remove historical copies.
+
 The implementation, tests, API contracts, full module documentation and
 reference manuscript moved from `crescent-city-intel` into `region-intel`.
 `region-deployment/v1` adds a shared runner with consumer-owned roots, explicit
