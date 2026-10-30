@@ -1,0 +1,3 @@
+# Captured provider bytes (including embedded marine forecast text) retain source whitespace.
+tests/fixtures/** -whitespace
+tests/nws-marine.test.ts -whitespace

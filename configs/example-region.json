@@ -1,0 +1,126 @@
+{
+  "alerts": {
+    "airQuality": {
+      "latitude": 41.7485,
+      "longitude": -124.2028,
+      "publicStationRadiusKm": 80,
+      "zip": "95531"
+    },
+    "ais": {
+      "feedUrl": "https://ais.example.invalid/locations",
+      "watchBox": {
+        "maxLat": 40.9,
+        "maxLon": -73.6,
+        "minLat": 40.4,
+        "minLon": -74.3
+      }
+    },
+    "dredging": {
+      "sitemapUrl": "https://harbor.example.invalid/sitemap.xml",
+      "windowDays": 90
+    },
+    "drought": {
+      "county": "New York",
+      "fips": "36061",
+      "state": "NY"
+    },
+    "earthquake": {
+      "latitude": 41.7485,
+      "longitude": -124.2028,
+      "minMagnitude": 4,
+      "radiusKm": 200
+    },
+    "fishing": {
+      "bulletinUrl": "https://wildlife.ca.gov/Fishing/Ocean/Regulations/Bulletins",
+      "region": "California"
+    },
+    "fuel": {
+      "seriesId": "EMM_EPM0_PTE_SNY_DPG",
+      "spikeThreshold": 0.15,
+      "state": "New York",
+      "trendWeeks": 8,
+      "url": "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=EMM_EPM0_PTE_SNY_DPG&f=W"
+    },
+    "marine": {
+      "stations": [
+        {
+          "distanceNm": 5,
+          "id": "44065",
+          "latitude": 40.37,
+          "longitude": -73.7,
+          "name": "New York Harbor"
+        }
+      ],
+      "waveHeightWarningFt": 15,
+      "waveHeightWatchFt": 10,
+      "windSpeedWarningKt": 34,
+      "windSpeedWatchKt": 22
+    },
+    "marineForecast": {
+      "productLocation": "OKX",
+      "zoneCode": "ANZ338"
+    },
+    "pacfin": {
+      "dashboardUrl": "https://reports.example.invalid/pacfin/"
+    },
+    "permits": {
+      "catalogUrl": "https://permits.example.invalid/module?module=pi"
+    },
+    "psps": {
+      "county": "New York",
+      "utility": "Con Edison"
+    },
+    "roads": {
+      "county": "New York",
+      "routes": [
+        "87",
+        "278"
+      ],
+      "textUrl": "https://511ny.org/?route="
+    },
+    "schools": {
+      "alertsUrl": "https://schools.example.invalid/news",
+      "district": "Example City Schools",
+      "fallbackUrl": "https://schools.example.invalid/alerts",
+      "websiteUrl": "https://schools.example.invalid"
+    },
+    "smoke": {
+      "box": {
+        "latMax": 42.15,
+        "latMin": 41.45,
+        "lonMax": -123.55,
+        "lonMin": -124.45
+      }
+    },
+    "tides": {
+      "highTideAlertFt": 8.5,
+      "stationId": "8518750",
+      "stationName": "The Battery, NY"
+    },
+    "tsunami": {
+      "capArea": "CA"
+    },
+    "uscg": {
+      "district": 1,
+      "listUrl": "https://www.navcen.uscg.gov/broadcast-notice-to-mariners-search-results?district=1&sector=0&date-range={START}--{END}&items_per_page=50",
+      "messageUrl": "https://www.navcen.uscg.gov/broadcast-notice-to-mariners-message?guid={GUID}",
+      "windowDays": 35
+    },
+    "weather": {
+      "latitude": 42.1,
+      "longitude": -73.2,
+      "nwsZone": "NYZ072"
+    },
+    "wildfire": {
+      "counties": [
+        "New York"
+      ],
+      "latitude": 42.1,
+      "longitude": -73.2,
+      "radiusKm": 150
+    }
+  },
+  "id": "example-region",
+  "profileId": "example-civic",
+  "schemaVersion": "region-config/v1"
+}
