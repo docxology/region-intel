@@ -17,4 +17,22 @@ jobs:
           bun-version: '1.4.2'
       - run: bun install --frozen-lockfile
       - run: bunx playwright install --with-deps chromium
-      - run: bun run validate
+      - name: Run complete qualification and retain its exit status
+        id: gate
+        shell: bash
+        run: |
+          # Regular-file capture preserves large failure output before the shell exits.
+          set +e
+          bun run validate > "$RUNNER_TEMP/region-intel-qualification.log" 2>&1
+          gate_status=$?
+          set -e
+          cat "$RUNNER_TEMP/region-intel-qualification.log"
+          exit "$gate_status"
+      - name: Retain complete qualification diagnostics
+        if: always() && (steps.gate.outcome == 'success' || steps.gate.outcome == 'failure')
+        uses: actions/upload-artifact@v7
+        with:
+          name: qualification-${{ github.sha }}
+          path: ${{ runner.temp }}/region-intel-qualification.log
+          if-no-files-found: error
+          retention-days: 7
