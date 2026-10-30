@@ -121,7 +121,7 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `REGION_ROOT` | [scripts/scheduler-plan.ts:6](../../scripts/scheduler-plan.ts#L6) | `process.env.REGION_ROOT` | `resolve(import.meta.dir, "..")` |
 | `REGION_ROOT` | [scripts/scheduler-plan.ts:13](../../scripts/scheduler-plan.ts#L13) | `process.env.REGION_ROOT` | `resolve(import.meta.dir, "..")` |
 | `REGION_ROOT` | [src/regional_cli.ts:17](../../src/regional_cli.ts#L17) | `process.env.REGION_ROOT` | not declared at this read |
-| `REGION_ROOT` | [src/regional_cli.ts:195](../../src/regional_cli.ts#L195) | `process.env.REGION_ROOT` | `process.cwd()` |
+| `REGION_ROOT` | [src/regional_cli.ts:202](../../src/regional_cli.ts#L202) | `process.env.REGION_ROOT` | `process.cwd()` |
 | `REPO_OUTPUT_DIR` | [scripts/lifeos-bridge.ts:16](../../scripts/lifeos-bridge.ts#L16) | `process.env.REPO_OUTPUT_DIR` | `outputRoot()` |
 | `RERANK_ENABLED` | [src/llm/config.ts:98](../../src/llm/config.ts#L98) | `process.env.RERANK_ENABLED` | not declared at this read |
 | `RERANK_TOP_N` | [src/llm/config.ts:101](../../src/llm/config.ts#L101) | `process.env.RERANK_TOP_N` | `"5"` |

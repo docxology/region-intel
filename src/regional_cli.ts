@@ -176,9 +176,16 @@ export async function runRegionalCli(options: {
         const { initSearch } = await import("./gui/search.js");
         await initSearch();
         const { applyMiddleware } = await import("./api/middleware.js");
-        const server = Bun.serve({ hostname: process.env.HOST ?? "127.0.0.1", port: Number(process.env.PORT ?? 3000), async fetch(request, server) { const blocked = await applyMiddleware(request, server.requestIP(request)?.address); if (blocked)
-                return blocked; if (new URL(request.url).pathname === "/")
-                return new Response(renderRegionalSurface(d, await regionalObservations(d), {localApi:true}), { headers: { "content-type": "text/html; charset=utf-8" } }); return await handleApiRoute(new URL(request.url), request) ?? new Response("Not found", { status: 404 }); } });
+        const server = Bun.serve({hostname:process.env.HOST??"127.0.0.1",port:Number(process.env.PORT??3000),async fetch(request,server){
+          const url=new URL(request.url);
+          if(url.pathname==="/") {
+            if(!["GET","HEAD"].includes(request.method))return new Response("Method not allowed",{status:405,headers:{Allow:"GET, HEAD"}});
+            return new Response(request.method==="HEAD"?null:renderRegionalSurface(d,await regionalObservations(d),{localApi:true}),{headers:{"Content-Type":"text/html; charset=utf-8","X-Content-Type-Options":"nosniff"}});
+          }
+          if(!url.pathname.startsWith("/api/"))return new Response("Not found",{status:404});
+          const blocked=await applyMiddleware(request,server.requestIP(request)?.address);if(blocked)return blocked;
+          return handleApiRoute(url,request);
+        }});
         console.log(`Regional GUI: ${server.url}`);
         return;
     }

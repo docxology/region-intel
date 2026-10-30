@@ -119,3 +119,23 @@ test("terminating a compatibility runner also terminates its GUI child", async (
   await expect(fetch(`http://127.0.0.1:${port}/api/health`)).rejects.toThrow();
  } finally {abort.abort();rmSync(root,{recursive:true,force:true});}
 },20000);
+
+test("alternate regional GUI serves HTML separately from API admission",async()=>{
+ const root=mkdtempSync(join(tmpdir(),"regional-http-")),abort=new AbortController();
+ try{
+  writeFileSync(join(root,"civic.json"),readFileSync(new URL("../configs/example-civic.json",import.meta.url)));
+  writeFileSync(join(root,"policy.json"),readFileSync(new URL("../configs/example-region.json",import.meta.url)));
+  writeFileSync(join(root,"region.json"),JSON.stringify({schemaVersion:"region-deployment/v1",civicProfile:"civic.json",regionConfig:"policy.json",outputDir:"output",seedDir:"seed",enabledMonitors:[],sources:[]}));
+  const reserve=Bun.serve({hostname:"127.0.0.1",port:0,fetch(){return new Response("reserved")}}),port=reserve.port;reserve.stop(true);
+  const cli=new URL("../src/regional_cli.ts",import.meta.url).pathname;
+  writeFileSync(join(root,"entry.ts"),`import {runRegionalCli} from ${JSON.stringify(cli)};process.env.PORT=${JSON.stringify(String(port))};await runRegionalCli({root:import.meta.dir,args:["gui"]});`);
+  const {runBoundedChild}=await import("../src/shared/subprocess.ts");
+  const pending=runBoundedChild([process.execPath,join(root,"entry.ts")],{cwd:root,timeoutMs:10000,signal:abort.signal});
+  let response:Response|undefined;for(let i=0;i<100;i++){try{response=await fetch(`http://127.0.0.1:${port}/`);break;}catch{/* Await the real server binding. */}await Bun.sleep(25);}
+  expect(response?.status).toBe(200);expect(await response!.text()).toContain("<title>Example Civic Platform</title>");
+  expect((await fetch(`http://127.0.0.1:${port}/`,{method:"POST"})).status).toBe(405);
+  expect((await fetch(`http://127.0.0.1:${port}/unknown`)).status).toBe(404);
+  expect((await fetch(`http://127.0.0.1:${port}/api/openapi.yaml`)).status).toBe(200);
+  abort.abort();expect((await pending).reaped).toBe(true);
+ }finally{abort.abort();rmSync(root,{recursive:true,force:true});}
+},15000);
