@@ -6,9 +6,9 @@ import { loadAllArticles } from "../src/shared/data.ts";
 import { runBoundedChild } from "../src/shared/subprocess.ts";
 
 const serverPath = new URL("../src/gui/server.ts", import.meta.url).pathname;
-interface StartupReceipt { started: boolean; exitCode?: number; searchStatus?: number; total?: number; count?: number; statsStatus?: number }
+interface StartupReceipt { started: boolean; exitCode?: number | null; error?: string; diagnostics?: string; searchStatus?: number; total?: number; count?: number; statsStatus?: number }
 
-/** An actual GUI entrypoint in a bounded owned group, with no provider calls. */
+/** Real GUI entrypoint; feed pipe bytes individually to exercise incomplete port records. */
 async function startGui(root: string): Promise<StartupReceipt> {
   const code = `
     const {spawn}=await import('node:child_process');
@@ -16,10 +16,10 @@ async function startGui(root: string): Promise<StartupReceipt> {
     let output='',errors='',timer;const exited=new Promise(resolve=>child.once('close',resolve));
     child.stderr.on('data',chunk=>{errors+=chunk.toString();if(errors.length>65536)child.kill('SIGKILL');});
     try{
-      const url=await new Promise((resolve,reject)=>{timer=setTimeout(()=>reject(new Error('startup timeout')),4000);child.stdout.on('data',chunk=>{output+=chunk.toString();if(output.length>65536){child.kill('SIGKILL');reject(new Error('startup output limit'));}const port=parseInt(output.split('running at http://localhost:')[1]??'',10);if(Number.isInteger(port))resolve('http://127.0.0.1:'+port);});child.once('close',code=>reject(new Error('GUI exited '+code)));});
+      const url=await new Promise((resolve,reject)=>{timer=setTimeout(()=>reject(new Error('startup timeout')),4000);child.stdout.on('data',chunk=>{for(const fragment of chunk.toString()){output+=fragment;if(output.length>65536){child.kill('SIGKILL');reject(new Error('startup output limit'));}const match=/running at http:\\/\\/localhost:(\\d+)(?=\\D)/.exec(output);if(match)resolve('http://127.0.0.1:'+match[1]);}});child.once('close',code=>reject(new Error('GUI exited '+code)));});
       clearTimeout(timer);const search=await fetch(url+'/api/search?q=harbor',{headers:{'x-api-key':'owned-empty-corpus-fixture'},signal:AbortSignal.timeout(2000)});const data=await search.json();const stats=await fetch(url+'/api/stats',{signal:AbortSignal.timeout(2000)});
       console.log('RECEIPT:'+JSON.stringify({started:true,searchStatus:search.status,total:data.total,count:data.count,statsStatus:stats.status}));
-    }catch(error){clearTimeout(timer);child.kill('SIGKILL');const exitCode=await exited;console.log('RECEIPT:'+JSON.stringify({started:false,exitCode}));}
+    }catch(error){clearTimeout(timer);child.kill('SIGKILL');const exitCode=await exited;console.log('RECEIPT:'+JSON.stringify({started:false,exitCode,error:String(error),diagnostics:errors.slice(-4000)}));}
     finally{clearTimeout(timer);child.kill('SIGKILL');await exited;}
   `;
   const result = await runBoundedChild([process.execPath, "-e", code], { timeoutMs: 8000, maxBytes: 128_000 });

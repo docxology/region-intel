@@ -1,5 +1,11 @@
 # Shared-platform extraction
 
+## Unreleased — regional reading flow
+
+- Parse complete GUI readiness records under one-character stdout fragmentation and retain startup errors without widening the fixture deadline.
+
+- Keep six collected news items visible and preserve remaining news and captured meeting links in native expandable summaries, keeping municipal search reachable on mobile.
+
 ## Unreleased — source-marked inactive sections and native fixtures
 
 - Accept empty reserved/repealed section bodies only when the parsed title and exact retained source heading share the explicit inactive marker. Keep unmarked emptiness and changed status/source bytes invalid.
