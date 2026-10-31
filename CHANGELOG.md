@@ -1,5 +1,11 @@
 # Shared-platform extraction
 
+## Unreleased — source-marked inactive sections and native fixtures
+
+- Accept empty reserved/repealed section bodies only when the parsed title and exact retained source heading share the explicit inactive marker. Keep unmarked emptiness and changed status/source bytes invalid.
+- Retain minimal Davis provider fragments and failing controls for inline and deep extraction custody.
+- Run the regional static-search browser fixture headlessly and preserve launch failures; require actual browser readiness before the weekly killed-controller recovery fixture reaches HTTP.
+
 ## Unreleased — regional corpus publication
 
 - Add shared source-bound corpus checks, recoverable promotion and public seed selection for thin regional deployments.

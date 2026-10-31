@@ -155,8 +155,12 @@ test("alternate Pages ships searchable verified code and rejects rehashed replac
         const pageRoot = join(root, ".pages");
         server = Bun.serve({ hostname: "127.0.0.1", port: 0, async fetch(request) { const path = new URL(request.url).pathname; const file = Bun.file(join(pageRoot, path === "/" ? "index.html" : path.slice(1))); if (!await file.exists())
                 return new Response("Not found", { status: 404 }); return new Response(file, { headers: { "Content-Type": path === "/" ? "text/html" : "application/json" } }); } });
-        await withOutputRoot(root, async () => { try {
+        const previousHeadless = process.env.HEADLESS_BROWSER;
+        process.env.HEADLESS_BROWSER = "1";
+        let browserStarted = false;
+        try { await withOutputRoot(root, async () => { try {
             const page = await newPage();
+            browserStarted = true;
             await page.route("**/*", route => new URL(route.request().url()).hostname === "127.0.0.1" ? route.continue() : route.abort());
             await page.goto(server!.url.href);
             await page.getByRole("textbox", { name: "Search published municipal code" }).fill("permit licensing");
@@ -170,9 +174,15 @@ test("alternate Pages ships searchable verified code and rejects rehashed replac
         }
         finally {
             const receipt = await closeBrowser();
-            expect(receipt?.directChildReaped).toBe(true);
-            expect(receipt?.processGroupGone).toBe(true);
-        } });
+            // A failed launch already performs cleanup; preserve its original error.
+            if (browserStarted) {
+                expect(receipt?.directChildReaped).toBe(true);
+                expect(receipt?.processGroupGone).toBe(true);
+            }
+        } }); } finally {
+            if (previousHeadless === undefined) delete process.env.HEADLESS_BROWSER;
+            else process.env.HEADLESS_BROWSER = previousHeadless;
+        }
         await writeFile(join(pageRoot, "unexpected.json"), "{}");
         expect((await run("pages:validate")).exitCode).not.toBe(0);
         await rm(join(pageRoot, "unexpected.json"));
