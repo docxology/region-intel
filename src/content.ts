@@ -9,6 +9,7 @@ import type { Page } from "playwright";
 import type { TocNode, ArticlePage, SectionContent } from "./types.js";
 import { navigateWithCloudflare, withPageDeadline, newPage, closePageBounded } from "./browser.js";
 import { readFile } from "node:fs/promises";
+import { inactiveSectionStatus } from "./scraper_utils.js";
 import { BASE_URL, RATE_LIMIT_MS, SCRAPE_TIMEOUT_MS, SPA_RENDER_MS } from "./constants.js";
 import { computeSha256 } from "./utils.js";
 import { createLogger } from "./logger.js";
@@ -89,7 +90,7 @@ async function scrapeSectionPage(
       return null;
     }, sectionGuid);
 
-    if (!result || (!result.text && !/reserved/i.test(sectionTitle))) return null;
+    if (!result || (!result.text && inactiveSectionStatus(sectionTitle) === null)) return null;
 
     return { section: {
       guid: sectionGuid,

@@ -19,8 +19,8 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `ALERT_WEBHOOK_URL` | [src/notifications/push.ts:89](../../src/notifications/push.ts#L89) | `env("ALERT_WEBHOOK_URL")` | not declared at this read |
 | `APP_VERSION` | [src/gui/routes.ts:1114](../../src/gui/routes.ts#L1114) | `process.env.APP_VERSION` | `packageVersion()` |
 | `APP_VERSION` | [src/shared/orchestration.ts:111](../../src/shared/orchestration.ts#L111) | `process.env.APP_VERSION` | `packageVersion()` |
-| `ARTICLE_DEADLINE_MS` | [src/content.ts:123](../../src/content.ts#L123) | `process.env.ARTICLE_DEADLINE_MS` | not declared at this read |
-| `ARTICLE_DEADLINE_MS` | [src/content.ts:123](../../src/content.ts#L123) | `process.env.ARTICLE_DEADLINE_MS` | not declared at this read |
+| `ARTICLE_DEADLINE_MS` | [src/content.ts:124](../../src/content.ts#L124) | `process.env.ARTICLE_DEADLINE_MS` | not declared at this read |
+| `ARTICLE_DEADLINE_MS` | [src/content.ts:124](../../src/content.ts#L124) | `process.env.ARTICLE_DEADLINE_MS` | not declared at this read |
 | `CC_OUTPUT_DIR` | [src/regional_cli.ts:16](../../src/regional_cli.ts#L16) | `process.env.CC_OUTPUT_DIR` | not declared at this read |
 | `CC_OUTPUT_DIR` | [src/shared/paths.ts:29](../../src/shared/paths.ts#L29) | `process.env.CC_OUTPUT_DIR` | not declared at this read |
 | `CC_QUERY_LOGGING` | [src/llm/privacy.ts:21](../../src/llm/privacy.ts#L21) | `process.env.CC_QUERY_LOGGING` | not declared at this read |

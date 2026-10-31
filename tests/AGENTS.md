@@ -123,3 +123,6 @@ committed journal marked interrupted, real cancellation after an earlier batch
 commits, reverse rollback after a later write failure, protected roots, profile
 and source custody, public edition replay and native static code-search rendering.
 It preserves unrelated producer files and tests injected markup as literal text.
+
+`content-membership.test.ts` also replays captured reserved/repealed empty sections
+against exact retained source headings; active, missing and changed markers fail.

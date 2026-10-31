@@ -20,6 +20,14 @@ const TOC_TYPES = new Set<TocNode["type"]>([
   "section",
 ]);
 
+/** Recognize explicit provider heading markers, not general prose about repeal. */
+export function inactiveSectionStatus(title: string): "reserved" | "repealed" | null {
+  const value = title.trim();
+  if (/^\(?reserved\)?\.?$/i.test(value) || /\(reserved\.?\)\.?$/i.test(value)) return "reserved";
+  if (/\(repealed(?:\s+by\s+ord(?:inance)?\.?\s+[^()\r\n]{1,160})?\)\.?$/i.test(value)) return "repealed";
+  return null;
+}
+
 /**
  * Validate the minimum recursive shape required to safely use a TOC as the
  * scrape contract. A 200 response containing an error object or an empty
@@ -61,7 +69,7 @@ export function isArticleArtifactShapeValid(value: unknown, expectedSectionGuids
     const item = section as Record<string, string>;
     return ["guid", "number", "title", "html", "text", "history"].every(key => typeof item[key] === "string")
       && /^[A-Za-z0-9_-]+$/.test(item.guid!) && !!item.html!.trim()
-      && (!!item.text!.trim() || /^\(?reserved\)?\.?$/i.test(item.title!.trim()));
+      && (!!item.text!.trim() || inactiveSectionStatus(item.title!) !== null);
   })) return false;
   const sectionGuids = new Set(record.sections.map(section => (section as Record<string, string>).guid));
   if (sectionGuids.size !== record.sections.length) return false;

@@ -4,7 +4,7 @@ import { load } from "cheerio";
 import { readFile, mkdir, readdir, rename, writeFile, rm } from "node:fs/promises";
 import { join } from "node:path";
 import type { ArticlePage, SectionContent } from "./types.js";
-import { isArticleArtifactShapeValid } from "./scraper_utils.js";
+import { isArticleArtifactShapeValid, inactiveSectionStatus } from "./scraper_utils.js";
 import { writeJsonAtomic } from "./shared/source_health.js";
 
 export const EXTRACTION_PARSER_VERSION = "ecode360-sections/v2";
@@ -70,7 +70,11 @@ export function validateArticleCustody(value: unknown, expectedGuids?: readonly 
     if (receipt.mode === "inline") {
       const node = nodesById.get(`${section.guid}_content`);
       if (!node || node.html() !== canonicalSection) errors.push(`Source fragment mismatch: ${section.guid}`);
-      if (!section.text.trim() && !/reserved/i.test(nodesById.get(`${section.guid}_title`)?.text() ?? "")) errors.push(`Reserved status absent from retained source heading: ${section.guid}`);
+      if (!section.text.trim()) {
+        const heading = nodesById.get(`${section.guid}_title`);
+        const sourceStatus = inactiveSectionStatus(heading?.find(".titleTitle").first().text() || heading?.text() || "");
+        if (!sourceStatus || sourceStatus !== inactiveSectionStatus(section.title)) errors.push(`Inactive status absent or different in retained source heading: ${section.guid}`);
+      }
     } else if (receipt.mode === "section-pages") {
       const fragment = fragments.get(section.guid);
       if (!fragment || fragment.sha256 !== custodyHash(fragment.html)) errors.push(`Deep source fragment mismatch: ${section.guid}`);
@@ -78,7 +82,12 @@ export function validateArticleCustody(value: unknown, expectedGuids?: readonly 
         try { const url = new URL(fragment.url); if (url.origin !== "https://ecode360.com" || url.pathname !== `/${section.guid}`) errors.push(`Deep source URL mismatch: ${section.guid}`); } catch { errors.push(`Invalid deep source URL: ${section.guid}`); }
         const source = load(fragment.html, {}, false); const selected = source(".section_content.content").first();
         if ((selected.length ? selected.html() ?? "" : source.root().html() ?? "") !== canonicalSection) errors.push(`Deep selector replay mismatch: ${section.guid}`);
-        if (!section.text.trim() && !/reserved/i.test(source(".contentTitle").text())) errors.push(`Reserved status absent from deep source heading: ${section.guid}`);
+        if (!section.text.trim()) {
+          const heading = source(`[id="${section.guid}_title"]`).first();
+          const title = heading.length ? heading.find(".titleTitle").first().text() || heading.text() : source(".contentTitle").first().text();
+          const sourceStatus = inactiveSectionStatus(title);
+          if (!sourceStatus || sourceStatus !== inactiveSectionStatus(section.title)) errors.push(`Inactive status absent or different in deep source heading: ${section.guid}`);
+        }
       }
     } else errors.push("Invalid extraction mode");
     parsedSection(".history,.footnotes").remove();
