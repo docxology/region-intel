@@ -16,6 +16,18 @@ export async function runRegionalCli(options: {
     process.env.CC_OUTPUT_DIR = d.output;
     process.env.REGION_ROOT = d.root;
     const packageRoot = resolve(import.meta.dir, "..");
+    const localManuscript = await Bun.file(join(d.root,"docs/manuscript/config.json")).exists();
+    if(command.startsWith("manuscript:") && (localManuscript || ["manuscript:render","manuscript:validate-render","manuscript:bundle"].includes(command))) {
+      if(rest.length && !(command==="manuscript:validate-render"&&rest.length===1&&rest[0]==="--bundle"))throw new Error("Unexpected regional manuscript arguments");
+      const methods=await import("./regional_manuscript.js");
+      if(command==="manuscript:check")console.log(JSON.stringify(await methods.checkRegionalManuscript(d),null,2));
+      else if(command==="manuscript:hydrate")console.log(await methods.buildRegionalManuscript(d));
+      else if(command==="manuscript:render")console.log(await methods.buildRegionalManuscript(d,true));
+      else if(command==="manuscript:bundle")console.log(await methods.packageRegionalManuscript(d));
+      else if(command==="manuscript:validate-render"){await methods.validateRegionalRender(d,rest.includes("--bundle")?"bundle":undefined);console.log("Regional manuscript exact-byte/current-input validation passed");}
+      else throw new Error("Unsupported regional manuscript command");
+      return;
+    }
     if(command === "cron-setup" || command === "lifeos:daily") {
       if(!(await import("./civic_profile.js")).isCrescentCityProfile(d.profile)) throw new Error("This compatibility integration is not configured for the selected region");
       if(command === "cron-setup") {

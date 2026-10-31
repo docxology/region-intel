@@ -6,7 +6,7 @@ import { MANUSCRIPT_VARIABLE_NAMES } from "./manuscript_variables.js";
 import { publicationHash } from "./publication_bundle.js";
 import { paths } from "./shared/paths.js";
 
-export async function validateManuscript(options: { root?: string; hydrated?: boolean } = {}): Promise<string[]> {
+export async function validateManuscript(options: { root?: string; hydrated?: boolean; variableNames?: ReadonlySet<string> } = {}): Promise<string[]> {
 const root = options.root ?? process.cwd();
 const sourceDir = join(root, "docs", "manuscript");
 const hydrated = options.hydrated ?? false;
@@ -62,7 +62,7 @@ async function main(): Promise<void> {
     for (const match of body.matchAll(/\{#eq:([a-z0-9_]+)\}/gi)) equationLabels.add(match[1]);
     for (const match of body.matchAll(/\{#tbl:([a-z0-9_]+)\}/gi)) tableLabels.add(match[1]);
     for (const match of body.matchAll(/\{\{([A-Z][A-Z0-9_]*)\}\}/g)) {
-      if (!MANUSCRIPT_VARIABLE_NAMES.has(match[1])) errors.push(`${file} contains unknown manuscript variable {{${match[1]}}}`);
+      if (!(options.variableNames ?? MANUSCRIPT_VARIABLE_NAMES).has(match[1])) errors.push(`${file} contains unknown manuscript variable {{${match[1]}}}`);
     }
   }
 

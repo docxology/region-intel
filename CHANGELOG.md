@@ -1,5 +1,12 @@
 # Shared-platform extraction
 
+## Unreleased — regional manuscript review
+
+- Validate consumer-owned manuscript sources and claims against exact accepted public seed inputs.
+- Hydrate independent regional counts and render native PDF/HTML with bounded tools, current-input replay and output hash receipts.
+- Preserve the Crescent reference manuscript and prior complete review editions on native tool failure.
+
+
 ## Unreleased — documentation after extraction
 
 - Correct shared-checkout installation, renderer ownership and GitHub README section links.

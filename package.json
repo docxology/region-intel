@@ -75,7 +75,10 @@
     "region:config": "bun run src/region_config.ts",
     "region": "bun run src/regional_cli.ts",
     "corpus:check": "bun run src/regional_cli.ts corpus:check",
-    "corpus:promote": "bun run src/regional_cli.ts corpus:promote"
+    "corpus:promote": "bun run src/regional_cli.ts corpus:promote",
+    "manuscript:render": "bun run src/regional_cli.ts manuscript:render",
+    "manuscript:validate-render": "bun run src/regional_cli.ts manuscript:validate-render",
+    "manuscript:bundle": "bun run src/regional_cli.ts manuscript:bundle"
   },
   "dependencies": {
     "@xmldom/xmldom": "^0.8.11",

@@ -41,7 +41,8 @@ installed package, never in a copied consumer `src/` tree.
 | `gui` | Authored Quadruplicate application | Regional dashboard plus shared API and local corpus search |
 | `pages:export`, `pages:validate` | Authored multi-page static edition and validation | Regional static dashboard, accepted code edition and exact-byte source replay |
 | `weekly-check` | Crescent reference collection workflow | Catalog, news, meetings, enabled alerts, geography, observation summary and Pages checks; failed steps remain in the run receipt |
-| `manuscript:*`, `docs:*` | Installed reference-source tooling | Same installed reference-source tooling; does not create a new regional study |
+| `manuscript:*` | Retained reference tooling unless a local manuscript config is selected | Consumer-owned manuscript sources when configured; shared native PDF/HTML methods and exact accepted-seed evidence |
+| `docs:*` | Installed reference-source documentation tooling | Same installed documentation tooling; does not copy a guide tree into the consumer |
 
 The package's OpenAPI inventory describes the shared API; the regional dashboard
 does not promise every authored reference interface. Optional model retrieval

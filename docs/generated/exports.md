@@ -947,7 +947,7 @@ Qualified source exports, independent of similarly named symbols in other module
 | [src/logger.ts:13](../../src/logger.ts#L13) | `LogLevel` | type | `8467f02a562f0fd4013052351da2575080fd2e3e58d2fca41bd2ff9a02ea1328` |
 | [src/logger.ts:57](../../src/logger.ts#L57) | `redactLogValue` | function | `b343f6dfd5e8323ba2832436292232237abdf48051f4a8f01132322addb08efc` |
 | [src/logger.ts:47](../../src/logger.ts#L47) | `setLogLevel` | function | `fde4db1b6ed809119d6d57e7250fedeff889092207f65fb564e2f4bde7424d60` |
-| [src/manuscript_document.ts:9](../../src/manuscript_document.ts#L9) | `validateManuscript` | function | `c53a9ab71d87cbc9bab9d6bdc13586bc16288cce6254ed91a1a67f68ec01f40c` |
+| [src/manuscript_document.ts:9](../../src/manuscript_document.ts#L9) | `validateManuscript` | function | `c3f5e16519f6166ff33c5ecc31dfc7d522bf74941e34c07fb87c37b9f14b9391` |
 | [src/manuscript_hydration.ts:11](../../src/manuscript_hydration.ts#L11) | `hydrateManuscript` | function | `8f97d84a1bd41d2f4020aac7d9d99c66240c709fe635e8d6bc9f3a444d4b38fb` |
 | [src/manuscript_variables.ts:10](../../src/manuscript_variables.ts#L10) | `MANUSCRIPT_VARIABLE_NAMES` | value | `31e45566e7c34329dfaa753194629087139f9d473de911292d86434927982f70` |
 | [src/manuscript_variables.ts:72](../../src/manuscript_variables.ts#L72) | `renderableManuscriptTokenNames` | function | `e97f0fd2f059223365f92ebb225b62d67e9668ed6cef407be594b5d00b6d7692` |
@@ -1193,6 +1193,10 @@ Qualified source exports, independent of similarly named symbols in other module
 | [src/regional_corpus.ts:138](../../src/regional_corpus.ts#L138) | `promoteRegionalCorpus` | function | `25164903be09d82ef1e8424ce5f81d510dd614f9eeb90f6b31d9a4b72922eb73` |
 | [src/regional_corpus.ts:210](../../src/regional_corpus.ts#L210) | `regionalCorpusPublication` | function | `ea5809d01329ac84fb07addebdfff082dffc5caa98a861387a7d77b5fc6940c2` |
 | [src/regional_corpus.ts:207](../../src/regional_corpus.ts#L207) | `seedRegionalCorpus` | function | `d041cf334ed289f0a446f0bcb6be3e88cba0b6e2dacb323ac0922ef7f21e3c2d` |
+| [src/regional_manuscript.ts:131](../../src/regional_manuscript.ts#L131) | `buildRegionalManuscript` | function | `dc296d1ffe95522f189643cdfc46f07abf356ca816dad9aa82a66119bb950a16` |
+| [src/regional_manuscript.ts:126](../../src/regional_manuscript.ts#L126) | `checkRegionalManuscript` | function | `92d55d8f5d5236617c13d223d8f34ee9689bbc5b5994c4c59399bbd4c003f90d` |
+| [src/regional_manuscript.ts:192](../../src/regional_manuscript.ts#L192) | `packageRegionalManuscript` | function | `b85182d5270887f80ce3f830d0194a1dcb2aac3a21b7d53ba4847e60fe3b9e39` |
+| [src/regional_manuscript.ts:169](../../src/regional_manuscript.ts#L169) | `validateRegionalRender` | function | `253cf7fe199af65ab9649c16478215a7b3d3dda3102b763d6fa08deb362056fa` |
 | [src/regional_surface.ts:52](../../src/regional_surface.ts#L52) | `regionalObservations` | function | `30b0a1596b071cee22a827b85281977ab245ff3a1057cff07990ad60aec19db7` |
 | [src/regional_surface.ts:6](../../src/regional_surface.ts#L6) | `renderRegionalSurface` | function | `863122a97b83054c39db127695d293e5fe7dd43fdd8c4daa26a10d24265f5e45` |
 | [src/release_checks.ts:5](../../src/release_checks.ts#L5) | `CoverageSummary` | type | `b47a4529b04d35f25088e9df301beea866b2c3064eabf16e781962ee8604b9d8` |

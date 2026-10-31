@@ -54,6 +54,7 @@ src/                            # Shared platform and compatibility preset
 deployment.ts                   # Strict regional deployment admission and root ownership
 regional_cli.ts                 # Shared command dispatcher for thin consumer repositories
 regional_surface.ts             # Configured public dashboard and Pages publication
+regional_manuscript.ts          # Consumer-authored manuscripts, accepted-seed evidence and native PDF/HTML review editions
 regional_corpus.ts              # Verified regional corpus promotion, seed selection and public code edition
 types.ts                        # All TypeScript interfaces
 civic_profile.ts                # Validated jurisdiction identity, fingerprints and output ownership

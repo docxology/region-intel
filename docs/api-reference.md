@@ -34,6 +34,10 @@ compatibility interface as an alternate-region capability.
 | --- | --- | --- |
 | `loadDeployment(root, filename?)` | `src/deployment.ts` | Admit a `region-deployment/v1` document, default `region.json`, with matched identity/policy and safe owned paths |
 | `deploymentPath(root, path)` | `src/deployment.ts` | Resolve and validate a consumer-relative path |
+| `checkRegionalManuscript(deployment)` | `src/regional_manuscript.ts` | Validate local scholarly sources, captured claim inputs and accepted-seed counts |
+| `buildRegionalManuscript(deployment, render?)` | `src/regional_manuscript.ts` | Hydrate regional sources and optionally render native PDF/HTML with tool/output receipts |
+| `validateRegionalRender(deployment, directoryRelative?)` | `src/regional_manuscript.ts` | Require current captured inputs, exact generated projections, output hashes and member set |
+| `packageRegionalManuscript(deployment)` | `src/regional_manuscript.ts` | Produce a visibly labelled pre-publication review packet |
 | `runRegionalCli({ root, args? })` | `src/regional_cli.ts` | Select configured commands, installed methods and producer roots |
 | `checkRegionalCorpus(deployment, sourceRelative?)` | `src/regional_corpus.ts` | Check the complete source-bound edition; defaults to active output |
 | `promoteRegionalCorpus(deployment, sourceRelative)` | `src/regional_corpus.ts` | Recoverably promote a verified candidate while preserving unrelated producer state |

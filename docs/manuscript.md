@@ -9,11 +9,45 @@ observations, generated language, and public-delivery claims separate through
 ## Ownership after extraction
 
 The renderer adapter, numbered sources, bibliography and claim ledger live in
-`region-intel`. The thin consumers contain manuscript application notes only.
-Use the shared checkout as the renderer project. Consumer manuscript aliases
-invoke the installed reference tooling; they do not turn the retained paper
-into a Davis study. The [regional methods manuscript](region-methods-manuscript.md)
+`region-intel`. Use the shared checkout as the renderer project for that retained reference
+study. A configured consumer can own independent regional source prose and
+claims through the shared native workflow below; the reference findings are
+never relabelled as a Davis study. The [regional methods manuscript](region-methods-manuscript.md)
 describes the common design without importing numerical reference findings.
+
+## Consumer-owned regional manuscripts
+
+A consumer may own ten numbered, labelled source sections, a bibliography,
+claim ledger and `docs/manuscript/config.json` using `regional-manuscript/v1`.
+The local document declares a title, semantic manuscript version, author list
+and explicit `review-draft` status. Generic checking/hydration/rendering remains
+in `src/regional_manuscript.ts`; no renderer implementation is copied into a
+consumer. The retained Crescent study remains the default when no local config
+is selected. A local config routes manuscript commands to that consumer's own
+sources and exact accepted public seed.
+
+From a configured consumer, run:
+
+```sh
+bun run manuscript:check
+bun run manuscript:render
+bun run manuscript:validate-render
+bun run manuscript:bundle
+bun run manuscript:validate-render -- --bundle
+```
+
+Checking recomputes source denominators and captures configuration, frozen
+dependency, seed/publication verification, source prose, bibliography, ledger
+and renderer hashes. Unsupported claims, unknown tokens and changed bindings
+fail. Rendering uses native Pandoc, XeLaTeX, qpdf and pdftotext through bounded
+owned children, with raw HTML/TeX disabled in manuscript Markdown. Failed
+staging is retained; prior complete output is preserved. PDF/HTML and exact
+input/tool/output receipts live under consumer `output/manuscript-review/`.
+Bundle writes a visibly labelled `review/<version>-draft/` packet; it does not
+create a GitHub release, tag or DOI. Inspect actual PDF pages and obtain an
+independent review before declaring a particular packet review-ready. Source,
+render, scientific and publication acceptance remain distinct. See Davis for
+an authored inland application; do not substitute the Crescent findings.
 
 ## Source and hydration
 

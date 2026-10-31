@@ -36,7 +36,7 @@ the generated copies and repository links before publication.
 | [Project Review](project-review.md) | Current-state findings, cleanup decisions, and verification receipts |
 | [Roadmap](roadmap.md) | Future priorities, dependencies, and delivery sequence |
 | [Open Backlog](../TODO.md) | Minor, medium, and major improvement scopes with acceptance criteria |
-| [Manuscript](manuscript.md) | Evidence-bound IMRAD paper, claim ledger, hydration, and template rendering |
+| [Manuscript](manuscript.md) | Independent regional review manuscripts and the retained reference study; evidence, hydration and native rendering |
 | **Module Guides** | |
 | [Scraping](modules/scraping.md) | Browser, TOC, content extraction, and scraper orchestrator |
 | [Verification](modules/verification.md) | Local custody/replay, current TOC, live sample, and publication binding |

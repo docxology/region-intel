@@ -126,3 +126,7 @@ It preserves unrelated producer files and tests injected markup as literal text.
 
 `content-membership.test.ts` also replays captured reserved/repealed empty sections
 against exact retained source headings; active, missing and changed markers fail.
+
+`regional-manuscript.test.ts` uses real temporary publication inputs, changed-byte
+and claim-reference failures, unknown-token rejection, and a real unavailable
+native-tool subprocess proving prior complete output preservation.
