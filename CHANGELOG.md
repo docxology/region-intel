@@ -1,5 +1,11 @@
 # Shared-platform extraction
 
+## Unreleased — documentation after extraction
+
+- Correct shared-checkout installation, renderer ownership and GitHub README section links.
+- Document actual compatibility versus regional command routing, clean-clone publication, candidate promotion and upgrade acceptance.
+- Reconcile documentation navigation, configuration guidance and retained manuscript status without changing historical study findings or failed receipts.
+
 ## Unreleased — regional reading flow
 
 - Parse complete GUI readiness records under one-character stdout fragmentation and retain startup errors without widening the fixture deadline.

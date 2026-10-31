@@ -4,6 +4,17 @@
 
 # Architecture
 
+## Shared package and consumer boundary
+
+`deployment.ts` admits consumer-owned configuration and paths;
+`regional_cli.ts` selects the installed methods; `regional_corpus.ts` checks,
+promotes and seeds complete editions; `regional_surface.ts` publishes the
+configured regional dashboard. The [deployment contract](deployments.md)
+describes which commands delegate to the authored Crescent preset and which
+use the generic regional path. The diagrams below describe the compatibility
+application. Regional repositories do not copy this implementation or assume
+that its coastal source roster applies elsewhere.
+
 ## System Overview
 
 The Crescent City Intelligence Platform provides a pipeline for scraping,

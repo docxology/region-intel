@@ -1,5 +1,10 @@
 # GUI Module
 
+This guide describes the authored Crescent compatibility application and shared
+methods. Installed alternate regions use the configured dashboard and command
+routing in [deployments](../deployments.md#command-routing); they do not inherit
+every reference presentation or source adapter.
+
 ## `src/gui/server.ts` — HTTP Server
 
 Lightweight `Bun.serve()` server on port 3000 (configurable via `PORT` env var).

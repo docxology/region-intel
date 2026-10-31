@@ -1,5 +1,10 @@
 # HTTP contracts and notification boundaries
 
+This guide describes the authored Crescent compatibility application and shared
+methods. Installed alternate regions use the configured dashboard and command
+routing in [deployments](../deployments.md#command-routing); they do not inherit
+every reference presentation or source adapter.
+
 `src/api/contracts.ts` parses `openapi.yaml` structurally as the HTTP
 method/authentication/input/response authority. Generated
 [HTTP documentation](../generated/http.md) derives from that same document;

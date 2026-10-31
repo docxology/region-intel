@@ -1,9 +1,15 @@
 # Scripts
 
-Bun/TypeScript entry points for the Crescent City pipeline delegate project
+Bun/TypeScript entry points for the shared platform and Crescent compatibility
+pipeline delegate project
 logic to importable modules in `src/`. Shell wrappers handle setup and scheduling;
 the thin Python manuscript adapter delegates to the Bun hydrator for the external
 template renderer.
+
+Thin consumers invoke these installed methods through `region-intel/cli`.
+See [command routing](../docs/deployments.md#command-routing): alternate-region
+collection, observation summaries and dashboards have explicit regional paths
+and do not inherit every Crescent adapter or authored surface.
 
 ## Quick Reference
 
@@ -61,7 +67,9 @@ scripts/weekly-check.ts
     └── shared orchestration     → output/state/latest-pipeline-run.json
 ```
 
-The Pages workflow (`.github/workflows/pages.yml`) runs the release gate,
+The Crescent consumer owns the operational Pages workflow; this checkout retains
+a repository-guarded compatibility example at `.github/workflows/pages.yml`.
+The consumer workflow runs the release gate,
 collects live sources, preserves unavailable/stale health states, builds the
 static export, validates it, and deploys the artifact. It does not publish the
 runtime `output/` directory wholesale.

@@ -22,25 +22,44 @@ The shared runtime selects a deployment before starting any producer and keeps
 consumer output separate from installed code. Live source availability, rendered
 manuscript acceptance and hosted delivery need their own evidence.
 
+## Choose a checkout
+
+For shared-method development:
+
+```sh
+git clone https://github.com/docxology/region-intel.git
+cd region-intel
+bun install --frozen-lockfile
+bunx playwright install chromium
+bun run docs:check
+bun run validate
+```
+
+For regional operation, clone either
+[crescent-city-intel](https://github.com/docxology/crescent-city-intel) or
+[davis-ca-intel](https://github.com/docxology/davis-ca-intel) and follow that
+repository's guide. Each installs an exact public Git commit; it does not need
+a neighboring core checkout. A clean consumer can export its accepted public
+seed before live collection. Local corpus search needs separately acquired and
+promoted articles; model-backed retrieval also needs its model/vector services.
+
+Start with the [documentation index](../docs/README.md),
+[deployment contract and command routing](../docs/deployments.md), and
+[operations guide](../docs/operations.md). The
+[regional methods manuscript](../docs/region-methods-manuscript.md) describes the
+shared design; the [reference manuscript](../docs/manuscript/README.md) retains its
+original Crescent evidence. A new package or corpus edition does not refresh
+those historical findings.
+
 ## Reference application and compatibility documentation
 
-<p align="center">
-  <h1 align="center">🌊 The Quadruplicate</h1>
-  <p align="center">
-    <strong>Scrape · Verify · Export · View · Chat · Stream · Monitor · Alert · Analyze · Query</strong><br/>
-    A source-bound local intelligence platform for the
-    <a href="https://crescentcity.org">City of Crescent City, CA</a> —
-    powered by <a href="https://ecode360.com/CR4919">ecode360.com/CR4919</a>
-  </p>
-  <p align="center">
-    <a href="https://github.com/docxology/crescent-city-intel"><img src="https://img.shields.io/badge/GitHub-docxology%2Fcrescent--city--intel-181717?logo=github" alt="GitHub"></a>
-    <a href="#-quick-start"><img src="https://img.shields.io/badge/Bun-1.4.2-black?logo=bun" alt="Bun"></a>
-    <a href="../docs/modules/llm.md"><img src="https://img.shields.io/badge/Ollama-RAG_+_Streaming-blue" alt="Ollama"></a>
-    <a href="../LICENSE"><img src="https://img.shields.io/badge/License-CC_BY--SA_4.0-lightgrey" alt="License"></a>
-    <a href="#-test-suite"><img src="https://img.shields.io/badge/Tests-bun_run_validate-brightgreen" alt="Tests"></a>
-    <a href="#-commands-reference"><img src="https://img.shields.io/badge/Version-3.3.1-orange" alt="Version"></a>
-  </p>
-</p>
+### The Quadruplicate
+
+Scrape · Verify · Export · View · Chat · Stream · Monitor · Alert · Analyze · Query
+
+The retained reference application serves Crescent City, California, using
+[eCode360 CR4919](https://ecode360.com/CR4919). Its authored interface and
+regional adapters are owned here and imported by the Crescent consumer.
 
 **Explore the public edition at [quadruplicate.org](https://quadruplicate.org/).**
 The static website exposes a bounded, source-attributed snapshot; the local Bun
@@ -55,7 +74,7 @@ links adjusted for that location. After editing, run `bun run docs:generate`;
 `bun run docs:check` and the release gate reject drift between the two guides.
 
 For measured release evidence, use the
-[versioned releases](https://github.com/docxology/crescent-city-intel/releases),
+[historical Crescent releases](https://github.com/docxology/crescent-city-intel/releases),
 [local acceptance receipt](../docs/release-acceptance.json) and
 [current-state review](../docs/project-review.md). Read their version, scope and
 date: an older receipt does not certify a later tree. Remaining external and
@@ -65,12 +84,12 @@ human acceptance is tracked in [TODO.md](../TODO.md).
 
 ## 📋 Table of Contents
 
-- [🏙️ About Crescent City, CA](#-about-crescent-city-ca)
+- [🏙 About Crescent City, CA](#-about-crescent-city-ca)
 - [✨ What This Does](#-what-this-does)
-- [🏗️ Architecture](#-architecture)
+- [🏗 Architecture](#-architecture)
 - [🚀 Quick Start](#-quick-start)
-- [🎛️ Interactive Menu](#-interactive-menu-runsh)
-- [🖥️ Web Viewer Features](#-web-viewer-features)
+- [🎛 Interactive Menu](#-interactive-menu-runsh)
+- [🖥 Web Viewer Features](#-web-viewer-features)
 - [💬 LLM / RAG Chat](#-llm--rag-chat)
 - [📡 Real-Time Monitoring & Alerts](#-real-time-monitoring--alerts)
 - [📊 Analytics & Readability](#-analytics--readability)
@@ -84,16 +103,16 @@ human acceptance is tracked in [TODO.md](../TODO.md).
 - [⚡ Commands Reference](#-commands-reference)
 - [🌐 API Reference](#-api-reference)
 - [Reusable civic methods](#reusable-civic-methods)
-- [⚙️ Configuration](#-configuration)
+- [⚙ Configuration](#-configuration)
 - [📖 Documentation](#-documentation)
 - [🚦 Current Status](#-current-status)
 - [🧭 What To Do Next](#-what-to-do-next)
-- [⚠️ Known Limitations](#-known-limitations)
+- [⚠ Known Limitations](#-known-limitations)
 - [LifeOS / Pulse integration](#lifeos--pulse-integration)
 
 ---
 
-## 🏙️ About Crescent City, CA
+## 🏙 About Crescent City, CA
 
 The project anchors municipal-code and North Coast civic evidence on Crescent
 City, California. Official City, County and Harbor source identities, geographic
@@ -115,10 +134,10 @@ instructions; this software does not establish their legal or safety efficacy.
 
 | Stage | Description | Tests | Docs |
 | :---- | :---------- | :---: | :--: |
-| 🕷️ **Scrape** | Refreshes a validated live TOC, rejects partial/challenge pages, and atomically resumes only hash- and section-complete article artifacts | ✓ | [→](../docs/modules/scraping.md) |
+| 🕷 **Scrape** | Refreshes a validated live TOC, rejects partial/challenge pages, and atomically resumes only hash- and section-complete article artifacts | ✓ | [→](../docs/modules/scraping.md) |
 | ✅ **Verify** | SHA-256 integrity checks + TOC cross-reference + live re-fetch sampling | ✓ | [→](../docs/modules/verification.md) |
 | 📦 **Export** | JSON · Markdown · plain text · CSV index | ✓ | [→](../docs/modules/export.md) |
-| 🖥️ **View** | Web viewer: TOC, BM25 search, analytics dashboard, dark/light mode | ✓ | [→](../docs/modules/gui.md) |
+| 🖥 **View** | Web viewer: TOC, BM25 search, analytics dashboard, dark/light mode | ✓ | [→](../docs/modules/gui.md) |
 | 💬 **Chat** | Ollama or OpenRouter chat with Ollama embeddings + ChromaDB · citation checks (municipal code + YouTube transcripts) · opt-in content-free diagnostics | ✓ | [→](../docs/modules/llm.md) |
 | 📡 **Monitor** | Municipal code change detection + RSS/Atom news + government meeting tracking + YouTube meeting transcripts + Triplicate (Cloudflare), with per-source health | ✓ | [→](../docs/modules/monitoring.md) |
 | 📰 **Curate** | Source-grounded, bounded LLM summaries + domain tagging across news/meetings/YouTube with provider/model-aware retry-safe idempotency | ✓ | [→](../docs/modules/monitoring.md) |
@@ -132,26 +151,26 @@ instructions; this software does not establish their legal or safety efficacy.
 
 ---
 
-## 🏗️ Architecture
+## 🏗 Architecture
 
 ```mermaid
 flowchart LR
-    A["🌐 ecode360.com/CR4919"] -->|Playwright + CF bypass| B["🕷️ Scraper"]
+    A["🌐 ecode360.com/CR4919"] -->|Playwright + CF bypass| B["🕷 Scraper"]
     B --> C["📄 output/articles/*.json\n(manifest-driven counts)"]
     C --> D["✅ Verifier\nSHA-256 + TOC + live re-fetch"]
     D --> E["📦 Exporter"]
     E --> F["JSON · MD · TXT · CSV"]
-    C --> G["🖥️ GUI :3000\nBM25 · Analytics · Chat"]
+    C --> G["🖥 GUI :3000\nBM25 · Analytics · Chat"]
     C --> H["💬 LLM / RAG\nOllama + ChromaDB"]
 
     subgraph Intelligence["⚡ Real-Time Intelligence Layer"]
         J["📡 Code Monitor"] --> K["monitor-history.jsonl"]
         L["📰 News Monitor\nconfigured RSS/Atom sources"] --> M["output/news/source-health.json"]
-        N["🏛️ Meeting Tracker\nCity · Planning · Harbor · County"] --> O["output/gov_meetings/"]
+        N["🏛 Meeting Tracker\nCity · Planning · Harbor · County"] --> O["output/gov_meetings/"]
         P["🌊 NOAA Tides\nStation 9419750"] --> Q["output/tides/"]
         R["🌊 NOAA Tsunami\nCAP alerts"] --> S["output/alerts/tsunami/"]
         T["🌍 USGS M4+\n200 km radius"] --> U["output/alerts/earthquake/"]
-        V["⛈️ NWS CAZ101\nCoastal alerts"] --> W["output/alerts/weather/"]
+        V["⛈ NWS CAZ101\nCoastal alerts"] --> W["output/alerts/weather/"]
         X["🦀 CDFW\nCrab season"] --> Y["output/fishing/"]
     end
 
@@ -176,9 +195,9 @@ flowchart LR
 ### Install & Run
 
 ```bash
-# 1. Clone and install
-git clone https://github.com/docxology/crescent-city-intel.git
-cd crescent-city-intel
+# 1. Clone the shared implementation and its compatibility preset
+git clone https://github.com/docxology/region-intel.git
+cd region-intel
 bun install --frozen-lockfile
 bunx playwright install chromium
 bun run source-discovery # Generate canonical registry inventory; offline by default
@@ -197,7 +216,7 @@ bun run validate
 
 ---
 
-## 🎛️ Interactive Menu (`run.sh`)
+## 🎛 Interactive Menu (`run.sh`)
 
 The top-level `run.sh` delegates to the Bun launcher in `src/interactive_menu.ts`.
 It shows a menu or runs a declared `package.json` command with the supplied arguments:
@@ -237,7 +256,7 @@ response example, not a recorded live acceptance:
 
 ---
 
-## 🖥️ Web Viewer Features
+## 🖥 Web Viewer Features
 
 Launch with `bun run gui` → open **<http://localhost:3000>**:
 
@@ -468,12 +487,12 @@ The project maps the municipal code to **12 civic intelligence domains**, each c
 | Public Safety & Justice | 🚔 | Police · corrections · Pelican Bay · crime prevention | 9, 10 |
 | Public Health & Safety | 🏥 | EMS · food safety · mental health/CARE Court | 6, 8, 9 |
 | Environment & Conservation | 🌲 | Coastal zone management · redwoods · wildlife · waste | 8, 13, 17 |
-| Infrastructure & Services | 🏗️ | Utilities · roads · parks · building permits · zoning | 12, 13, 15, 16, 17 |
+| Infrastructure & Services | 🏗 | Utilities · roads · parks · building permits · zoning | 12, 13, 15, 16, 17 |
 | Housing & Homelessness | 🏠 | Affordable housing · emergency shelter · vehicle dwelling · CARE Court | 8, 13, 15, 16, 17 |
 | Harbor & Marine Operations | ⚓ | Harbor commerce · dredging · fishing fleet · waterfront | 3, 5, 13 |
 | Event Planning & Tourism | 🎪 | Special events · film permits · tourism promotion | 5, 9 |
 | Education & Youth | 📚 | School district · youth programs · library | 2, 9 |
-| Climate & Environment | 🌡️ | Sea-level rise · drought/water conservation · air quality | 8, 17 |
+| Climate & Environment | 🌡 | Sea-level rise · drought/water conservation · air quality | 8, 17 |
 | Demographics & Social Indicators | 📊 | Population profile · poverty · homelessness trends | 6, 8, 9 |
 
 **External cross-references per domain:**
@@ -573,7 +592,7 @@ artifact boundaries, and local preview instructions.
 - 🔄 Verification **re-computes hashes** from saved files and compares against manifest
 - 📋 Section presence **cross-referenced** against the saved TOC
 - 🌐 Publication requires passing **local replay, current live TOC, and a nonempty live sample**; errors, mismatches, or unattempted required checks deny eligibility. Sampling checks the selected pages, not every live page.
-- ⏱️ Manifest records **exact timestamps** for audit trail
+- ⏱ Manifest records **exact timestamps** for audit trail
 - 💾 **Resume support** — interrupt and restart safely; only exact current-TOC artifacts are skipped
 - 🧱 **Recoverable artifacts** — owned writer leases, bounded retained-state reads and exact-byte multi-artifact transactions preserve prior complete outputs on failure
 - 📎 **Derived custody** — actual input, transformer/configuration and output hashes support private replay, separate from municipal eligibility and semantic/legal review
@@ -909,7 +928,7 @@ bun run region:config` for the deliberately synthetic pair. See
 [region-intel: generic core and configured orchestration](../docs/region-intel.md)
 for APIs, the per-module layer classification, acceptance and explicit limits.
 
-## ⚙️ Configuration
+## ⚙ Configuration
 
 Common settings are listed below. The [generated configuration inventory](../docs/generated/configuration.md)
 records literal source reads and unresolved dynamic expressions without reading
@@ -955,12 +974,12 @@ actual environment values; consumer validation and units remain authoritative:
 | 🚀 [Setup Guide](../docs/setup.md) | Step-by-step: install, scrape, view, chat |
 | 📐 [Architecture](../docs/architecture.md) | System design, data flow, module dependency graph |
 | 📋 [API Reference](../docs/api-reference.md) | Selected module exports; OpenAPI defines the route surface |
-| ⚙️ [Configuration](../docs/configuration.md) | Environment variables, constants, tuning |
-| 🗺️ [Roadmap](../docs/roadmap.md) | Future priorities, dependencies, and delivery sequence |
-| 🕷️ [Scraping](../docs/modules/scraping.md) | Browser, TOC, content extraction |
+| ⚙ [Configuration](../docs/configuration.md) | Environment variables, constants, tuning |
+| 🗺 [Roadmap](../docs/roadmap.md) | Future priorities, dependencies, and delivery sequence |
+| 🕷 [Scraping](../docs/modules/scraping.md) | Browser, TOC, content extraction |
 | ✅ [Verification](../docs/modules/verification.md) | SHA-256 checks, section presence, live re-fetch |
 | 📦 [Export](../docs/modules/export.md) | JSON, Markdown, plain text, CSV |
-| 🖥️ [GUI](../docs/modules/gui.md) | Web viewer, API routes, search, analytics |
+| 🖥 [GUI](../docs/modules/gui.md) | Web viewer, API routes, search, analytics |
 | 💬 [LLM](../docs/modules/llm.md) | Ollama, ChromaDB, embeddings, RAG pipeline |
 | 🔗 [Shared](../docs/modules/shared.md) | Root/cancellation ownership, bounded retained state, transactions and data loading |
 | 📎 [Artifact Contracts](../docs/modules/artifact-contracts.md) | Versioned shared schemas, read migrations and deterministic custody/replay |
@@ -1006,7 +1025,7 @@ release-gate pipeline before editing.
 
 ---
 
-## ⚠️ Known Limitations
+## ⚠ Known Limitations
 
 - **Cloudflare Turnstile** — local scraping defaults to visible Chromium; `HEADLESS_BROWSER=1` enables headless collection for CI/containers. Challenge timing varies and bounded attempts can fail.
 - Intermediate `part` and `subarticle` TOC nodes are not themselves scrapable pages; their child sections are collected recursively
@@ -1040,7 +1059,7 @@ establishes that the personal app consumed or verified its contents.
 ---
 
 <p align="center">
-  Made with ❤️ for civic transparency in Crescent City, California<br/>
+  Made with ❤ for civic transparency in Crescent City, California<br/>
   <a href="../LICENSE">CC BY-SA 4.0</a> ·
   <a href="../CONTRIBUTING.md">Contributing</a> ·
   <a href="../docs/setup.md">Setup</a> ·

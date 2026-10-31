@@ -6,6 +6,15 @@ sufficiency. The manuscript keeps implementation invariants, one-run
 observations, generated language, and public-delivery claims separate through
 `docs/manuscript/claim_ledger.json`.
 
+## Ownership after extraction
+
+The renderer adapter, numbered sources, bibliography and claim ledger live in
+`region-intel`. The thin consumers contain manuscript application notes only.
+Use the shared checkout as the renderer project. Consumer manuscript aliases
+invoke the installed reference tooling; they do not turn the retained paper
+into a Davis study. The [regional methods manuscript](region-methods-manuscript.md)
+describes the common design without importing numerical reference findings.
+
 ## Source and hydration
 
 The numbered Markdown files provide the renderer-compatible IMRAD spine:
@@ -33,10 +42,10 @@ replace an existing link or directory:
 
 ~~~bash
 CCI_TEMPLATE_CHECKOUT=/path/to/template
-CCI_PROJECT_CHECKOUT=/path/to/crescent-city-intel
+CCI_PROJECT_CHECKOUT=/path/to/region-intel
 (
   cd "$CCI_TEMPLATE_CHECKOUT" || exit 1
-  CCI_RENDER_LINK="$PWD/projects/working/crescent-city-intel"
+  CCI_RENDER_LINK="$PWD/projects/working/region-intel"
   if [ -e "$CCI_RENDER_LINK" ] || [ -L "$CCI_RENDER_LINK" ]; then
     echo "Renderer link already exists; select an unused project slot." >&2
     exit 1
@@ -44,7 +53,7 @@ CCI_PROJECT_CHECKOUT=/path/to/crescent-city-intel
   mkdir -p "$PWD/projects/working"
   ln -s "$CCI_PROJECT_CHECKOUT" "$CCI_RENDER_LINK" || exit 1
   trap 'unlink "$CCI_RENDER_LINK"' EXIT
-  uv run python scripts/pipeline/stage_03_render.py --project working/crescent-city-intel
+  uv run python scripts/pipeline/stage_03_render.py --project working/region-intel
 )
 ~~~
 

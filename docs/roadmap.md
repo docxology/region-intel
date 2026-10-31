@@ -3,7 +3,7 @@
 > are thin configured consumers. Older entries below retain their reference
 > snapshot scope. Current runtime ownership is documented in [deployments](https://github.com/docxology/region-intel/blob/main/docs/deployments.md).
 
-# Roadmap — The Quadruplicate
+# Region Intel roadmap
 
 Delivery proceeds from measured reliability to useful coverage. The operating
 platform uses bounded owned producers, current-cycle source validity, shared
@@ -12,6 +12,12 @@ transformation/output custody. The [current-state review](project-review.md)
 states these contracts and their evidence limits. [TODO.md](../TODO.md) is the
 only item-level backlog; [CHANGELOG.md](../CHANGELOG.md) is the only version
 history.
+
+The shared extraction and the real Davis consumer are implemented. Both regions
+have accepted complete municipal seeds and their own publication workflows.
+Further work concerns the remaining host, provider, semantic and legal acceptance
+requirements below; M30 no longer means building a second repository from scratch.
+See the [deployment contract](deployments.md) and consumer edition receipts.
 
 ## Acceptance sequence
 

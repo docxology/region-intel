@@ -1,5 +1,10 @@
 # GitHub Pages snapshots
 
+This guide describes the authored Crescent compatibility application and shared
+methods. Installed alternate regions use the configured dashboard and command
+routing in [deployments](../deployments.md#command-routing); they do not inherit
+every reference presentation or source adapter.
+
 `src/pages_snapshot.ts` builds the public static artifact used by
 `.github/workflows/pages.yml`. It is intentionally separate from the local
 Bun GUI: GitHub Pages cannot reach the local API, Ollama, or ChromaDB.

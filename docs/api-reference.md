@@ -23,6 +23,28 @@ family boundaries and migration policy.
 > `tests/docs-sync.test.ts` asserts this file never advertises a route the spec
 > does not publish.
 
+## Installed regional package entry points
+
+Consumers import `runRegionalCli` from `region-intel/cli`; package assets resolve
+from the installed dependency and regional data resolves from the consumer root.
+See [command routing](deployments.md#command-routing) before interpreting a
+compatibility interface as an alternate-region capability.
+
+| Export | Source | Responsibility |
+| --- | --- | --- |
+| `loadDeployment(root, filename?)` | `src/deployment.ts` | Admit a `region-deployment/v1` document, default `region.json`, with matched identity/policy and safe owned paths |
+| `deploymentPath(root, path)` | `src/deployment.ts` | Resolve and validate a consumer-relative path |
+| `runRegionalCli({ root, args? })` | `src/regional_cli.ts` | Select configured commands, installed methods and producer roots |
+| `checkRegionalCorpus(deployment, sourceRelative?)` | `src/regional_corpus.ts` | Check the complete source-bound edition; defaults to active output |
+| `promoteRegionalCorpus(deployment, sourceRelative)` | `src/regional_corpus.ts` | Recoverably promote a verified candidate while preserving unrelated producer state |
+| `seedRegionalCorpus(deployment, sourceRelative?)` | `src/regional_corpus.ts` | Refresh accepted public projections and receipts |
+| `regionalCorpusPublication(deployment)` | `src/regional_corpus.ts` | Select an accepted same-profile edition for public rendering |
+| `renderRegionalSurface(deployment, evidence?, options?)` | `src/regional_surface.ts` | Render the configured regional dashboard; distinct from the authored Quadruplicate interface |
+
+These exports do not grant live-source, legal or model acceptance. See
+[operations](operations.md) for acquisition, promotion and separate publication
+checks; the [generated inventory](generated/exports.md) binds current declarations.
+
 ## Constants (`src/constants.ts`)
 
 | Constant | Type | Default |
@@ -181,10 +203,10 @@ An unregistered page cannot authorize closing another root's browser.
 | `CRESCENT_CITY_ANCHOR` | `geo.ts` | `MunicipalityAnchor` | Authoritative Crescent City + Del Norte bounds (WGS84) |
 | `getDefaultCrescentSpec()` | `geo.ts` | `() → MunicipalitySpec` | Crescent City anchor + 12 domains as data |
 | `buildMunicipalityContract(spec)` | `geo.ts` | `(MunicipalitySpec) → Record<string, unknown>` | **Transferable** pure builder for any municipality |
-| `buildGeoIntel(domainList?)` | `geo.ts` | `(IntelligenceDomain[]) → Record<string, unknown>` | Crescent City default builder (delegates to transferable builder) |
+| `buildGeoIntel(domainList?)` | `geo.ts` | `(IntelligenceDomain[]) → Record<string, unknown>` | Selected civic-profile builder; Crescent defaults retain their curated domain surface |
 | `hazardRelevantDomains(surface?)` | `geo.ts` | `(IntelligenceDomain[]?) → Array<{…}>` | Hazard-tagged subset (word-boundary matching) |
 | `geoPaths` | `geo.ts` | `{ pagesSeed, liveExport }` | `pages-data/geo-intel.json` + `output/geo-intel.json` |
-| `writeGeoIntelExports()` | `geo.ts` | `() → Promise<string[]>` | Write Crescent seed + live export (guarded) |
+| `writeGeoIntelExports(options?)` | `geo.ts` | `({ seedDir?, outputDir? }) → Promise<string[]>` | Write selected-profile exports; alternate profiles require explicit independent roots and geo capability |
 | `buildGeoView(intel)` | `geo_view.ts` | `(contract) → GeoIntelView` | Tiles-free SVG map features (bounds, anchor, hazard points, sections), `crescent-city-geo-view/v1` |
 | `buildGeoIntelSurface(intel)` | `geo_view.ts` | `(contract) → GeoIntelSurface` | Preserve top-level contract fields and add the canonical tiles-free `view`; shared by API and Pages |
 | `/api/geo-intel` | `gui/routes.ts` | `GET` | Serves the contract + geo-view feature surface (pure, no scraper needed) |

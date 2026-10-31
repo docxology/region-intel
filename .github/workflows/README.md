@@ -1,4 +1,10 @@
-# Workflows
+# Shared qualification and compatibility workflows
+
+`core.yml` runs the full shared gate on pushes to main and pull requests.
+The Pages and weekly workflows below are manually invoked, repository-guarded
+compatibility examples; they do not publish a consumer hostname from region-intel.
+Operational acceptance, Pages and collection workflows belong to each thin
+consumer. See [deployment operations](../../docs/operations.md).
 
 - `pr-gate.yml`: strict source/tests types, canonical contract checks,
   conservative affected-test selection, real GUI browser smoke, and

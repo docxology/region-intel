@@ -1,6 +1,6 @@
-# Source Code (`src/`)
+# Shared platform source (`src/`)
 
-All TypeScript source modules for the Crescent City Municipal Code project.
+Shared TypeScript methods and the retained Crescent compatibility application.
 
 ## Structure
 
@@ -18,6 +18,17 @@ All TypeScript source modules for the Crescent City Municipal Code project.
 | `gui/` | HTTP server, API routes, search engine, analytics |
 | `llm/` | Ollama/ChromaDB RAG pipeline for chat |
 | `shared/` | Shared path resolution and data loading helpers |
+
+## Installed consumer boundary
+
+`deployment.ts` admits regional identity/policy and consumer-owned paths;
+`regional_cli.ts` dispatches the thin importer; `regional_corpus.ts` validates,
+promotes and seeds complete editions; `regional_surface.ts` renders configured
+regional dashboards. See [deployments](../docs/deployments.md) and the
+[API entry points](../docs/api-reference.md#installed-regional-package-entry-points).
+Direct module commands below use the checkout's compatibility defaults unless
+an explicit profile and independent output context is selected. Regional
+operators should use the consumer's installed runner.
 
 ## Running
 

@@ -1,6 +1,10 @@
-# Start Here — The Quadruplicate
+# Shared development and Crescent compatibility setup
 
-Complete setup guide to get the scraper, web viewer, RAG chat, and 20 alert monitors running.
+This guide runs the shared checkout's Crescent reference application. To operate
+an installed regional deployment, start with [operations](operations.md) and
+the [deployment contract](deployments.md). The thin repositories have their own
+commands, evidence roots and hosted workflows; they do not contain the source
+paths, Compose files or manuscript renderer adapter used below.
 
 ## Prerequisites
 
@@ -25,7 +29,7 @@ recommended Deno challenge runtime are
 external tools; a thin Python adapter delegates to Bun when the shared manuscript
 renderer is used. See [the manuscript workflow](manuscript.md) for that integration.
 
-The Pages runner installs the official Linux x86_64 standalone
+The Crescent consumer Pages runner installs the official Linux x86_64 standalone
 [yt-dlp 2026.08.19](https://github.com/yt-dlp/yt-dlp/releases/tag/2026.08.19)
 and [Deno 2.9.7](https://github.com/denoland/deno/releases/tag/v2.9.7) in private
 job storage, verifies their pinned SHA-256 digests before execution and checks
@@ -40,7 +44,8 @@ separate receipts; successful installation does not establish source access.
 ## Step 1: Install Dependencies
 
 ```bash
-cd crescent-city-intel
+git clone https://github.com/docxology/region-intel.git
+cd region-intel
 bun install --frozen-lockfile
 bunx playwright install chromium
 bun run source-discovery

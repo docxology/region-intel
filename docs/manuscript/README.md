@@ -7,7 +7,7 @@ all consumers; native rendering and scientific acceptance remain separate.
 
 See [deployment manuscript ownership](../deployments.md#manuscript-and-documentation).
 
-# Manuscript workflow
+## Reference manuscript workflow
 
 This directory is the source-controlled manuscript for the Crescent City
 Intelligence Platform. The numbered files form one renderer-compatible paper:
@@ -21,6 +21,11 @@ is ignored and must not be edited by hand.
 
 The claim ledger is part of the manuscript contract. It distinguishes
 implementation claims from snapshot observations and records what each claim
-does not establish. The shared template repository renders this source through
+does not establish. The renderer must target the shared `region-intel` checkout,
+which owns the
+adapter and numbered source files. See the [rendering procedure](../manuscript.md).
+The original publication metadata identifies the retained Crescent study and
+is not a current consumer-package release declaration. The shared template
+repository renders this source through
 `scripts/pipeline/stage_03_render.py` after invoking the Python compatibility
 adapter at `scripts/z_generate_manuscript_variables.py`.

@@ -6,7 +6,7 @@ A thin deployment contains `region.json`, configuration JSON, a pinned
 ```ts
 import { fileURLToPath } from "node:url";
 import { runRegionalCli } from "region-intel/cli";
-await runRegionalCli({ root: fileURLToPath(new URL("../", import.meta.url)), args: Bun.argv.slice(2) });
+await runRegionalCli({ root: fileURLToPath(new URL("../", import.meta.url)), args: Bun.argv.slice(2).filter(arg => arg !== "--") });
 ```
 
 The versioned `region-deployment/v1` document selects `civicProfile`,
@@ -23,6 +23,31 @@ Use `bun run source-discovery` for the configured source catalog, `bun run news`
 for feeds, `bun run gov-meetings` for bounded official-page links, and
 `bun run alerts` for the explicitly enabled monitor roster. Live fetch failures
 remain visible; an empty result does not establish absence of hazards.
+
+## Command routing
+
+Both consumers use the same dispatcher, but locality-specific features retain
+their actual admission and presentation. Source entry points below live in the
+installed package, never in a copied consumer `src/` tree.
+
+| Command or surface | Crescent compatibility profile | Alternate regional profile, including Davis |
+| --- | --- | --- |
+| `validate`, `status`, `civic:profile`, `region:config` | Configuration, output identity and installed-package admission | Same shared admission; not a provider or model readiness check |
+| `scrape`, `verify`, `export`, `index`, `query`, `chat` | Installed source entry points | Same shared methods with selected profile and owned roots |
+| `alerts` / enabled `alerts:*` | Explicit configured monitor batch | Only the selected enabled roster; disabled adapters are rejected |
+| `source-discovery` | Canonical Crescent registry and retained health | Configured source catalog, initially `not-checked`; no reachability probe |
+| `gov-meetings` | Reference meeting/archive adapter | Bounded official-page meeting/agenda/minutes links, at most 100 per source; dates remain null |
+| `analytics`, `insights` | Reference analytics and evidence pipeline | Retained observation counts with explicit lack of comparable sampling windows |
+| `gui` | Authored Quadruplicate application | Regional dashboard plus shared API and local corpus search |
+| `pages:export`, `pages:validate` | Authored multi-page static edition and validation | Regional static dashboard, accepted code edition and exact-byte source replay |
+| `weekly-check` | Crescent reference collection workflow | Catalog, news, meetings, enabled alerts, geography, observation summary and Pages checks; failed steps remain in the run receipt |
+| `manuscript:*`, `docs:*` | Installed reference-source tooling | Same installed reference-source tooling; does not create a new regional study |
+
+The package's OpenAPI inventory describes the shared API; the regional dashboard
+does not promise every authored reference interface. Optional model retrieval
+requires separate model/vector services. `pages:validate` checks a local export;
+it does not check a remote deployment. The consumer importer removes standalone
+`--` separators so forwarded arguments reach the same command parser.
 
 ## Compatibility
 
@@ -42,6 +67,15 @@ its numerical claims concern its recorded Crescent edition only. Regional
 manuscript notes must cite their own input artifacts. Do not relabel the
 reference manuscript's findings as Davis results. Native PDF/DOCX rendering is
 an optional external toolchain and requires inspection of its own outputs.
+
+## Workflows and publication
+
+The shared repository runs `.github/workflows/core.yml` for core qualification.
+Its guarded legacy delivery workflows are compatibility examples. Each consumer
+owns `validate.yml`, `pages.yml` and `weekly.yml`. A consumer main push triggers
+acceptance and Pages delivery; the workflow may collect live sources before
+exporting. Editing docs and pushing does not acquire a new municipal edition.
+See [operations](operations.md) for exact local checks and evidence to retain.
 
 ## Upgrade
 

@@ -1,6 +1,12 @@
 # Configuration
 
-All configurable parameters for the Crescent City Municipal Code project.
+Shared environment configuration and the Crescent compatibility defaults.
+Installed consumers select `REGION_DEPLOYMENT` (default `region.json`); that
+document binds their public civic profile, regional policy, enabled monitors,
+sources, output and seed roots. The runner resolves those paths from the consumer
+and sets `CIVIC_PROFILE`, `REGION_CONFIG`, `CC_OUTPUT_DIR` and `REGION_ROOT` before
+starting producers. See [deployments](deployments.md) before using bare module
+entry points or overriding these variables.
 
 The [generated environment inventory](generated/configuration.md) derives literal
 environment reads and defaults from TypeScript ASTs without reading current
@@ -17,8 +23,12 @@ require an explicit isolated `CC_OUTPUT_DIR`, independently named calendar/vecto
 identities and explicit source policies. Credentials and private paths stay in
 runtime settings. Inspect with `bun run civic:profile`; see
 [civic profiles](civic-profiles.md) and the synthetic
-[example](../configs/example-civic.json). Authored GUI/Pages, regional adapters and
-weekly scheduler remain Crescent-specific and refuse alternate activation.
+[example](../configs/example-civic.json). The authored Quadruplicate GUI/Pages
+and compatibility scheduler retain their
+Crescent admission. Other consumers use the shared regional dashboard and
+explicit enabled-monitor policy through `runRegionalCli`; this path supports
+Davis without renaming the Quadruplicate. A schema-valid provider policy alone
+does not establish source access or regional coverage.
 
 ## Regional adapter configuration
 

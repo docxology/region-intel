@@ -1,4 +1,8 @@
-# Public Pages seed
+# Retained Crescent reference seed
+
+This is the shared checkout's compatibility fixture and reference seed. Current
+regional publication seeds belong to the thin consumers; see their edition
+notes. Refreshing this reference seed does not refresh either deployment.
 
 This directory contains the reviewed, public municipal-code seed used when a
 GitHub Actions checkout has no local `output/` directory. It contains only

@@ -9,8 +9,11 @@ Comprehensive project documentation covering architecture, all src/ modules, API
 | File | Content |
 | :--- | :--- |
 | `README.md` | Documentation index with links to all sections |
+| `deployments.md` | Installed-package ownership, deployment contract and command routing |
+| `operations.md` | Consumer acceptance, safe corpus promotion, publication and troubleshooting |
+| `region-methods-manuscript.md` | Generic architectural methods without regional empirical claims |
 | `architecture.md` | System architecture, data flow diagram, module dependency graph |
-| `region-intel.md` | Generic-core vs configured-orchestration split, the `civic-profile/v1` + `region-config/v1` contracts, module classification, extraction sequence |
+| `region-intel.md` | Completed extraction and shared versus consumer ownership |
 | `api-reference.md` | Selected module exports; OpenAPI is the HTTP route authority |
 | `configuration.md` | All environment variables, constants, and tuning parameters |
 | `generated/` | Source-derived configuration/export declarations and structural OpenAPI HTTP inventory; regenerate through `scripts/generate-docs.ts` |

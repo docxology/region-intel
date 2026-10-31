@@ -1,6 +1,13 @@
-# Contributing to Crescent City Municipal Code
+# Contributing to Region Intel
 
 Thank you for your interest in contributing! This project is licensed under **CC BY-SA 4.0** (Creative Commons Attribution-ShareAlike 4.0 International). All contributions must be compatible with this license.
+
+Generic adapters, algorithms, APIs, interfaces, contracts, tests and method
+documentation belong in this repository. Regional identity, policy, evidence,
+source rights and delivery workflows belong in the corresponding thin consumer.
+Read the [deployment contract](docs/deployments.md) before changing that seam.
+Keep the two consumers on reviewed immutable package commits; a local core edit
+does not update their installed dependencies.
 
 ## Getting Started
 
@@ -56,6 +63,10 @@ When modifying source code:
 2. If adding new exports, update `docs/api-reference.md`
 3. If adding new config parameters, update `docs/configuration.md`
 4. If changing module relationships, update `docs/architecture.md`
+5. Run `bun run docs:generate` and `bun run docs:check`; commit the generated
+   `.github/README.md` with its root authority and any changed inventories
+6. Check the affected installed consumers and freshly exported Pages artifacts;
+   see [operations](docs/operations.md) for the separate acceptance scopes
 
 ## Pull Request Guidelines
 

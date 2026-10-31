@@ -5,15 +5,15 @@
 
 # Reusable civic methods and jurisdiction configuration
 
-> The generic-core / configured-orchestration split, the full per-module layer
-> classification and the `region-intel` extraction sequence live in
-> [region-intel.md](region-intel.md). This document covers the identity contract
-> and its acceptance boundaries.
+The [completed extraction](region-intel.md) and [deployment contract](deployments.md)
+describe current ownership and dispatch. This guide covers the identity contract
+and the lower-level compatibility boundaries.
 
-Crescent City remains the deployed platform. Shared methods now consume a
-validated `civic-profile/v1` contract rather than silently importing its identity
-and policy. This establishes tested reuse with synthetic non-Pacific profiles;
-it does not establish another city's live sources or a fully portable deployment.
+Crescent City and Davis are independently configured consumers of the shared
+package. Shared methods consume a validated `civic-profile/v1` contract rather
+than silently importing Crescent identity and policy. Synthetic non-Pacific
+fixtures test additional isolation cases; each real deployment retains its own
+source-access, corpus and publication receipts.
 
 `src/civic_profile.ts` owns the public configuration schema. It rejects unknown
 fields, control characters, credential-bearing URLs, unsupported providers,
@@ -70,10 +70,14 @@ identifiers, counties, FIPS codes, route lists, watch boxes, provider endpoints
 and severity thresholds are configuration, not code. Supplying another region's
 parameters does not establish that a forecast zone, buoy station, road
 jurisdiction, fisheries regime, utility service area or AIS feed exists or is
-covered there. Regional producers, the regional weekly/alert batches and private digest writer fail
-before acquisition or transfer for alternate profiles. The analytics-overview
-producer remains regional; shared statistical and coverage methods can receive
-explicit inputs.
+covered there. The original Crescent weekly pipeline, authored surfaces and
+private digest
+integration refuse alternate profiles. `runRegionalCli` instead routes alternate
+deployments through the configured monitor batch, regional collection pipeline
+and regional dashboard. Its `analytics` and `insights` commands emit observation
+counts and explicit comparability limits; they do not inherit the reference
+analytics-overview or Crescent empirical findings. Shared statistical and
+coverage methods can receive explicit inputs.
 
 Pure geography builders accept explicit `MunicipalitySpec` values. An explicit
 empty domain list stays empty. Nondefault schemas are `civic-geo-intel/v1`,

@@ -2,9 +2,14 @@
 > compatibility preset. Regional configuration and retained evidence belong to
 > the consuming deployment; see [deployments](https://github.com/docxology/region-intel/blob/main/docs/deployments.md).
 
-# The Quadruplicate — Documentation
+# Region Intel documentation
 
-Comprehensive documentation for the full pipeline: scraping, verification,
+Shared methods and the retained Crescent compatibility preset are documented
+here. Regional configuration, public evidence and deployments are maintained in
+the [Crescent](https://github.com/docxology/crescent-city-intel/tree/main/docs)
+and [Davis](https://github.com/docxology/davis-ca-intel/tree/main/docs) consumers.
+
+Documentation for the pipeline covers scraping, verification,
 export, web viewer, RAG chat, streaming, monitoring, alerting, structured
 queries, legal analysis, and civic intelligence domains.
 
@@ -17,6 +22,9 @@ the generated copies and repository links before publication.
 
 | Document | Description |
 | :--- | :--- |
+| [Deployment contract](deployments.md) | Installed-package ownership, command routing, regional configuration and upgrades |
+| [Operations](operations.md) | Fresh-clone checks, candidate promotion, delivery and troubleshooting |
+| [Regional methods manuscript](region-methods-manuscript.md) | Shared architecture without inherited empirical findings |
 | [Setup Guide](setup.md) | Step-by-step installation and first-run instructions |
 | [Architecture](architecture.md) | System design, data flow diagrams, full module dependency graph |
 | [Configuration](configuration.md) | All env vars, constants, and tuning parameters |
@@ -24,7 +32,7 @@ the generated copies and repository links before publication.
 | [Generated Configuration](generated/configuration.md) | Environment reads derived from TypeScript source, including explicit dynamic-read limits |
 | [Generated Exports](generated/exports.md) | Qualified source export names and declaration hashes |
 | [Generated HTTP Inventory](generated/http.md) | Structurally parsed route methods, authentication, parameters and response media |
-| [Region-Intel](region-intel.md) | Generic-core / configured-orchestration split, the two configuration contracts, module classification and the extraction sequence |
+| [Region-Intel](region-intel.md) | Completed repository split and shared versus consumer ownership |
 | [Project Review](project-review.md) | Current-state findings, cleanup decisions, and verification receipts |
 | [Roadmap](roadmap.md) | Future priorities, dependencies, and delivery sequence |
 | [Open Backlog](../TODO.md) | Minor, medium, and major improvement scopes with acceptance criteria |
@@ -73,8 +81,7 @@ When modifying source code:
 - [Civic profiles and reusable methods](civic-profiles.md) — public configuration,
   isolation, explicit regional policy and synthetic second-profile acceptance.
 - [Region-intel: generic core and configured orchestration](region-intel.md) —
-  the `civic-profile/v1` + `region-config/v1` contracts, per-module layer
-  classification, and the sequence that extracts the reusable core.
+  the completed extraction and shared versus consumer ownership.
 
 - [Regional methods manuscript](region-methods-manuscript.md) — shared architecture without inherited empirical findings.
 - [Deployment contract](deployments.md) — thin consumers and installed-package ownership.

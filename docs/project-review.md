@@ -3,7 +3,13 @@
 > are thin configured consumers. Older entries below retain their reference
 > snapshot scope. Current runtime ownership is documented in [deployments](https://github.com/docxology/region-intel/blob/main/docs/deployments.md).
 
-# Current project state
+# Reference project history and evidence
+
+Current repository ownership and installed command routing are documented in
+[deployments](deployments.md); operating checks are in [operations](operations.md).
+The entries below retain their dated candidate, source and gate outcomes,
+including failures. They are not qualification of a later package or consumer
+HEAD. Current regional edition bindings live in each consumer's `docs/edition.md`.
 
 The Quadruplicate is a Bun/TypeScript municipal-code and civic-intelligence
 platform with a bounded static public edition. The v3.3.1 operating contract
