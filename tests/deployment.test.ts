@@ -139,3 +139,26 @@ test("alternate regional GUI serves HTML separately from API admission",async()=
   abort.abort();expect((await pending).reaped).toBe(true);
  }finally{abort.abort();rmSync(root,{recursive:true,force:true});}
 },15000);
+
+
+test("long regional lists preserve every item behind expandable summaries", async()=>{
+ const {renderRegionalSurface}=await import("../src/regional_surface.ts");
+ const {load}=await import("cheerio");
+ const root=mkdtempSync(join(tmpdir(),"region-list-surface-"));
+ try{
+  writeFileSync(join(root,"civic.json"),JSON.stringify(defaultCivicProfile));
+  writeFileSync(join(root,"policy.json"),readFileSync(new URL("../configs/crescent-city-region.json",import.meta.url)));
+  writeFileSync(join(root,"region.json"),JSON.stringify({schemaVersion:"region-deployment/v1",civicProfile:"civic.json",regionConfig:"policy.json",outputDir:"output",seedDir:"seed",enabledMonitors:[],sources:[]}));
+  const d=loadDeployment(root);
+  const news=Array.from({length:26},(_,i)=>({title:`News ${i}`,url:`https://example.org/news/${i}`}));
+  const documents=Array.from({length:100},(_,i)=>({title:`Agenda ${i}`,url:`https://example.org/agenda/${i}`}));
+  const $=load(renderRegionalSurface(d,{news,meetings:{sources:[{sourceId:"official",status:"ok",documents}]}}));
+  const sections=$("main > section"),newsSection=sections.eq(0),meetings=sections.eq(1);
+  expect(newsSection.children("ul").find("li").length).toBe(6);
+  expect(newsSection.find("details li").length).toBe(20);
+  expect(newsSection.find("details").attr("open")).toBeUndefined();
+  expect(newsSection.find("a").length).toBe(26);
+  expect(meetings.find("details a").length).toBe(100);
+  expect(meetings.find("details").attr("open")).toBeUndefined();
+ }finally{rmSync(root,{recursive:true,force:true});}
+});

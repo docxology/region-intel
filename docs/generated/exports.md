@@ -1193,7 +1193,7 @@ Qualified source exports, independent of similarly named symbols in other module
 | [src/regional_corpus.ts:138](../../src/regional_corpus.ts#L138) | `promoteRegionalCorpus` | function | `25164903be09d82ef1e8424ce5f81d510dd614f9eeb90f6b31d9a4b72922eb73` |
 | [src/regional_corpus.ts:210](../../src/regional_corpus.ts#L210) | `regionalCorpusPublication` | function | `ea5809d01329ac84fb07addebdfff082dffc5caa98a861387a7d77b5fc6940c2` |
 | [src/regional_corpus.ts:207](../../src/regional_corpus.ts#L207) | `seedRegionalCorpus` | function | `d041cf334ed289f0a446f0bcb6be3e88cba0b6e2dacb323ac0922ef7f21e3c2d` |
-| [src/regional_surface.ts:51](../../src/regional_surface.ts#L51) | `regionalObservations` | function | `30b0a1596b071cee22a827b85281977ab245ff3a1057cff07990ad60aec19db7` |
+| [src/regional_surface.ts:52](../../src/regional_surface.ts#L52) | `regionalObservations` | function | `30b0a1596b071cee22a827b85281977ab245ff3a1057cff07990ad60aec19db7` |
 | [src/regional_surface.ts:6](../../src/regional_surface.ts#L6) | `renderRegionalSurface` | function | `863122a97b83054c39db127695d293e5fe7dd43fdd8c4daa26a10d24265f5e45` |
 | [src/release_checks.ts:5](../../src/release_checks.ts#L5) | `CoverageSummary` | type | `b47a4529b04d35f25088e9df301beea866b2c3064eabf16e781962ee8604b9d8` |
 | [src/release_checks.ts:8](../../src/release_checks.ts#L8) | `parseCoverageSummary` | function | `4f2ea37d99e4916c361438fdecec740a089cb19fc075e38877ff9d2b74283b9a` |
