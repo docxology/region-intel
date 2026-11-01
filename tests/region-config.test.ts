@@ -144,3 +144,14 @@ describe("generic regional-adapter configuration", () => {
     expect(USDM_API_URL).toContain(`aoi=${cfg.drought.fips}`);
   });
 });
+
+test("alternate smoke and road summaries preserve selected regional identity",async()=>{
+ const {buildExtendedMonitorDefinitions}=await import("../src/alerts/composite.js");
+ const {buildHmsSmokeReport}=await import("../src/alerts/hrrr_smoke.js"),{computeAlertSeverity}=await import("../src/alerts/severity.js");
+ const config=alternate();config.alerts.roads.county="Example County";config.alerts.smoke.box={lonMin:-74,lonMax:-72,latMin:41,latMax:43};config.alerts.drought={county:"Example County",fips:"36001",state:"NY"};
+ withCivicProfile(exampleCityProfile(),()=>withRegionConfig(config,()=>{
+  const report=buildHmsSmokeReport({mapDate:"20260102",plumes:0,maxDensity:"Unknown"},"2026-01-02T12:00:00Z");expect(report.summary).toContain("Example City watch box");expect(report.summary).not.toContain("Del Norte");
+  const drought=buildExtendedMonitorDefinitions({}).find(row=>row.key==="drought")!;expect(drought.url).toContain("aoi=36001");expect(drought.provenance).toContain("Example County FIPS 36001");
+  expect(computeAlertSeverity({warningCount:0,watchCount:0},{events:[]},{severities:[],count:0,available:false},{waterLevelFt:null,available:false},{closureActive:false,available:false},undefined,undefined,undefined,undefined,undefined,undefined,{severity:"NONE",incidentCount:0,hasMajorClosure:false,available:true}).monitors.roads.summary).toContain("Example County");
+ }));
+});

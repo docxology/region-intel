@@ -466,3 +466,7 @@ fetch. AirNow and buoy observations, marine/smoke/drought/fuel products and AIS
 positions retain their actual clocks and units. These policies do not prove
 provider completeness, uncollected local geography or correctness of a model's
 interpretation; source outages remain coverage facts.
+
+## Regional display identity
+
+Smoke, NWS and air-quality summaries use the selected profile and watch policy; drought source-health provenance names the selected county/FIPS. Requested-run logging counts the admitted roster. Compatibility source IDs remain stable and do not establish universal local coverage.

@@ -29,11 +29,11 @@ export async function runRegionalCli(options: {
         await writeJsonAtomic(join(d.seed,"regional-observations.json"),{schemaVersion:"regional-observation-input/v1",profileId:d.profile.id,configurationSha256:regionalObservationBinding(d),capturedAt:new Date().toISOString(),observations:await regionalObservations(d,true)});console.log("Retained public observations with original source clocks");
       }return;
     }
-    if (command === "documents:acquire" || command === "documents:check") {
-      if(rest.length)throw new Error("Unexpected document arguments");
+    if (command === "documents:acquire" || command === "documents:check" || command === "documents:import") {
+      if(command==="documents:import" ? rest.length!==2||rest[0]!=="--source"||!rest[1]||rest[1].startsWith("--") : rest.length>0)throw new Error("Expected documents:import --source <output-relative capture directory>, or no arguments");
       await (await import("./civic_profile.js")).bindCivicOutputRoot(d.output);
       const methods=await import("./regional_documents.js");
-      if(command==="documents:acquire"){const r=await methods.acquireDocuments(d);console.log(JSON.stringify({profileId:r.profileId,acquiredAt:r.acquiredAt,documents:r.documents.map(x=>({id:x.id,pages:x.pages.length,pdfSha256:x.pdfSha256}))},null,2));}
+      if(command!=="documents:check"){const r=command==="documents:import"?await methods.importDocuments(d,rest[1]!):await methods.acquireDocuments(d);console.log(JSON.stringify({profileId:r.profileId,acquiredAt:r.acquiredAt,documents:r.documents.map(x=>({id:x.id,pages:x.pages.length,pdfSha256:x.pdfSha256}))},null,2));}
       else {const r=await methods.readDocuments(d);console.log(JSON.stringify({editionId:r.editionId,pages:r.profile.totalArticles,nonemptyLines:r.profile.totalSections},null,2));}
       return;
     }
@@ -202,7 +202,7 @@ export async function runRegionalCli(options: {
         const receipt = { schemaVersion: "regional-pages/v1", profile: d.profile, sources: d.config.sources, enabledMonitors: d.config.enabledMonitors, observations, corpus:corpus.summary, htmlSha256: new Bun.CryptoHasher("sha256").update(html).digest("hex") };
         const staging = await mkdtemp(join(d.root,".pages-build-"));
         await writeTextAtomic(join(staging,"index.html"),html);
-        for(const [name,bytes] of Object.entries(corpus.files))await writeTextAtomic(join(staging,name),bytes);
+        for(const [name,bytes] of Object.entries(corpus.files))await Bun.write(join(staging,name),bytes);
         for(const [name,bytes] of Object.entries(manuscript.files)){await mkdir(join(staging,name,".."),{recursive:true});await Bun.write(join(staging,name),bytes);}
         await writeTextAtomic(join(staging,"region.json"),JSON.stringify(receipt,null,2));
         await promotePublicationDirectory(staging,destination);
@@ -218,7 +218,7 @@ export async function runRegionalCli(options: {
         const {captureArtifactBytes}=await import("./artifact_custody.js");
         const decode=(bytes:Uint8Array)=>new TextDecoder("utf-8",{fatal:true}).decode(bytes);
         const region=decode(await captureArtifactBytes(join(target,"region.json"),8*1024*1024)),html=decode(await captureArtifactBytes(join(target,"index.html"),8*1024*1024));
-        for(const [name,bytes] of Object.entries(corpus.files))if(decode(await captureArtifactBytes(join(target,name),16_000_000))!==bytes)throw new Error("Published municipal corpus differs from verified source");
+        for(const [name,bytes] of Object.entries(corpus.files))if(new Bun.CryptoHasher("sha256").update(await captureArtifactBytes(join(target,name),16_000_000)).digest("hex")!==new Bun.CryptoHasher("sha256").update(bytes).digest("hex"))throw new Error("Published municipal corpus differs from verified source");
         if (region !== JSON.stringify(expected, null, 2) || html !== expectedHtml)
             throw new Error("Published regional bytes differ from configured source-derived edition");
         console.log("Regional Pages exact-byte source replay passed");

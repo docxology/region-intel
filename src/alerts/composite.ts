@@ -477,8 +477,8 @@ export function buildExtendedMonitorDefinitions(
       key,
       report,
       itemCount: key === "smoke" ? isHmsSmokeReport(report) ? report.plumeCount : 0 : Array.isArray(count) ? count.length : count ? 1 : 0,
-      url,
-      provenance,
+      url: key === "drought" ? url.replace(/aoi=\d+/, "aoi="+currentRegionConfig().alerts.drought.fips) : url,
+      provenance: key === "drought" ? `US Drought Monitor county area-percent CSV (${currentRegionConfig().alerts.drought.county} FIPS ${currentRegionConfig().alerts.drought.fips})` : provenance,
     };
   });
 }

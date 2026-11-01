@@ -208,7 +208,7 @@ export async function seedRegionalCorpus(d: LoadedDeployment, sourceRelative = d
     return scoped(d, async () => { const source = corpusSource(d, sourceRelative); return withFileLease(join(source, "state/corpus.lock"), async () => { const { bundle } = await captureCorpus(d, source); return stagePublicationSeed(bundle, d.seed); }, { staleMs: 0 }); });
 }
 export async function regionalCorpusPublication(d: LoadedDeployment): Promise<{
-    files: Record<string, string>;
+    files: Record<string, string | Uint8Array>;
     summary: {
         kind?: "documents";
         articleCount: number;

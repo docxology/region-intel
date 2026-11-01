@@ -89,3 +89,5 @@ bun run alerts:pacfin       # pacfin.ts (PacFIN public report catalog)
 bun run alerts:ais          # ais.ts (open-AIS feed, watch-box filter)
 bun run alerts:all          # all 20 concurrently + composite severity (scripts/run-alerts.ts)
 ```
+
+Regional labels and requested-run counts must resolve from the selected civic profile and policy at call time. The roster above names compatibility source identities; it does not grant another region coverage. Preserve primary source clocks and unrequested states.

@@ -4,7 +4,7 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 
 | Variable | Consumer | Source expression | Fallback expression |
 | :--- | :--- | :--- | :--- |
-| `AIRNOW_API_KEY` | [src/alerts/epa_airnow.ts:151](../../src/alerts/epa_airnow.ts#L151) | `process.env.AIRNOW_API_KEY` | not declared at this read |
+| `AIRNOW_API_KEY` | [src/alerts/epa_airnow.ts:152](../../src/alerts/epa_airnow.ts#L152) | `process.env.AIRNOW_API_KEY` | not declared at this read |
 | `AIS_FEED_URL` | [src/alerts/ais.ts:178](../../src/alerts/ais.ts#L178) | `process.env[AIS_FEED_URL_ENV]` | `aisFeedUrl()` |
 | `AIS_FEED_URL` | [src/alerts/ais.ts:208](../../src/alerts/ais.ts#L208) | `process.env[AIS_FEED_URL_ENV]` | `aisFeedUrl()` |
 | `AIS_FEED_URL` | [src/alerts/ais.ts:244](../../src/alerts/ais.ts#L244) | `process.env[AIS_FEED_URL_ENV]` | `aisFeedUrl()` |

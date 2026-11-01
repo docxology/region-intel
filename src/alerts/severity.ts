@@ -1,3 +1,4 @@
+import {currentRegionConfig} from "../region_config.js";
 /**
  * Composite alert severity scoring for Crescent City.
  * Aggregates input from all 20 alert monitors and returns a single
@@ -532,14 +533,14 @@ function assessPsps(input: PspsInput): MonitorStatus {
   if (input.delNorteAffected && input.status === "ACTIVE") {
     return {
       level: "WARNING",
-      summary: `\u{1f534} Active PSPS in Del Norte County (${input.eventCount} event(s))`,
+      summary: `\u{1f534} Active PSPS in ${currentRegionConfig().alerts.psps.county} County (${input.eventCount} event(s))`,
       count: input.eventCount,
     };
   }
   if (input.status === "PLANNED" || input.status === "ACTIVE") {
     return {
       level: "WATCH",
-      summary: `\u{1f7e1} PSPS ${input.status}: ${input.eventCount} event(s) (${input.delNorteAffected ? "Del Norte affected" : "regionally"})`,
+      summary: `\u{1f7e1} PSPS ${input.status}: ${input.eventCount} event(s) (${input.delNorteAffected ? currentRegionConfig().alerts.psps.county + " affected" : "regionally"})`,
       count: input.eventCount,
     };
   }
@@ -577,12 +578,12 @@ function assessRoads(input: RoadClosureInput): MonitorStatus {
     return { level: "CALM", summary: "Road closure data unavailable", count: 0, availability: "unavailable" };
   }
   if (input.incidentCount === 0) {
-    return { level: "CALM", summary: "No road incidents on Del Norte routes", count: 0 };
+    return { level: "CALM", summary: `No road incidents on ${currentRegionConfig().alerts.roads.county} routes`, count: 0 };
   }
   if (input.hasMajorClosure) {
     return {
       level: "WARNING",
-      summary: `\u{1f534} Major road closure active on Del Norte route (${input.incidentCount} incident(s))`,
+      summary: `\u{1f534} Major road closure active on ${currentRegionConfig().alerts.roads.county} route (${input.incidentCount} incident(s))`,
       count: input.incidentCount,
     };
   }

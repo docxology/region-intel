@@ -167,7 +167,7 @@ async function runAlertMonitorsInScope(options: AlertRunOptions): Promise<Source
     const tidesReport = settledValue("tides") as TideReport | null;
 
     // ─── Compute composite severity ───────────────────────────────────
-    logger.info("Computing 20-monitor composite alert severity...");
+    logger.info(`Computing composite alert severity for ${runnableBatch.length} requested monitors...`);
 
     async function readCurrentFile(type: string): Promise<any | null> {
       const result = resultsByKey[type as MonitorKey];
@@ -304,7 +304,7 @@ async function runAlertMonitorsInScope(options: AlertRunOptions): Promise<Source
 
     await writeJsonAtomic(attemptPath, { runId, startedAt, completedAt: checkedAt, status: "complete", requested: selected ?? MONITOR_KEYS, outcomes: runnableBatch.map(entry => ({ key: entry.key, status: resultsByKey[entry.key].status, error: monitorErrors.get(entry.key) })) });
 
-    logger.info("=== All 20 Alert Monitors Complete ===");
+    logger.info(`=== All ${runnableBatch.length} Alert Monitors Complete ===`);
     return alertSources;
   } catch (error) {
     await writeJsonAtomic(attemptPath, { runId, startedAt, completedAt: new Date().toISOString(), status: signal?.aborted ? "interrupted" : "failed", requested: selected ?? MONITOR_KEYS, error: error instanceof Error ? error.message : String(error) }, { signal: null });

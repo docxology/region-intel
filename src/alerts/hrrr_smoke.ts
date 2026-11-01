@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import {currentCivicProfile as monitorCivicProfile,isCrescentCityProfile as referenceCivicProfile} from "../civic_profile.js";
 import { withProducerScope, type ProducerOptions } from "../shared/run_scope.js";
 import { boundedHttpFetch as fetch } from "../shared/transport.js";
 import { outputRoot } from "../shared/paths.js";
@@ -23,6 +24,7 @@ import { join } from "path";
 import { SOURCE_FETCH_TIMEOUT_MS, writeJsonAtomic, appendBoundedJsonlSync } from "../shared/source_health.js";
 
 const logger = createLogger("hrrr_smoke_alert");
+const smokeArea = () => referenceCivicProfile() ? "Del Norte" : monitorCivicProfile().name + " watch box";
 
 function HISTORY_DIR(): string { return join(outputRoot(), "alerts", "smoke"); }
 function HISTORY_FILE(): string { return join(HISTORY_DIR(), "history.jsonl"); }
@@ -252,8 +254,8 @@ export function buildHmsSmokeReport(hms: HmsSmokeResult, fetchedAt = new Date().
   const density = hms.plumes === 0 ? "none" : hms.maxDensity === "Heavy" ? "heavy" : hms.maxDensity === "Medium" ? "moderate" : hms.maxDensity === "Light" ? "light" : "unknown";
   const peakLevel = "UNKNOWN" as const;
   const summary = hms.plumes === 0
-    ? `No mapped HMS plume overlaps Del Norte in product ${productDate}; surface air quality was not measured.`
-    : `HMS product ${productDate} maps ${hms.plumes} ${density}-density plume(s) over Del Norte; surface PM2.5 and AQI are unknown.`;
+    ? `No mapped HMS plume overlaps ${smokeArea()} in product ${productDate}; surface air quality was not measured.`
+    : `HMS product ${productDate} maps ${hms.plumes} ${density}-density plume(s) over ${smokeArea()}; surface PM2.5 and AQI are unknown.`;
   if (!Number.isSafeInteger(hms.plumes) || hms.plumes < 0 || !Number.isFinite(Date.parse(fetchedAt))) throw new Error("Invalid HMS report input");
   return { schemaVersion: "2.0.0", sourceProduct: "noaa-hms", source: "noaa-hms", density, productDate,
     timestamp, observedAt: null, observationStart: null, observationEnd: null, fetchedAt, checkedAt: fetchedAt,
@@ -271,7 +273,7 @@ export async function fetchSmokeForecast(): Promise<SmokeReport> {
 /** Main monitor entry point */
 export async function runSmokeMonitor(options: ProducerOptions = {}): Promise<SmokeReport | null> { return withProducerScope("alert-hrrr-smoke", options, () => runSmokeMonitorInScope()); }
 async function runSmokeMonitorInScope(): Promise<SmokeReport | null> {
-  logger.info("Checking NOAA HMS smoke plumes for the Del Norte area");
+  logger.info(`Checking NOAA HMS smoke plumes for ${smokeArea()}`);
   lastSmokeError = undefined;
 
   try {

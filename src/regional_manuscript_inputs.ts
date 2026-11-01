@@ -161,7 +161,7 @@ async function documentInputs(d:LoadedDeployment,config:Config,sources:Record<st
  for(const path of ["region.json",d.config.civicProfile,d.config.regionConfig,"package.json","bun.lock"]){const text=await bounded(d,path,16000000);files[path]={sha256:publicationHash(text),bytes:Buffer.byteLength(text)};}
  for(const [name,text] of Object.entries(sources))files[SOURCE+"/"+name]={sha256:publicationHash(text),bytes:Buffer.byteLength(text)};
  if(config.cover)files[config.cover.path]={sha256:publicationHash(assets["figures/cover.png"]!),bytes:assets["figures/cover.png"]!.length};
- try{const path=d.config.seedDir+"/regional-observations.json",text=await bounded(d,path,4000000);await (await import("./regional_surface.js")).regionalObservations(d);files[path]={sha256:publicationHash(text),bytes:Buffer.byteLength(text)};}catch(e){if((e as NodeJS.ErrnoException).code!=="ENOENT")throw e;}
+ try{const path=d.config.seedDir+"/regional-observations.json",text=await bounded(d,path,4000000);(await import("./regional_surface.js")).validateRegionalObservationInput(d,JSON.parse(text));files[path]={sha256:publicationHash(text),bytes:Buffer.byteLength(text)};}catch(e){if((e as NodeJS.ErrnoException).code!=="ENOENT")throw e;}
  const pin=JSON.parse(await bounded(d,"package.json")).dependencies?.["region-intel"];
  if(typeof pin!=="string"||!/^github:docxology\/region-intel#[a-f0-9]{40}$/.test(pin))throw new Error("Manuscript requires an immutable public core pin");
  const ledger=JSON.parse(sources["claim_ledger.json"]!);

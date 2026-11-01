@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import {currentCivicProfile as monitorCivicProfile,isCrescentCityProfile as referenceCivicProfile} from "../civic_profile.js";
 import { withProducerScope, type ProducerOptions } from "../shared/run_scope.js";
 import { boundedHttpFetch as fetch } from "../shared/transport.js";
 import { outputRoot } from "../shared/paths.js";
@@ -20,6 +21,7 @@ import { SOURCE_FETCH_TIMEOUT_MS, writeJsonAtomic, appendBoundedJsonlSync } from
 const logger = createLogger('nws_weather_alert');
 
 /** The configured Coastal Del Norte forecast zone, resolved per call. */
+function nwsCoverageLabel():string{return referenceCivicProfile()?"Del Norte coastal zone":monitorCivicProfile().name+" forecast zone";}
 function nwsForecastZone(): string { return currentRegionConfig().alerts.weather.nwsZone; }
 
 /** The active NWS zone query for the configured forecast zone, resolved per call. */
@@ -329,7 +331,7 @@ async function monitorNWSWeatherAlertsInScope(): Promise<void> {
     if (geographicMismatchCount > 0 && alerts.length === 0) {
       throw new Error(`NWS returned ${geographicMismatchCount} active alert(s) without established ${nwsForecastZone()} coverage`);
     }
-    if (geographicMismatchCount > 0) logger.warn('Excluded NWS alerts outside established Coastal Del Norte coverage', {
+    if (geographicMismatchCount > 0) logger.warn(`Excluded NWS alerts outside ${nwsCoverageLabel()} coverage`, {
       forecastZone: nwsForecastZone(), excludedCount: geographicMismatchCount,
     });
 
@@ -418,12 +420,12 @@ async function monitorNWSWeatherAlertsInScope(): Promise<void> {
     const advisoryOnly = enrichedAlerts.filter(a => a.severityLevel === 'advisory').length;
     const level = warningCount > 0 ? 'WARNING' : (watchCount > 0 || advisoryOnly > 0) ? 'WATCH' : 'CALM';
     const summary = warningCount > 0
-      ? `${warningCount} active NWS Warning(s) for Del Norte coastal zone`
+      ? `${warningCount} active NWS Warning(s) for ${nwsCoverageLabel()}`
       : watchCount > 0
-        ? `${watchCount} active NWS Watch(es) for Del Norte coastal zone`
+        ? `${watchCount} active NWS Watch(es) for ${nwsCoverageLabel()}`
         : advisoryOnly > 0
-          ? `${advisoryOnly} active NWS Advisory(ies) for Del Norte coastal zone`
-          : `No active NWS alerts for the Del Norte coastal zone (${nwsForecastZone()})`;
+          ? `${advisoryOnly} active NWS Advisory(ies) for ${nwsCoverageLabel()}`
+          : `No active NWS alerts for the ${nwsCoverageLabel()} (${nwsForecastZone()})`;
     await writeJsonAtomic(join(HISTORY_DIR(), 'current.json'), {
       fetchedAt: new Date().toISOString(),
       forecastZone: nwsForecastZone(),

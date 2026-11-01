@@ -24,6 +24,16 @@ type Page = {
     sha256: string;
     nonemptyLines: number;
 };
+type Capture = {
+    id: string;
+    sourceId: string;
+    url: string;
+    retrievedAt: string;
+    transport: "bounded-http" | "curl" | "browser-download";
+    httpStatus: 200;
+    pdfSha256: string;
+    pdfBytes: number;
+};
 type Receipt = {
     schemaVersion: "regional-document-input/v1";
     profileId: string;
@@ -33,6 +43,7 @@ type Receipt = {
         pdfBytes: number;
         pages: Page[];
         extractor: string;
+        capture?: Capture;
     }>;
 };
 const decode = (b: Uint8Array) => new TextDecoder("utf-8", { fatal: true }).decode(b);
@@ -99,36 +110,69 @@ export async function extractDocument(bytes: Uint8Array): Promise<{
         await rm(stage, { recursive: true, force: true });
     }
 }
-/** Transactional capture: failure preserves the previous complete collection. */
-export async function acquireDocuments(d: LoadedDeployment): Promise<Receipt> {
-    const config = await documentConfiguration(d);
-    if (!config)
-        throw new Error("No document collection configured");
+function assertCapture(raw: unknown, doc: Document): asserts raw is Capture {
+    if (!keys(raw, ["id", "sourceId", "url", "retrievedAt", "transport", "httpStatus", "pdfSha256", "pdfBytes"]) || raw.id !== doc.id || raw.sourceId !== doc.sourceId || raw.url !== doc.url || typeof raw.retrievedAt !== "string" || !Number.isFinite(Date.parse(raw.retrievedAt)) || !["bounded-http", "curl", "browser-download"].includes(String(raw.transport)) || raw.httpStatus !== 200 || typeof raw.pdfSha256 !== "string" || !/^[a-f0-9]{64}$/.test(raw.pdfSha256) || !Number.isSafeInteger(raw.pdfBytes) || Number(raw.pdfBytes) < 1 || Number(raw.pdfBytes) > 16000000)
+        throw new Error("Invalid recorded document capture identity");
+}
+/** Both live acquisition and explicit capture imports share one transaction. */
+async function captureCollection(d: LoadedDeployment, config: Document[], loader: (doc: Document) => Promise<{
+    bytes: Uint8Array;
+    capture: Capture;
+}>): Promise<Receipt> {
     await mkdir(d.seed, { recursive: true });
     return withFileLease(join(d.output, "state/documents.lock"), async () => {
-        const stage = await mkdtemp(join(d.seed, ".documents-build-"));
-        const receipt: Receipt = { schemaVersion: "regional-document-input/v1", profileId: d.profile.id, acquiredAt: new Date().toISOString(), documents: [] };
+        const stage = await mkdtemp(join(d.seed, ".documents-build-")), receipt: Receipt = { schemaVersion: "regional-document-input/v1", profileId: d.profile.id, acquiredAt: "", documents: [] };
         let total = 0;
         for (const doc of config) {
-            const response = await boundedHttpFetch(doc.url, { timeoutMs: 60000, maxBytes: 16000000 });
-            if (!response.ok)
-                throw new Error(`Document ${doc.id}: HTTP ${response.status}`);
-            const bytes = new Uint8Array(await response.arrayBuffer());
+            const { bytes, capture } = await loader(doc);
+            assertCapture(capture, doc);
             total += bytes.length;
-            if (total > 64000000)
-                throw new Error("Document collection exceeds aggregate bound");
+            if (total > 64000000 || bytes.length !== capture.pdfBytes || publicationHash(bytes) !== capture.pdfSha256)
+                throw new Error("Document capture PDF binding differs or exceeds bounds");
             const extracted = await extractDocument(bytes);
             await Bun.write(join(stage, doc.id + ".pdf"), bytes);
-            receipt.documents.push({ ...doc, pdfSha256: publicationHash(bytes), pdfBytes: bytes.length, ...extracted });
+            receipt.documents.push({ ...doc, pdfSha256: publicationHash(bytes), pdfBytes: bytes.length, ...extracted, capture });
         }
         if (receipt.documents.reduce((n, doc) => n + doc.pages.length, 0) > 10000)
             throw new Error("Document collection exceeds page bound");
+        receipt.acquiredAt = new Date(Math.max(...receipt.documents.map(doc => Date.parse(doc.capture!.retrievedAt)))).toISOString();
         if (JSON.stringify(await documentConfiguration(d)) !== JSON.stringify(config))
             throw new Error("Document configuration changed during acquisition");
         await Bun.write(join(stage, "input.json"), JSON.stringify(receipt, null, 2) + "\n");
         await promotePublicationDirectory(stage, join(d.seed, "documents"));
         return receipt;
     }, { staleMs: 0 });
+}
+/** No hidden fallback: an HTTP error remains a failed live acquisition. */
+export async function acquireDocuments(d: LoadedDeployment): Promise<Receipt> {
+    const config = await documentConfiguration(d);
+    if (!config)
+        throw new Error("No document collection configured");
+    return captureCollection(d, config, async (doc) => {
+        const response = await boundedHttpFetch(doc.url, { timeoutMs: 60000, maxBytes: 16000000 });
+        if (response.status !== 200)
+            throw new Error(`Document ${doc.id}: HTTP ${response.status}`);
+        const bytes = new Uint8Array(await response.arrayBuffer());
+        return { bytes, capture: { id: doc.id, sourceId: doc.sourceId, url: doc.url, retrievedAt: new Date().toISOString(), transport: "bounded-http", httpStatus: 200, pdfSha256: publicationHash(bytes), pdfBytes: bytes.length } };
+    });
+}
+/** Operator-recorded transport metadata is provenance, not independently proven network availability. */
+export async function importDocuments(d: LoadedDeployment, sourceRelative: string): Promise<Receipt> {
+    const config = await documentConfiguration(d);
+    if (!config)
+        throw new Error("No document collection configured");
+    const source = deploymentPath(d.root, sourceRelative);
+    if (!source.startsWith(d.output + "/"))
+        throw new Error("Capture import must be a child of the isolated output root");
+    const raw = JSON.parse(decode(await captureArtifactBytes(join(source, "capture.json"), 65536)));
+    if (!keys(raw, ["schemaVersion", "profileId", "documents"]) || raw.schemaVersion !== "recorded-public-capture/v1" || raw.profileId !== d.profile.id || !Array.isArray(raw.documents) || raw.documents.length !== config.length)
+        throw new Error("Invalid recorded capture roster");
+    for (let i = 0; i < config.length; i++)
+        assertCapture(raw.documents[i], config[i]!);
+    const rows = raw.documents as Capture[], members = await readdir(source, { withFileTypes: true }), expected = ["capture.json", ...config.map(doc => doc.id + ".pdf")];
+    if (members.length !== expected.length || members.some(row => !row.isFile() || row.isSymbolicLink() || !expected.includes(row.name)))
+        throw new Error("Unexpected recorded capture member");
+    return captureCollection(d, config, async (doc) => ({ bytes: await captureArtifactBytes(join(source, doc.id + ".pdf"), 16000000), capture: rows.find(row => row.id === doc.id)! }));
 }
 export async function readDocuments(d: LoadedDeployment): Promise<{
     receipt: Receipt;
@@ -155,7 +199,7 @@ export async function readDocuments(d: LoadedDeployment): Promise<{
     }> = [];
     for (let i = 0; i < config.length; i++) {
         const doc = r.documents[i]!, expected = config[i]!;
-        if (!keys(doc, [...Object.keys(expected), "pdfSha256", "pdfBytes", "pages", "extractor"]) || Object.entries(expected).some(([k, v]) => doc[k as keyof Document] !== v) || !label(doc.extractor) || !/^[a-f0-9]{64}$/.test(doc.pdfSha256))
+        if (!keys(doc, [...Object.keys(expected), "pdfSha256", "pdfBytes", "pages", "extractor", ...(doc.capture === undefined ? [] : ["capture"])]) || Object.entries(expected).some(([k, v]) => doc[k as keyof Document] !== v) || !label(doc.extractor) || !/^[a-f0-9]{64}$/.test(doc.pdfSha256))
             throw new Error("Document source binding differs");
         const path = d.config.seedDir + "/documents/" + expected.id + ".pdf", bytes = await captureArtifactBytes(deploymentPath(d.root, path), 16000000);
         total += bytes.length;
@@ -163,6 +207,11 @@ export async function readDocuments(d: LoadedDeployment): Promise<{
             throw new Error("Document collection exceeds aggregate bound");
         if (bytes.length !== doc.pdfBytes || publicationHash(bytes) !== doc.pdfSha256)
             throw new Error("Document PDF bytes differ");
+        if (doc.capture !== undefined) {
+            assertCapture(doc.capture, expected);
+            if (doc.capture.pdfSha256 !== doc.pdfSha256 || doc.capture.pdfBytes !== doc.pdfBytes)
+                throw new Error("Retained capture binding differs");
+        }
         const extracted = await extractDocument(bytes);
         if (JSON.stringify(extracted.pages) !== JSON.stringify(doc.pages))
             throw new Error("Document extraction replay differs");
@@ -170,12 +219,19 @@ export async function readDocuments(d: LoadedDeployment): Promise<{
         for (const page of extracted.pages)
             articles.push({ guid: expected.id + "-" + page.page, number: String(page.page), title: expected.title + " — PDF page " + page.page, sections: Array.from({ length: page.nonemptyLines }, () => null) });
     }
+    const captures = r.documents.filter(doc => doc.capture !== undefined);
+    if (captures.length && (captures.length !== r.documents.length || r.acquiredAt !== new Date(Math.max(...captures.map(doc => Date.parse(doc.capture!.retrievedAt)))).toISOString()))
+        throw new Error("Document capture clock differs");
     const profile = profileCorpus({ articles });
     profile.units = { items: "PDF pages", records: "Nonempty extracted lines", identifier: "PDF page number" };
     return { receipt: r, files, profile, editionId: publicationHash(raw) };
 }
 export async function documentPublication(d: LoadedDeployment) {
-    const docs = await readDocuments(d);
-    const rows = docs.receipt.documents.flatMap(doc => doc.pages.map(page => ({ id: doc.id + "-" + page.page, title: doc.title + " — PDF page " + page.page, url: doc.url + "#page=" + page.page, text: page.text })));
-    return { files: { "documents.json": JSON.stringify(docs.receipt, null, 2), "document-search.json": JSON.stringify(rows) }, summary: { articleCount: docs.profile.totalArticles, sectionCount: docs.profile.totalSections, verifiedAt: docs.receipt.acquiredAt, editionId: docs.editionId, kind: "documents" as const } };
+    const docs = await readDocuments(d), files: Record<string, string | Uint8Array> = {};
+    const rows = docs.receipt.documents.flatMap(doc => doc.pages.map(page => ({ id: doc.id + "-" + page.page, title: doc.title + " — PDF page " + page.page, url: doc.id + ".pdf#page=" + page.page, upstreamUrl: doc.url + "#page=" + page.page, text: page.text })));
+    files["documents.json"] = JSON.stringify(docs.receipt, null, 2);
+    files["document-search.json"] = JSON.stringify(rows);
+    for (const doc of docs.receipt.documents)
+        files[doc.id + ".pdf"] = docs.files[d.config.seedDir + "/documents/" + doc.id + ".pdf"]!;
+    return { files, summary: { articleCount: docs.profile.totalArticles, sectionCount: docs.profile.totalSections, verifiedAt: docs.receipt.acquiredAt, editionId: docs.editionId, kind: "documents" as const } };
 }

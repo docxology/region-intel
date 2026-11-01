@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import {currentCivicProfile as monitorCivicProfile,isCrescentCityProfile as referenceCivicProfile} from "../civic_profile.js";
 import { withProducerScope, type ProducerOptions } from "../shared/run_scope.js";
 import { boundedHttpFetch as fetch } from "../shared/transport.js";
 import { outputRoot } from "../shared/paths.js";
@@ -251,7 +252,7 @@ export async function fetchPublicAirNowKml(): Promise<AirQualityReport> {
     const base = update ? airnowObservationTime(`${update[3]}-${update[1]}-${update[2]}`, hour, update[7]!.toUpperCase()) : null;
     const observedAt = base && update && Number(update[4]) >= 1 && Number(update[4]) <= 12 && Number(update[5]) < 60 ? new Date(Date.parse(base) + Number(update[5]) * 60_000).toISOString() : null;
     if (!observedAt || !assessSourceClock("airquality", { observedAt }).usable) continue;
-    const site = placemark.getElementsByTagName("Snippet")[0]?.textContent?.trim() || "Crescent City-area AirNow station";
+    const site = placemark.getElementsByTagName("Snippet")[0]?.textContent?.trim() || `${monitorCivicProfile().name}-area AirNow station`;
     nearest = { aqi, distanceKm, site, observedAt };
   }
 
@@ -264,7 +265,7 @@ export async function fetchPublicAirNowKml(): Promise<AirQualityReport> {
       readings: [],
       maxAqi: 0,
       level: "GOOD",
-      summary: "AirNow public KML was reachable, but it contained no current Crescent City-area PM2.5 observation",
+      summary: `AirNow public KML was reachable, but it contained no current ${monitorCivicProfile().name}-area PM2.5 observation`,
       advisory: null,
     };
   }
@@ -286,7 +287,7 @@ export async function fetchPublicAirNowKml(): Promise<AirQualityReport> {
 /** Main monitor entry point */
 export async function runAirQualityMonitor(options: ProducerOptions = {}): Promise<AirQualityReport | null> { return withProducerScope("alert-epa-airnow", options, () => runAirQualityMonitorInScope()); }
 async function runAirQualityMonitorInScope(): Promise<AirQualityReport | null> {
-  logger.info("Checking air quality for Crescent City (ZIP " + airQualityConfig().zip + ")");
+  logger.info(`Checking air quality for ${monitorCivicProfile().name} (ZIP ${airQualityConfig().zip})`);
   lastAirQualityError = undefined;
 
   try {
