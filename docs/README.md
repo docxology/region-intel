@@ -85,3 +85,6 @@ When modifying source code:
 
 - [Regional methods manuscript](region-methods-manuscript.md) — shared architecture without inherited empirical findings.
 - [Deployment contract](deployments.md) — thin consumers and installed-package ownership.
+
+- [Scholarship and claim use](scholarship.md) — primary-source reading scope and bibliographic decisions.
+- [Template-backed manuscripts](manuscript.md) — native template dependency, figures and complete offline packets.

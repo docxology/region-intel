@@ -1,3 +1,5 @@
 # Captured provider bytes (including embedded marine forecast text) retain source whitespace.
 tests/fixtures/** -whitespace
 tests/nws-marine.test.ts -whitespace
+# Preserve Matplotlib SVG path whitespace; exact artifact hashes remain checked.
+docs/assets/method-architecture.svg whitespace=-blank-at-eol linguist-generated=true

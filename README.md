@@ -1,5 +1,9 @@
 # Region Intel
 
+![Region civic information: conceptual editorial landscape](docs/assets/region-editorial.png)
+
+*Conceptual editorial artwork; [provenance and scope](docs/assets/ARTWORK.md).*
+
 Shared Bun/TypeScript methods for regional civic intelligence. This repository owns
 implementation, tests, OpenAPI, provider protocols, documentation and manuscript
 tooling. The deployment repositories own identity, source selection, enabled

@@ -191,3 +191,14 @@ AIRNOW_API_KEY=your-key-here bun run alerts:airquality
 | `REGION_CONFIG` | _(unset)_ | Path to a bounded `region-config/v1` JSON document for the alert adapters; must name the selected civic profile. Unset uses the built-in Crescent City default (`src/region_config.ts`) |
 | `RERANK_ENABLED` | `false` | Enable the post-retrieval lexical-hybrid rerank (`src/llm/rag.ts`) |
 | `RERANK_TOP_N` | `5` | Chunks retained by the rerank when `RERANK_ENABLED=true` |
+
+
+## External manuscript renderer
+
+REGION_TEMPLATE_ROOT selects the clean pinned docxology/template checkout.
+REGION_TEMPLATE_PYTHON selects its prepared interpreter (Python 3.14 or newer,
+respecting the template's declared version and frozen environment). These affect
+native manuscript execution, not regional acquisition or model selection.
+Source checking and byte replay need neither a sibling checkout nor native tools.
+See [manuscript rendering](manuscript.md) for exact preparation, native tool
+versions, external storage bindings and the complete HTML asset requirement.

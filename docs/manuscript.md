@@ -1,72 +1,105 @@
-# Manuscript and template rendering
+# Manuscripts, scholarship and template-backed rendering
 
-The source-controlled paper is in [`docs/manuscript/`](manuscript/). It is a
-software-and-artifact evaluation paper, not a claim of safety impact or legal
-sufficiency. The manuscript keeps implementation invariants, one-run
-observations, generated language, and public-delivery claims separate through
-`docs/manuscript/claim_ledger.json`.
+Region Intel owns generic manuscript admission, evidence projection, numerical
+profiling, figure production, output custody and external-template orchestration.
+Regional consumers own their prose, bibliography, claim ledger, artwork and
+accepted public evidence. The retained Crescent reference paper is distinct from
+the independently authored Davis software/corpus case study.
 
-## Ownership after extraction
+## Regional publication backend
 
-The renderer adapter, numbered sources, bibliography and claim ledger live in
-`region-intel`. Use the shared checkout as the renderer project for that retained reference
-study. A configured consumer can own independent regional source prose and
-claims through the shared native workflow below; the reference findings are
-never relabelled as a Davis study. The [regional methods manuscript](region-methods-manuscript.md)
-describes the common design without importing numerical reference findings.
+Native regional rendering uses the actual **docxology/template RenderManager**
+combined PDF and HTML APIs. The dependency is pinned to
+[c18dae54a07fe6ac3a7b1a1a274251c169a12e7a](https://github.com/docxology/template/tree/c18dae54a07fe6ac3a7b1a1a274251c169a12e7a).
+There is no direct-Pandoc fallback. Template code is imported from that external
+checkout; it is not copied into a consumer or reimplemented in this package.
 
-## Consumer-owned regional manuscripts
+Prepare that clean template revision with its declared Python toolchain and
+frozen dependencies. Its offline reader requires the exact MathJax dependencies
+in its npm lockfile; follow the template's Node 24/npm 11.20.0 instructions.
+For this workflow, optional browser-install scripts are unnecessary because the
+figures are generated with Matplotlib rather than Mermaid.
 
-A consumer may own ten numbered, labelled source sections, a bibliography,
-claim ledger and `docs/manuscript/config.json` using `regional-manuscript/v1`.
-The local document declares a title, semantic manuscript version, author list
-and explicit `review-draft` status. Generic checking/hydration/rendering remains
-in `src/regional_manuscript.ts`; no renderer implementation is copied into a
-consumer. The retained Crescent study remains the default when no local config
-is selected. A local config routes manuscript commands to that consumer's own
-sources and exact accepted public seed.
+~~~sh
+# In the pinned template checkout:
+uv sync --frozen --no-default-groups --extra rendering
+npm ci --ignore-scripts
+~~~
 
-From a configured consumer, run:
+Pandoc 3.12.1 and matching pandoc-crossref 0.3.26, XeLaTeX/BibTeX, qpdf and
+pdftotext are required for the qualified workflow. Select the checkout and
+interpreter explicitly; do not infer them from a consumer's location.
 
-```sh
+~~~sh
+export REGION_TEMPLATE_ROOT=/path/to/pinned/template
+export REGION_TEMPLATE_PYTHON=/path/to/pinned/template/.venv/bin/python
+# In a configured regional consumer:
+bun install --frozen-lockfile
 bun run manuscript:check
 bun run manuscript:render
 bun run manuscript:validate-render
 bun run manuscript:bundle
 bun run manuscript:validate-render -- --bundle
-```
-
-Checking recomputes source denominators and captures configuration, frozen
-dependency, seed/publication verification, source prose, bibliography, ledger
-and renderer hashes. Unsupported claims, unknown tokens and changed bindings
-fail. Rendering uses native Pandoc, XeLaTeX, qpdf and pdftotext through bounded
-owned children, with raw HTML/TeX disabled in manuscript Markdown. Failed
-staging is retained; prior complete output is preserved. PDF/HTML and exact
-input/tool/output receipts live under consumer `output/manuscript-review/`.
-Bundle writes a visibly labelled `review/<version>-draft/` packet; it does not
-create a GitHub release, tag or DOI. Inspect actual PDF pages and obtain an
-independent review before declaring a particular packet review-ready. Source,
-render, scientific and publication acceptance remain distinct. See Davis for
-an authored inland application; do not substitute the Crescent findings.
-
-## Source and hydration
-
-The numbered Markdown files provide the renderer-compatible IMRAD spine:
-abstract, introduction, methods, results, discussion, limitations and ethics,
-reproducibility, conclusion, appendix, and references. Run:
-
-~~~text
-bun run analytics
-bun run manuscript:check
-bun run manuscript:hydrate
-bun run scripts/validate-manuscript.ts --hydrated
 ~~~
 
-Hydration reads `output/state/analytics-overview.json`, writes
-`output/data/manuscript_variables.json`, and creates the ignored
-`output/manuscript/` tree. The analytics input fingerprint is preserved in the
-variable artifact and rendered abstract/results text. Do not edit generated
-Markdown or hand-copy snapshot values into source prose.
+On the local GitVault installation, verify both interpreter prefixes and keep
+source, dependencies, TMP and caches on that mounted volume. The consumer's Bun
+toolchain is unchanged. Native work uses a fresh ignored namespace under the
+selected template's output/region-intel-builds directory, satisfying the
+template's confined offline asset writer. Failed native work is retained.
+
+## Authored input and derived figures
+
+A consumer supplies ten labelled numbered sections, references.bib,
+claim_ledger.json and config.json under docs/manuscript. Configuration retains
+the regional-manuscript/v1 schema and review-draft status. An optional cover
+object has path, alt and credit strings. Optional authorOrcids maps declared
+author names to validated ORCID identifiers; identifier checks include the checksum. Its path selects a bounded PNG under
+docs/assets; all three fields and the exact image bytes participate in the input
+identity. No title-page image is treated as measured geographic evidence.
+
+The accepted public seed supplies the article/section denominator. A complete
+article-level profile supplies minimum, median, maximum, zero-count pages and
+the CSV behind the measured figure. Publication figures have PNG, PDF and SVG
+versions. The architecture and evidence-boundary diagrams are explanatory;
+the corpus-profile figure is descriptive data. No population inference,
+legal-importance score or civic-impact outcome is computed.
+
+The [scholarship record](scholarship.md) maps ten contextual references to the
+limited claims they support. Literature results never substitute for a regional
+evaluation. The [generic methods manuscript](region-methods-manuscript.md)
+describes the shared/local boundary without relabelling Crescent observations.
+
+## Complete native packet and replay
+
+Native packets use regional-manuscript-review/v2. Upgrading from the earlier
+direct-Pandoc v1 receipt requires a fresh render and renewed applicable review.
+The review target remains review/VERSION-draft; no command creates a release,
+tag or DOI. Preserve the entire packet:
+
+- manuscript.pdf and manuscript.txt;
+- web/index.html, its font/MathJax assets and favicon;
+- figures, including native vector/raster variants and the cover;
+- all hydrated sections, bibliography, claim ledger and exact CSV/profile JSON;
+- source evidence, template request/provenance and review receipt.
+
+Copying the HTML entry point alone is incomplete. Replay checks the exact bounded
+member set, every hash, current text/data/artwork projection and the pinned
+template asset hashes. Actual template source identity and imported API are
+verified at native execution. A completed stage is validated before promotion;
+partial or invalid output cannot displace the prior complete edition.
+
+Recorded source verification, native execution, independent technical review,
+scientific/legal acceptance and publication decisions remain distinct. A
+renderer-generated receipt explicitly does not manufacture review or publication
+approval. Do not edit generated members to make them agree with prose.
+
+## Retained reference manuscript
+
+The numbered sources under this repository's docs/manuscript directory retain
+the Crescent reference study and its own claim/evidence scope. They are not
+the Davis manuscript. Existing reference hydration remains available through
+the thin Python adapter; the route below is retained for that reference edition.
 
 ## Rendering with the shared template repository
 

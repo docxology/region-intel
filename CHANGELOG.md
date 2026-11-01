@@ -49,6 +49,14 @@ The retained history below documents the reference implementation.
 
 # Changelog
 
+## Unreleased — template-backed scholarly editions
+
+- Replace the regional direct-Pandoc backend with pinned external docxology/template APIs.
+- Split input capture, numerical profiling, projection, membership and native invocation into focused shared modules.
+- Add complete finite-corpus tables, publication figures, optional evidence-bound cover art and full offline HTML assets.
+- Introduce v2 native receipts; previous v1 render packets require regeneration and renewed review.
+- Add a primary-source scholarship record and conceptual regional cover artwork.
+
 All notable changes to the **Crescent City Intelligence Platform** are
 documented here.
 

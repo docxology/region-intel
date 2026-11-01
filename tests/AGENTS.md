@@ -130,3 +130,6 @@ against exact retained source headings; active, missing and changed markers fail
 `regional-manuscript.test.ts` uses real temporary publication inputs, changed-byte
 and claim-reference failures, unknown-token rejection, and a real unavailable
 native-tool subprocess proving prior complete output preservation.
+
+The regional corpus profiler has constructed odd/even/zero-count arithmetic,
+CSV quoting and malformed/duplicate identity controls in regional-corpus-profile.test.ts.

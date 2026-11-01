@@ -539,3 +539,14 @@ readability-history modules. Full modelling notes live in
 | :--- | :--- |
 | `GET /api/geo-observations` | The `crescent-city-geo-observations/v1` envelope built per request from the live artifacts: `composite` (`{level, reason, assessedAt, hasUnavailableMonitors}` or `null`), `monitors[]` (`{id, label, status, checkedAt, itemCount?, ageMs?, url?}`), `hazardSummary[]` (`{tag, domainCount, topicCount}`), and `freshness.contractGeneratedAt` joined from the geo-intel seed (the in-repo domain surface substitutes when the seed is absent). Missing alert artifacts return the empty envelope — never a 500 |
 | `GET /api/readability/history?limit=&offset=` | Paginated bounded history: `{total, count, offset, limit, entries[], trend}`. Pagination walks from the newest end — `offset` skips the most-recent entries and `limit` takes the page before them, entries within the page staying chronological. `total` and `trend` always describe the FULL history file, never the page. `limit` is 1–200 (default 60), `offset` ≥ 0; non-numeric values are a 400, out-of-range values clamp |
+
+
+## Regional scholarly publication
+
+The regional manuscript API retains checkRegionalManuscript,
+buildRegionalManuscript, validateRegionalRender and packageRegionalManuscript.
+Captured inputs, deterministic projection, bounded recursive membership and
+native template invocation are separate modules. profileCorpus and profileCsv
+derive the complete descriptive record table used by publication figures.
+Native rendering requires an explicitly prepared pinned docxology/template
+checkout; source checking and existing-packet replay do not invoke it.

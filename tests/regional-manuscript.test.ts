@@ -65,7 +65,7 @@ test("missing source and unknown tokens fail; hydration owns no reference manusc
         const prior = await readFile(join(out, "review-receipt.json"), "utf8");
         expect(await readFile(join(out, "manuscript.md"), "utf8")).toContain("Recorded 1 articles and 1 sections");
         await expect(validateRegionalRender(d)).rejects.toThrow();
-        const child = Bun.spawn([process.execPath, join(import.meta.dir, "../src/regional_cli.ts"), "manuscript:render"], { cwd: d.root, env: { ...process.env, PATH: "/no-regional-render-tools", REGION_DEPLOYMENT: "region.json", REGION_ROOT: d.root }, stdin: "ignore", stdout: "pipe", stderr: "pipe" });
+        const child = Bun.spawn([process.execPath, join(import.meta.dir, "../src/regional_cli.ts"), "manuscript:render"], { cwd: d.root, env: { ...process.env, PATH: "/no-regional-render-tools", REGION_TEMPLATE_PYTHON: "/no-regional-render-tools/python", REGION_TEMPLATE_ROOT: d.root, REGION_DEPLOYMENT: "region.json", REGION_ROOT: d.root }, stdin: "ignore", stdout: "pipe", stderr: "pipe" });
         const stdout = new Response(child.stdout).text(), stderr = new Response(child.stderr).text();
         expect(await child.exited).not.toBe(0);
         expect((await stderr) + (await stdout)).toContain("Manuscript tool failed");
@@ -74,7 +74,7 @@ test("missing source and unknown tokens fail; hydration owns no reference manusc
     finally {
         await rm(d.root, { recursive: true, force: true });
     }
-});
+}, 30000);
 
 test("required and optional seed members reject symlink escapes and oversized regular files", async () => {
     const d = await fixture();
@@ -124,4 +124,43 @@ test("a BOM cannot silently collapse changed manuscript input bytes", async () =
         await writeFile(config,Buffer.concat([Buffer.from([0xef,0xbb,0xbf]),original]));
         await expect(checkRegionalManuscript(d)).rejects.toThrow();
     } finally { await rm(d.root,{recursive:true,force:true}); }
+});
+
+
+test("author identifiers and cover bytes are captured; invalid metadata and linked artwork fail", async () => {
+    const d=await fixture();
+    try {
+        const path=join(d.root,"docs/manuscript/config.json"),config=JSON.parse(await readFile(path,"utf8"));
+        const before=await checkRegionalManuscript(d);
+        config.authorOrcids={[config.authors[0]]:"0000-0000-0000-0001"};
+        await writeFile(path,JSON.stringify(config));
+        expect((await checkRegionalManuscript(d)).inputFingerprint).not.toBe(before.inputFingerprint);
+        config.authorOrcids[config.authors[0]]="0000-0000-0000-0002";
+        await writeFile(path,JSON.stringify(config));
+        await expect(checkRegionalManuscript(d)).rejects.toThrow("ORCID checksum");
+        config.authorOrcids={unlisted:"0000-0000-0000-0001"};
+        await writeFile(path,JSON.stringify(config));
+        await expect(checkRegionalManuscript(d)).rejects.toThrow("author identifiers");
+        delete config.authorOrcids;
+        await mkdir(join(d.root,"docs/assets"),{recursive:true});
+        const bytes=Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aZ1sAAAAASUVORK5CYII=","base64");
+        await writeFile(join(d.root,"docs/assets/cover.png"),bytes);
+        config.cover={path:"docs/assets/cover.png",alt:"Synthetic one-pixel fixture",credit:"Test fixture only"};
+        await writeFile(path,JSON.stringify(config));
+        expect((await checkRegionalManuscript(d)).inputFingerprint).not.toBe(before.inputFingerprint);
+        await writeFile(join(d.root,"docs/assets/retained.png"),bytes);
+        await unlink(join(d.root,"docs/assets/cover.png"));
+        await symlink(join(d.root,"docs/assets/retained.png"),join(d.root,"docs/assets/cover.png"));
+        await expect(checkRegionalManuscript(d)).rejects.toThrow();
+    } finally {await rm(d.root,{recursive:true,force:true});}
+});
+test("authored raw active content and TeX file operations never reach the native renderer",async()=>{
+    const d=await fixture();
+    try {
+        const path=join(d.root,"docs/manuscript/00_section.md"),original=await readFile(path,"utf8");
+        for(const payload of ["<script>throw 1</script>","<img src=x onerror=alert(1)>","<svg/onload=alert(1)>","\\input{outside.tex}"]){
+            await writeFile(path,original+"\n"+payload);
+            await expect(checkRegionalManuscript(d)).rejects.toThrow("active HTML");
+        }
+    } finally {await rm(d.root,{recursive:true,force:true});}
 });

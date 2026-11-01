@@ -298,3 +298,14 @@ module into the generic core, regional configuration or authored orchestration
 and sequences the extraction of the reusable core. Public Pages replay captures
 the exact profile; synthetic configuration cannot relabel the authored
 Quadruplicate or its reviewed municipal seed.
+
+
+## Scholarly publication boundary
+
+Regional accepted evidence and authored sources pass through shared input
+capture, corpus profiling and projection. The shared adapter imports the pinned
+external template's actual RenderManager APIs. Template-native PDF/HTML and
+Matplotlib figure outputs enter a bounded complete packet; membership, current
+inputs, image bytes and pinned reader assets are checked before promotion.
+Consumers contain no copy of this implementation. See [the publication
+procedure](manuscript.md) and [scholarly scope](scholarship.md).

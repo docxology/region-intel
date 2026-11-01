@@ -14,7 +14,8 @@ Quadruplicate GUI/Pages); Davis is an independent inland deployment. The
 architecture below describes the reference preset, not universal geographic
 coverage. Alternate regions require configured source policies and independent
 corpus/vector/output identities. All tests/application commands use Bun. The
-Python manuscript adapter only invokes the external renderer.
+native publication adapter invokes the external template and shared Matplotlib
+figure producer; generic publication code stays in this repository.
 
 ## Architecture
 
@@ -54,6 +55,11 @@ src/                            # Shared platform and compatibility preset
 deployment.ts                   # Strict regional deployment admission and root ownership
 regional_cli.ts                 # Shared command dispatcher for thin consumer repositories
 regional_surface.ts             # Configured public dashboard and Pages publication
+regional_manuscript_inputs.ts   # Captured public manuscript inputs, accepted seed and selected configuration
+regional_manuscript_projection.ts # Deterministic prose, evidence and corpus-profile projection
+regional_manuscript_members.ts  # Bounded complete offline edition membership and byte replay
+regional_corpus_profile.ts      # Descriptive accepted-corpus structure and exact CSV data
+regional_template.ts            # Pinned template source and native adapter invocation
 regional_manuscript.ts          # Consumer-authored manuscripts, accepted-seed evidence and native PDF/HTML review editions
 regional_corpus.ts              # Verified regional corpus promotion, seed selection and public code edition
 types.ts                        # All TypeScript interfaces
