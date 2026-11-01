@@ -53,6 +53,7 @@ ecode360.com/CR4919
 ```
 src/                            # Shared platform and compatibility preset
 deployment.ts                   # Strict regional deployment admission and root ownership
+regional_publication.ts         # Read-only committed/staged public input and manuscript byte correspondence
 regional_cli.ts                 # Shared command dispatcher for thin consumer repositories
 regional_surface.ts             # Configured public dashboard and Pages publication
 regional_manuscript_inputs.ts   # Captured public manuscript inputs, accepted seed and selected configuration

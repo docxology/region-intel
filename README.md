@@ -1069,3 +1069,7 @@ establishes that the personal app consumed or verified its contents.
   <a href="https://crescentcity.org">crescentcity.org</a> ·
   <a href="https://ecode360.com/CR4919">ecode360.com/CR4919</a>
 </p>
+
+Before publishing a consumer, run its shared publication:check command. The
+[committed/staged preflight](docs/publication-preflight.md) verifies actual Git
+bytes, including complete offline manuscript assets. See [security policy](SECURITY.md).

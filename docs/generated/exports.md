@@ -1207,6 +1207,9 @@ Qualified source exports, independent of similarly named symbols in other module
 | [src/regional_manuscript.ts:14](../../src/regional_manuscript.ts#L14) | `checkRegionalManuscript` | function | `92d55d8f5d5236617c13d223d8f34ee9689bbc5b5994c4c59399bbd4c003f90d` |
 | [src/regional_manuscript.ts:65](../../src/regional_manuscript.ts#L65) | `packageRegionalManuscript` | function | `b85182d5270887f80ce3f830d0194a1dcb2aac3a21b7d53ba4847e60fe3b9e39` |
 | [src/regional_manuscript.ts:47](../../src/regional_manuscript.ts#L47) | `validateRegionalRender` | function | `253cf7fe199af65ab9649c16478215a7b3d3dda3102b763d6fa08deb362056fa` |
+| [src/regional_publication.ts:73](../../src/regional_publication.ts#L73) | `checkRegionalPublication` | function | `3da7344dd0cec25d4b17fad9d82ab4979504ff8712cf3642495502175d6ef65c` |
+| [src/regional_publication.ts:12](../../src/regional_publication.ts#L12) | `PublicationReference` | type | `b7685516eba1aff20a66aa72b7f7109062a026d2f26d47737bed3cc5ac02c815` |
+| [src/regional_publication.ts:24](../../src/regional_publication.ts#L24) | `verifyGitPublication` | function | `798f62a6576398dad318073497d341966a09ba54403f1ec5f7f78e0d60fcece6` |
 | [src/regional_surface.ts:52](../../src/regional_surface.ts#L52) | `regionalObservations` | function | `30b0a1596b071cee22a827b85281977ab245ff3a1057cff07990ad60aec19db7` |
 | [src/regional_surface.ts:6](../../src/regional_surface.ts#L6) | `renderRegionalSurface` | function | `863122a97b83054c39db127695d293e5fe7dd43fdd8c4daa26a10d24265f5e45` |
 | [src/regional_template.ts:13](../../src/regional_template.ts#L13) | `rendererFingerprint` | function | `2ac723e14d1611c9e1815500d7f291b4850c11db728c38bf800852257ee28955` |

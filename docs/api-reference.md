@@ -550,3 +550,7 @@ native template invocation are separate modules. profileCorpus and profileCsv
 derive the complete descriptive record table used by publication figures.
 Native rendering requires an explicitly prepared pinned docxology/template
 checkout; source checking and existing-packet replay do not invoke it.
+
+The shared regional_publication module exports verifyGitPublication and
+checkRegionalPublication for bounded commit/index byte correspondence. See
+[publication preflight](publication-preflight.md) for scope and CLI use.

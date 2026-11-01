@@ -309,3 +309,12 @@ Matplotlib figure outputs enter a bounded complete packet; membership, current
 inputs, image bytes and pinned reader assets are checked before promotion.
 Consumers contain no copy of this implementation. See [the publication
 procedure](manuscript.md) and [scholarly scope](scholarship.md).
+
+The publication preflight verifies the consumer Git commit/index against its
+public input closure and optional complete manuscript packet. It is read-only
+and separate from rendering, source acquisition, and formal publication.
+
+The complete gate prints both ordinary and successful coverage child output,
+including their test denominators. The shared Linux workflow retains the whole
+regular-file log on success or failure. Capturing diagnostics does not change
+command arguments, timeout budgets, coverage measurement or failure handling.

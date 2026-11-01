@@ -16,6 +16,12 @@ export async function runRegionalCli(options: {
     process.env.CC_OUTPUT_DIR = d.output;
     process.env.REGION_ROOT = d.root;
     const packageRoot = resolve(import.meta.dir, "..");
+    if (command === "publication:check") {
+        if (rest.length && !(rest.length === 1 && rest[0] === "--staged")) throw new Error("Expected optional --staged");
+        const { checkRegionalPublication } = await import("./regional_publication.js");
+        console.log(JSON.stringify(await checkRegionalPublication(d, rest.length ? "index" : "HEAD", process.env.REGION_DEPLOYMENT ?? "region.json"), null, 2));
+        return;
+    }
     const localManuscript = await Bun.file(join(d.root,"docs/manuscript/config.json")).exists();
     if(command.startsWith("manuscript:") && (localManuscript || ["manuscript:render","manuscript:validate-render","manuscript:bundle"].includes(command))) {
       if(rest.length && !(command==="manuscript:validate-render"&&rest.length===1&&rest[0]==="--bundle"))throw new Error("Unexpected regional manuscript arguments");

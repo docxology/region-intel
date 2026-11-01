@@ -2219,3 +2219,14 @@ None. All existing CLI commands and API endpoints remain compatible.
 - 208 tests · 0 failures · 19 test files
 
 ---
+
+## Shared publication preflight
+
+- Add bounded read-only commit/index verification for both regional consumers.
+- Include selected public inputs and every declared manuscript asset; reject
+  ignored/missing blobs, dirty bytes, symlinks and observed reference drift.
+- Add real Git text/binary, nested ignore-rule and selected-configuration controls.
+
+- Preserve selected-reference presence of optional seed members and manuscript
+  configuration; real missing-file controls reject unstaged deletions and
+  distinguish deliberately staged removals from the current commit.

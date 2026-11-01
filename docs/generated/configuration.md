@@ -60,7 +60,7 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `HOME` | [src/browser_smoke.ts:30](../../src/browser_smoke.ts#L30) | `process.env.HOME` | `"~"` |
 | `HOME` | [src/browser_smoke.ts:31](../../src/browser_smoke.ts#L31) | `process.env.HOME` | `"~"` |
 | `HOME` | [src/browser.ts:55](../../src/browser.ts#L55) | `process.env.HOME` | `""` |
-| `HOST` | [src/regional_cli.ts:202](../../src/regional_cli.ts#L202) | `process.env.HOST` | `"127.0.0.1"` |
+| `HOST` | [src/regional_cli.ts:208](../../src/regional_cli.ts#L208) | `process.env.HOST` | `"127.0.0.1"` |
 | `LIFEOS_CUSTOMIZATIONS_DIR` | [scripts/lifeos-bridge.ts:19](../../scripts/lifeos-bridge.ts#L19) | `process.env.LIFEOS_CUSTOMIZATIONS_DIR` | `join(home, ".claude", "LIFEOS", "USER", "CUSTOMIZATIONS", "SKILLS", "LocalIntelligence")` |
 | `LIFEOS_DATA_DIR` | [scripts/lifeos-bridge.ts:21](../../scripts/lifeos-bridge.ts#L21) | `process.env.LIFEOS_DATA_DIR` | `join(home, ".claude", "LIFEOS", "MEMORY", "DATA", "LocalIntelligence")` |
 | `LLM_PREFLIGHT_TIMEOUT_MS` | [src/llm/config.ts:50](../../src/llm/config.ts#L50) | `process.env.LLM_PREFLIGHT_TIMEOUT_MS` | `"5000"` |
@@ -98,7 +98,7 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `PLAYWRIGHT_EXECUTABLE_PATH` | [src/browser_smoke.ts:25](../../src/browser_smoke.ts#L25) | `process.env.PLAYWRIGHT_EXECUTABLE_PATH` | not declared at this read |
 | `PORT` | [src/browser_smoke.ts:49](../../src/browser_smoke.ts#L49) | `process.env.PORT` | `"3999"` |
 | `PORT` | [src/gui/server.ts:12](../../src/gui/server.ts#L12) | `process.env.PORT` | `"3000"` |
-| `PORT` | [src/regional_cli.ts:202](../../src/regional_cli.ts#L202) | `process.env.PORT` | `3000` |
+| `PORT` | [src/regional_cli.ts:208](../../src/regional_cli.ts#L208) | `process.env.PORT` | `3000` |
 | `PUSH_CONTACT_EMAIL` | [src/notifications/push.ts:19](../../src/notifications/push.ts#L19) | `env("PUSH_CONTACT_EMAIL")` | not declared at this read |
 | `PUSH_CONTACT_EMAIL` | [src/notifications/push.ts:49](../../src/notifications/push.ts#L49) | `env("PUSH_CONTACT_EMAIL")` | not declared at this read |
 | `PUSH_PRIVATE_KEY` | [src/notifications/push.ts:19](../../src/notifications/push.ts#L19) | `env("PUSH_PRIVATE_KEY")` | not declared at this read |
@@ -118,10 +118,11 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `REGION_CONFIG` | [src/region_config.ts:272](../../src/region_config.ts#L272) | `process.env.REGION_CONFIG` | not declared at this read |
 | `REGION_CONFIG` | [src/regional_cli.ts:15](../../src/regional_cli.ts#L15) | `process.env.REGION_CONFIG` | not declared at this read |
 | `REGION_DEPLOYMENT` | [src/regional_cli.ts:13](../../src/regional_cli.ts#L13) | `process.env.REGION_DEPLOYMENT` | `"region.json"` |
+| `REGION_DEPLOYMENT` | [src/regional_cli.ts:22](../../src/regional_cli.ts#L22) | `process.env.REGION_DEPLOYMENT` | `"region.json"` |
 | `REGION_ROOT` | [scripts/scheduler-plan.ts:6](../../scripts/scheduler-plan.ts#L6) | `process.env.REGION_ROOT` | `resolve(import.meta.dir, "..")` |
 | `REGION_ROOT` | [scripts/scheduler-plan.ts:13](../../scripts/scheduler-plan.ts#L13) | `process.env.REGION_ROOT` | `resolve(import.meta.dir, "..")` |
 | `REGION_ROOT` | [src/regional_cli.ts:17](../../src/regional_cli.ts#L17) | `process.env.REGION_ROOT` | not declared at this read |
-| `REGION_ROOT` | [src/regional_cli.ts:225](../../src/regional_cli.ts#L225) | `process.env.REGION_ROOT` | `process.cwd()` |
+| `REGION_ROOT` | [src/regional_cli.ts:231](../../src/regional_cli.ts#L231) | `process.env.REGION_ROOT` | `process.cwd()` |
 | `REGION_TEMPLATE_PYTHON` | [src/regional_template.ts:21](../../src/regional_template.ts#L21) | `process.env.REGION_TEMPLATE_PYTHON` | not declared at this read |
 | `REGION_TEMPLATE_ROOT` | [src/regional_template.ts:21](../../src/regional_template.ts#L21) | `process.env.REGION_TEMPLATE_ROOT` | not declared at this read |
 | `REPO_OUTPUT_DIR` | [scripts/lifeos-bridge.ts:16](../../scripts/lifeos-bridge.ts#L16) | `process.env.REPO_OUTPUT_DIR` | `outputRoot()` |

@@ -88,3 +88,5 @@ When modifying source code:
 
 - [Scholarship and claim use](scholarship.md) — primary-source reading scope and bibliographic decisions.
 - [Template-backed manuscripts](manuscript.md) — native template dependency, figures and complete offline packets.
+
+Publication closure: [committed/staged preflight](publication-preflight.md).

@@ -327,7 +327,7 @@ export async function runReleaseGate(options: { only?: "contracts" | "all" } = {
   console.log("\n== Actual line coverage ==");
   const covOutput = await runFencedCommand({
     args: ["bun", "test", "tests/", "--coverage", "--timeout", "30000"],
-    cwd: root, outputRoot: paths.output, capture: true,
+    cwd: root, outputRoot: paths.output, capture: false,
   });
   const coverage = parseCoverageSummary(covOutput);
   const floor = 60;

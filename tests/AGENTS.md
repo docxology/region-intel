@@ -64,6 +64,7 @@ bun test --watch      # Watch mode
 | `pages-bundle-validation.test.ts` | Actual authored bundle semantics, bounded literal/helper/microtask loops, syntax/empty failure and UTF-8 source limits |
 | `lane-cci-frontend.test.ts` | Real browser helpers, exported calendar markup and bounded CLI success, rejection and stalled-bundle controls |
 | `laneA-operator-signals.test.ts` | Public operator-field projection and actual bounded CLI leakage/empty-edition controls |
+| `regional-publication.test.ts` | Real Git HEAD/index bytes, ignored assets, binary files, symlinks and selected deployment closure |
 | `publication-bundle.test.ts` | Whole-edition custody, interrupted promotion, privacy, and portable hash-bound sitemap provenance with real alternate-checkout timestamps |
 | `artifact-contracts.test.ts` | Shared versioned persisted family/API/Pages authority, counts, types, null facts and public URLs |
 | `artifact-custody.test.ts` | Actual bounded capture and directory export/replay with rehashed tampering controls |
@@ -136,3 +137,6 @@ CSV quoting and malformed/duplicate identity controls in regional-corpus-profile
 
 Manuscript member identity controls use real files, including comma-containing
 and prototype-named members, and exercise structural field-key comparisons.
+
+Regional publication tests create real Git repositories with text and binary
+blobs, ignored nested output assets, staged/unstaged changes and symlinks.
