@@ -1,3 +1,4 @@
+import { sameNames } from "./regional_manuscript_members.js";
 /** Consumer-owned scholarly sources, accepted-seed evidence and native review editions. */
 import { readdir, mkdtemp, rm } from "node:fs/promises";
 import { join } from "node:path";
@@ -42,7 +43,7 @@ async function bounded(d: LoadedDeployment, path: string, limit = 2000000): Prom
 /** Capture public inputs; never substitute live output or the Crescent reference study. */
 export async function inputs(d: LoadedDeployment): Promise<Input> {
     const raw = await bounded(d, SOURCE + "/config.json", 65536), config = JSON.parse(raw) as Config;
-    if (!config || Object.keys(config).sort().join() !== ["schemaVersion", "title", "version", "status", "authors", ...(config.cover === undefined ? [] : ["cover"]), ...(config.authorOrcids === undefined ? [] : ["authorOrcids"])].sort().join() || config.schemaVersion !== "regional-manuscript/v1" || config.status !== "review-draft" || (typeof config.version !== "string" || config.version.length > 32 || !/^\d+\.\d+\.\d+$/.test(config.version)) || typeof config.title !== "string" || !config.title.trim() || config.title.length > 200 || !Array.isArray(config.authors) || config.authors.length < 1 || config.authors.length > 10 || [config.title, ...config.authors].some(v => typeof v !== "string" || !v.trim() || v.length > 200 || /[\x00-\x1f\x7f]/.test(v)))
+    if (!config || !sameNames(Object.keys(config), ["schemaVersion", "title", "version", "status", "authors", ...(config.cover === undefined ? [] : ["cover"]), ...(config.authorOrcids === undefined ? [] : ["authorOrcids"])]) || config.schemaVersion !== "regional-manuscript/v1" || config.status !== "review-draft" || (typeof config.version !== "string" || config.version.length > 32 || !/^\d+\.\d+\.\d+$/.test(config.version)) || typeof config.title !== "string" || !config.title.trim() || config.title.length > 200 || !Array.isArray(config.authors) || config.authors.length < 1 || config.authors.length > 10 || [config.title, ...config.authors].some(v => typeof v !== "string" || !v.trim() || v.length > 200 || /[\x00-\x1f\x7f]/.test(v)))
         throw new Error("Invalid regional manuscript configuration");
     if (config.authorOrcids !== undefined) {
         if (!config.authorOrcids || typeof config.authorOrcids !== "object" || Array.isArray(config.authorOrcids) || Object.entries(config.authorOrcids).some(([name, id]) => !config.authors.includes(name) || typeof id !== "string" || !/^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/.test(id)))
@@ -60,7 +61,7 @@ export async function inputs(d: LoadedDeployment): Promise<Input> {
     const assets: Record<string, Uint8Array> = {};
     if (config.cover !== undefined) {
         const c = config.cover;
-        if (!c || Object.keys(c).sort().join() !== "alt,credit,path" || typeof c.path !== "string" || !/^docs\/assets\/[a-z0-9_/-]+\.png$/.test(c.path) || ![c.alt, c.credit].every(v => typeof v === "string" && v.trim().length > 0 && v.length <= 1000 && !/[\x00-\x1f]/.test(v)))
+        if (!c || !sameNames(Object.keys(c), ["alt", "credit", "path"]) || typeof c.path !== "string" || !/^docs\/assets\/[a-z0-9_/-]+\.png$/.test(c.path) || ![c.alt, c.credit].every(v => typeof v === "string" && v.trim().length > 0 && v.length <= 1000 && !/[\x00-\x1f]/.test(v)))
             throw new Error("Invalid manuscript cover configuration");
         const bytes = await captureArtifactBytes(deploymentPath(d.root, c.path), 8000000);
         if (Buffer.from(bytes).subarray(0, 8).toString("hex") !== "89504e470d0a1a0a")

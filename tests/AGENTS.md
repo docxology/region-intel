@@ -133,3 +133,6 @@ native-tool subprocess proving prior complete output preservation.
 
 The regional corpus profiler has constructed odd/even/zero-count arithmetic,
 CSV quoting and malformed/duplicate identity controls in regional-corpus-profile.test.ts.
+
+Manuscript member identity controls use real files, including comma-containing
+and prototype-named members, and exercise structural field-key comparisons.

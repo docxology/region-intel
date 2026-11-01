@@ -1196,11 +1196,12 @@ Qualified source exports, independent of similarly named symbols in other module
 | [src/regional_corpus.ts:138](../../src/regional_corpus.ts#L138) | `promoteRegionalCorpus` | function | `25164903be09d82ef1e8424ce5f81d510dd614f9eeb90f6b31d9a4b72922eb73` |
 | [src/regional_corpus.ts:210](../../src/regional_corpus.ts#L210) | `regionalCorpusPublication` | function | `ea5809d01329ac84fb07addebdfff082dffc5caa98a861387a7d77b5fc6940c2` |
 | [src/regional_corpus.ts:207](../../src/regional_corpus.ts#L207) | `seedRegionalCorpus` | function | `d041cf334ed289f0a446f0bcb6be3e88cba0b6e2dacb323ac0922ef7f21e3c2d` |
-| [src/regional_manuscript_inputs.ts:16](../../src/regional_manuscript_inputs.ts#L16) | `Config` | type | `8995817e75fa70c3b5ac8d82389327c811705569775edab99966f1d591a82ed5` |
-| [src/regional_manuscript_inputs.ts:29](../../src/regional_manuscript_inputs.ts#L29) | `Input` | type | `9226c7cca8b1cba1f6d872437b0a729ef7c1ec7c22bf0853f89e9f9515fecc2c` |
-| [src/regional_manuscript_inputs.ts:43](../../src/regional_manuscript_inputs.ts#L43) | `inputs` | function | `ee2b145d254b5a235ac01b8cda929fe6f628f7998164354211de712d604210c7` |
+| [src/regional_manuscript_inputs.ts:17](../../src/regional_manuscript_inputs.ts#L17) | `Config` | type | `8995817e75fa70c3b5ac8d82389327c811705569775edab99966f1d591a82ed5` |
+| [src/regional_manuscript_inputs.ts:30](../../src/regional_manuscript_inputs.ts#L30) | `Input` | type | `9226c7cca8b1cba1f6d872437b0a729ef7c1ec7c22bf0853f89e9f9515fecc2c` |
+| [src/regional_manuscript_inputs.ts:44](../../src/regional_manuscript_inputs.ts#L44) | `inputs` | function | `ee2b145d254b5a235ac01b8cda929fe6f628f7998164354211de712d604210c7` |
 | [src/regional_manuscript_members.ts:6](../../src/regional_manuscript_members.ts#L6) | `inventory` | function | `6d92db16c537f27d7d4ae6967efe4fc0e9e04e5ef75f5077b50a2b40eca615ff` |
-| [src/regional_manuscript_members.ts:37](../../src/regional_manuscript_members.ts#L37) | `validateMembers` | function | `a224fbc3d0c7dc2a68707d07a8992de5fe9bcfdc7a2d43d660f07f96693a943a` |
+| [src/regional_manuscript_members.ts:38](../../src/regional_manuscript_members.ts#L38) | `sameNames` | function | `e18d2ecdd4e854a9045751b2aeecdbda4d6f20afd1653667c422122e5d9a4aa6` |
+| [src/regional_manuscript_members.ts:44](../../src/regional_manuscript_members.ts#L44) | `validateMembers` | function | `a224fbc3d0c7dc2a68707d07a8992de5fe9bcfdc7a2d43d660f07f96693a943a` |
 | [src/regional_manuscript_projection.ts:4](../../src/regional_manuscript_projection.ts#L4) | `project` | function | `0c3bf2db664fc99b59c70df22b7ead886323a11b928285944ff2f15903987e0d` |
 | [src/regional_manuscript.ts:22](../../src/regional_manuscript.ts#L22) | `buildRegionalManuscript` | function | `dc296d1ffe95522f189643cdfc46f07abf356ca816dad9aa82a66119bb950a16` |
 | [src/regional_manuscript.ts:14](../../src/regional_manuscript.ts#L14) | `checkRegionalManuscript` | function | `92d55d8f5d5236617c13d223d8f34ee9689bbc5b5994c4c59399bbd4c003f90d` |

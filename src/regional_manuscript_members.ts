@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { captureArtifactBytes } from "./artifact_custody.js";
 import { publicationHash } from "./publication_bundle.js";
 export async function inventory(root: string): Promise<Record<string, string>> {
-    const files: Record<string, string> = {};
+    const files: Record<string, string> = Object.create(null);
     let total = 0;
     async function visit(relative: string, depth: number): Promise<void> {
         if (depth > 12)
@@ -34,15 +34,22 @@ export async function inventory(root: string): Promise<Record<string, string>> {
     await visit("", 0);
     return files;
 }
+/** Compare names structurally: delimiters may occur in real filenames or keys. */
+export function sameNames(actual: readonly string[], expected: readonly string[]): boolean {
+    if (actual.length !== expected.length)
+        return false;
+    const left = [...actual].sort(), right = [...expected].sort();
+    return left.every((name, index) => name === right[index]);
+}
 export async function validateMembers(root: string, hashes: unknown, required: string[], expected: Record<string, string | Uint8Array>): Promise<void> {
     if (!hashes || typeof hashes !== "object" || Array.isArray(hashes))
         throw new Error("Invalid manuscript member hashes");
     const recorded = hashes as Record<string, unknown>, actual = await inventory(root);
     delete actual["review-receipt.json"];
-    if (Object.keys(actual).sort().join() !== required.join() || Object.keys(recorded).sort().join() !== required.join())
+    if (new Set(required).size !== required.length || !sameNames(Object.keys(actual), required) || !sameNames(Object.keys(recorded), required))
         throw new Error("Rendered edition member set differs");
     for (const name of required) {
-        if (actual[name] !== recorded[name])
+        if (!Object.hasOwn(actual, name) || !Object.hasOwn(recorded, name) || typeof recorded[name] !== "string" || !/^[a-f0-9]{64}$/.test(recorded[name]) || actual[name] !== recorded[name])
             throw new Error("Rendered edition bytes differ: " + name);
         if (Object.hasOwn(expected, name) && actual[name] !== publicationHash(expected[name]!))
             throw new Error("Rendered source projection differs: " + name);

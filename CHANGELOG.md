@@ -1,5 +1,10 @@
 # Shared-platform extraction
 
+## Manuscript member identity hardening
+
+- Compare complete filename and tool-key arrays structurally, count prototype-named
+  files, and reject collision substitutions with real-files regression controls.
+
 ## Unreleased — regional manuscript review
 
 - Validate consumer-owned manuscript sources and claims against exact accepted public seed inputs.
