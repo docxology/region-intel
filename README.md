@@ -1,5 +1,7 @@
 # Region Intel
 
+Public PDF collections are a separate, replayed evidence plane for regions such as [Reno](https://github.com/docxology/reno-nv-intel). See [document methods](docs/regional-documents.md): exact PDF/page custody, explicit extraction units, source reachability, retained observations and complete native manuscript delivery through Pages. Existing eCode360 consumers keep their accepted-corpus path.
+
 ![Region civic information: conceptual editorial landscape](docs/assets/region-editorial.png)
 
 *Conceptual editorial artwork; [provenance and scope](docs/assets/ARTWORK.md).*

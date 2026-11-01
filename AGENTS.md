@@ -59,6 +59,7 @@ regional_surface.ts             # Configured public dashboard and Pages publicat
 regional_manuscript_inputs.ts   # Captured public manuscript inputs, accepted seed and selected configuration
 regional_manuscript_projection.ts # Deterministic prose, evidence and corpus-profile projection
 regional_manuscript_members.ts  # Bounded complete offline edition membership and byte replay
+regional_documents.ts           # Bounded public PDF collection, exact page replay and separate document publication
 regional_corpus_profile.ts      # Descriptive accepted-corpus structure and exact CSV data
 regional_template.ts            # Pinned template source and native adapter invocation
 regional_manuscript.ts          # Consumer-authored manuscripts, accepted-seed evidence and native PDF/HTML review editions
@@ -306,3 +307,7 @@ enables the optional keyed ZIP endpoint.
 - The keyed AirNow ZIP endpoint requires `AIRNOW_API_KEY`; the public PM2.5
   fallback requires no key and cannot establish current air quality without a
   fresh nearby observation.
+
+## Public PDF collections
+
+`src/regional_documents.ts` owns bounded public PDF acquisition, physical page extraction, replay and publication; it does not certify complete municipal-code coverage.

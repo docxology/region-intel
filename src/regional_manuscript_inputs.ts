@@ -85,6 +85,7 @@ export async function inputs(d: LoadedDeployment): Promise<Input> {
         throw new Error(errors.join("\n"));
     if (!names.some(n => sources[n].includes("{{CODE_ARTICLES}}")) || !names.some(n => sources[n].includes("{{CODE_SECTIONS}}")))
         throw new Error("Regional results must bind corpus counts through evidence tokens");
+    if (!d.profile.code) return documentInputs(d, config, sources, assets);
     // Parse a private exact-byte snapshot. Never re-open untrusted seed members
     // through the compatibility bundle reader's ordinary readFile path.
     const bundle = await withCivicProfile(d.profile, async () => {
@@ -151,4 +152,21 @@ export async function inputs(d: LoadedDeployment): Promise<Input> {
     const fingerprint = publicationHash(JSON.stringify({ selectedConfiguration, files, rendererSha256 }));
     const variables = { REGION_NAME: d.profile.name, PROFILE_ID: d.profile.id, MUNICIPALITY_CODE: d.profile.code!.municipalityCode, CODE_ARTICLES: String(articles), CODE_SECTIONS: String(sections), SOURCE_COUNT: String(d.config.sources.length), MONITOR_COUNT: String(d.config.enabledMonitors.length), VERIFIED_AT: bundle.receipt.sourceVerifiedAt!, EDITION_ID: bundle.receipt.editionId, CORE_PIN: pin.split("#")[1]!, EVIDENCE_FINGERPRINT: fingerprint, CODE_MEDIAN_SECTIONS: String(corpusProfile.medianSections), CODE_MAX_SECTIONS: String(corpusProfile.maxSections), CODE_MIN_SECTIONS: String(corpusProfile.minSections), CODE_EMPTY_ARTICLES: String(corpusProfile.emptyArticles), TEMPLATE_PIN: TEMPLATE_REVISION };
     return { config, sources, variables, assets, corpusProfile, fingerprint, evidence: { selectedConfiguration, template: { repository: "https://github.com/docxology/template", revision: TEMPLATE_REVISION }, schemaVersion: "regional-manuscript-evidence/v2", profileId: d.profile.id, editionId: bundle.receipt.editionId, variables, files, rendererSha256, inputFingerprint: fingerprint, limitations: ["Recorded accepted seed; no new upstream acquisition", "Live TOC and sample do not establish all-page currentness", "No legal, civic-impact, model-factuality or release acceptance implied"] } };
+}
+
+/** PDF evidence uses physical pages and nonempty lines, never fabricated code sections. */
+async function documentInputs(d:LoadedDeployment,config:Config,sources:Record<string,string>,assets:Record<string,Uint8Array>):Promise<Input>{
+ const doc=await (await import("./regional_documents.js")).readDocuments(d),files:Record<string,{sha256:string;bytes:number}>={};
+ for(const [path,bytes] of Object.entries(doc.files))files[path]={sha256:publicationHash(bytes),bytes:bytes.length};
+ for(const path of ["region.json",d.config.civicProfile,d.config.regionConfig,"package.json","bun.lock"]){const text=await bounded(d,path,16000000);files[path]={sha256:publicationHash(text),bytes:Buffer.byteLength(text)};}
+ for(const [name,text] of Object.entries(sources))files[SOURCE+"/"+name]={sha256:publicationHash(text),bytes:Buffer.byteLength(text)};
+ if(config.cover)files[config.cover.path]={sha256:publicationHash(assets["figures/cover.png"]!),bytes:assets["figures/cover.png"]!.length};
+ try{const path=d.config.seedDir+"/regional-observations.json",text=await bounded(d,path,4000000);await (await import("./regional_surface.js")).regionalObservations(d);files[path]={sha256:publicationHash(text),bytes:Buffer.byteLength(text)};}catch(e){if((e as NodeJS.ErrnoException).code!=="ENOENT")throw e;}
+ const pin=JSON.parse(await bounded(d,"package.json")).dependencies?.["region-intel"];
+ if(typeof pin!=="string"||!/^github:docxology\/region-intel#[a-f0-9]{40}$/.test(pin))throw new Error("Manuscript requires an immutable public core pin");
+ const ledger=JSON.parse(sources["claim_ledger.json"]!);
+ for(const claim of ledger.claims)if(!claim.evidence.length||claim.evidence.some((p:unknown)=>typeof p!=="string"||!Object.hasOwn(files,p)))throw new Error("Claim evidence must name captured public input files");
+ const rendererSha256=await rendererFingerprint(),selectedConfiguration={deployment:d.config,profile:d.profile,policy:d.policy},fingerprint=publicationHash(JSON.stringify({selectedConfiguration,files,rendererSha256})),p=doc.profile;
+ const variables={REGION_NAME:d.profile.name,PROFILE_ID:d.profile.id,MUNICIPALITY_CODE:doc.receipt.documents.map(x=>x.id).join(", "),CODE_ARTICLES:String(p.totalArticles),CODE_SECTIONS:String(p.totalSections),SOURCE_COUNT:String(d.config.sources.length),MONITOR_COUNT:String(d.config.enabledMonitors.length),VERIFIED_AT:doc.receipt.acquiredAt,EDITION_ID:doc.editionId,CORE_PIN:pin.split("#")[1]!,EVIDENCE_FINGERPRINT:fingerprint,CODE_MEDIAN_SECTIONS:String(p.medianSections),CODE_MAX_SECTIONS:String(p.maxSections),CODE_MIN_SECTIONS:String(p.minSections),CODE_EMPTY_ARTICLES:String(p.emptyArticles),TEMPLATE_PIN:TEMPLATE_REVISION};
+ return {config,sources,variables,assets,corpusProfile:p,fingerprint,evidence:{schemaVersion:"regional-document-manuscript-evidence/v1",selectedConfiguration,template:{repository:"https://github.com/docxology/template",revision:TEMPLATE_REVISION},profileId:d.profile.id,editionId:doc.editionId,variables,files,rendererSha256,inputFingerprint:fingerprint,limitations:["Retained public PDF edition; not the full municipal code","Physical PDF pages and nonempty extracted lines are extraction units, not legal sections","Page text replays through installed Poppler; figures, layout, tables and legal interpretation require the original","No legal currency, impact, model-factuality or release acceptance implied"]}};
 }

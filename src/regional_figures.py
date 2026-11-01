@@ -14,6 +14,8 @@ TEAL, GOLD, INK, MUTED = "#195b61", "#b98228", "#20363b", "#65767a"
 
 def generate_figures(profile_file: Path, destination: Path) -> None:
     profile = json.loads(profile_file.read_text())
+    units = profile.get("units", {"items": "article pages", "records": "section records", "identifier": "Article identifier"})
+    document = "units" in profile
     rows = profile["articles"]
     counts = [row["sections"] for row in rows]
     if (
@@ -67,9 +69,9 @@ def generate_figures(profile_file: Path, destination: Path) -> None:
         label="Median: " + str(profile["medianSections"]),
     )
     left.set(
-        xlabel="Section records per article page",
-        ylabel="Article pages",
-        title="A. Distribution across every article",
+        xlabel=(units["records"] + " per page" if document else "Section records per article page"),
+        ylabel=(units["items"] if document else "Article pages"),
+        title=("A. Distribution across every page" if document else "A. Distribution across every article"),
     )
     left.legend(frameon=False, fontsize=9)
     selected = sorted(
@@ -90,16 +92,16 @@ def generate_figures(profile_file: Path, destination: Path) -> None:
             fontsize=9,
         )
     right.set(
-        xlabel="Section records",
-        ylabel="Article identifier",
-        title="B. Twelve largest article pages",
+        xlabel=units["records"],
+        ylabel=units["identifier"],
+        title=("B. Twelve largest pages" if document else "B. Twelve largest article pages"),
     )
     right.set_xlim(0, max(upper * 1.17, 1))
     fig.suptitle(
         str(profile["totalArticles"])
-        + " article pages · "
+        + " " + units["items"] + " · "
         + str(profile["totalSections"])
-        + " section records",
+        + " " + units["records"],
         color=INK,
         fontsize=14,
         fontweight="bold",
@@ -107,7 +109,7 @@ def generate_figures(profile_file: Path, destination: Path) -> None:
     fig.text(
         0.5,
         0.01,
-        "Recorded source structure only; article size is not legal importance "
+        "Recorded source structure only; page size is not legal importance "
         "or civic burden.",
         ha="center",
         color=MUTED,
@@ -214,7 +216,7 @@ def generate_figures(profile_file: Path, destination: Path) -> None:
     ax.set(xlim=(0, 1), ylim=(0, 1))
     ax.axis("off")
     labels = [
-        ("Recorded corpus", "Bound accepted bytes\nArticle/section denominator"),
+        ("Recorded corpus", "Bound retained bytes\n" + ("PDF pages / extracted lines" if document else "Article/section denominator")),
         (
             "Selected policy",
             "Declared sources and monitors\nNo collection-success inference",

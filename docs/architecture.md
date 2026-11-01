@@ -318,3 +318,5 @@ The complete gate prints both ordinary and successful coverage child output,
 including their test denominators. The shared Linux workflow retains the whole
 regular-file log on success or failure. Capturing diagnostics does not change
 command arguments, timeout budgets, coverage measurement or failure handling.
+
+Public PDF collections are a separate replayed evidence plane; see [regional documents](regional-documents.md). They do not acquire eCode360 capabilities.

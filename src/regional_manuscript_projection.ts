@@ -33,7 +33,7 @@ export function project(input: Input): Record<string, string> {
     files["preamble.md"] = fence + "latex\n" + preamble + "\n" + fence + "\n";
     files["manuscript.html"] = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=web/index.html"><title>Regional manuscript</title></head><body><p><a href="web/index.html">Open the complete HTML manuscript</a>. Keep the complete packet for offline reading.</p></body></html>\n';
     files["corpus-profile.json"] = JSON.stringify(input.corpusProfile, null, 2) + "\n";
-    files["article-sections.csv"] = profileCsv(input.corpusProfile);
+    files[input.corpusProfile.units ? "page-lines.csv" : "article-sections.csv"] = profileCsv(input.corpusProfile);
     files["template-request.json"] = JSON.stringify({ config: input.config, variables: input.variables, repository: "https://github.com/docxology/template", revision: TEMPLATE_REVISION });
     files["graphical_abstract.md"] = "# Graphical abstract\n\n![Shared methods connect regional identity, an accepted source snapshot and authored prose to pinned template rendering and a separately reviewed packet. This is an architecture diagram, not a measured civic outcome.](../output/figures/architecture.png){#fig:graphical_abstract}\n";
     files["metadata.yaml"] = Bun.YAML.stringify({ title: input.config.title, author: input.config.authors, date: input.variables.VERIFIED_AT!.slice(0, 10), subtitle: `Version ${input.config.version} — review draft; not a published release`, lang: "en", fontsize: "11pt", papersize: "a4", geometry: "margin=25mm", colorlinks: true });

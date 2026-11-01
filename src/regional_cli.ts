@@ -16,6 +16,27 @@ export async function runRegionalCli(options: {
     process.env.CC_OUTPUT_DIR = d.output;
     process.env.REGION_ROOT = d.root;
     const packageRoot = resolve(import.meta.dir, "..");
+    if (command === "sources:check" || command === "observations:seed") {
+      if(rest.length)throw new Error("Unexpected observation arguments");
+      await (await import("./civic_profile.js")).bindCivicOutputRoot(d.output);
+      const {writeJsonAtomic}=await import("./shared/source_health.js");
+      if(command==="sources:check"){
+        const {boundedHttpFetch}=await import("./shared/transport.js"),rows=[];
+        for(const source of d.config.sources){const checkedAt=new Date().toISOString();try{const r=await boundedHttpFetch(source.url,{timeoutMs:15000,maxBytes:16000000});await r.arrayBuffer();rows.push({sourceId:source.id,url:source.url,checkedAt,status:r.ok?"reachable":"unavailable",httpStatus:r.status});}catch{rows.push({sourceId:source.id,url:source.url,checkedAt,status:"unavailable",httpStatus:null});}}
+        const report={schemaVersion:"regional-source-checks/v1",profileId:d.profile.id,scope:"HTTP reachability only; no semantic, completeness or freshness acceptance",sources:rows};await writeJsonAtomic(join(d.output,"source-checks.json"),report);console.log(JSON.stringify(report,null,2));
+      }else{
+        const {regionalObservationBinding}=await import("./regional_surface.js");
+        await writeJsonAtomic(join(d.seed,"regional-observations.json"),{schemaVersion:"regional-observation-input/v1",profileId:d.profile.id,configurationSha256:regionalObservationBinding(d),capturedAt:new Date().toISOString(),observations:await regionalObservations(d,true)});console.log("Retained public observations with original source clocks");
+      }return;
+    }
+    if (command === "documents:acquire" || command === "documents:check") {
+      if(rest.length)throw new Error("Unexpected document arguments");
+      await (await import("./civic_profile.js")).bindCivicOutputRoot(d.output);
+      const methods=await import("./regional_documents.js");
+      if(command==="documents:acquire"){const r=await methods.acquireDocuments(d);console.log(JSON.stringify({profileId:r.profileId,acquiredAt:r.acquiredAt,documents:r.documents.map(x=>({id:x.id,pages:x.pages.length,pdfSha256:x.pdfSha256}))},null,2));}
+      else {const r=await methods.readDocuments(d);console.log(JSON.stringify({editionId:r.editionId,pages:r.profile.totalArticles,nonemptyLines:r.profile.totalSections},null,2));}
+      return;
+    }
     if (command === "publication:check") {
         if (rest.length && !(rest.length === 1 && rest[0] === "--staged")) throw new Error("Expected optional --staged");
         const { checkRegionalPublication } = await import("./regional_publication.js");
@@ -114,7 +135,7 @@ export async function runRegionalCli(options: {
         return;
     }
     if (command === "weekly-check") {
-        const steps = ["source-discovery", "news", "gov-meetings", ...(d.config.enabledMonitors.length ? ["alerts"] : []), "geo:intel", "analytics", "pages:export", "pages:validate"];
+        const steps = ["source-discovery", ...(d.config.sources.some(s=>s.feedUrl)?["news"]:[]), "gov-meetings", ...(d.config.enabledMonitors.length ? ["alerts"] : []), "geo:intel", "analytics", "pages:export", "pages:validate"];
         const receipts = [];
         for (const step of steps) {
             try {
@@ -171,26 +192,29 @@ export async function runRegionalCli(options: {
         return;
     }
     if (command === "news") {
+        if(!d.config.sources.some(s=>s.feedUrl))throw new Error("No news feeds configured for this deployment");
         const { monitorNews } = await import("./news_monitor.js");
         await monitorNews(undefined, { feeds: Object.fromEntries(d.config.sources.filter(s => s.feedUrl).map(s => [s.name, s.feedUrl!])), outputDir: d.output });
         return;
     }
     if (command === "pages:export") {
-        const destination = deploymentPath(d.root, ".pages"), observations = await regionalObservations(d), corpus = await (await import("./regional_corpus.js")).regionalCorpusPublication(d), html = renderRegionalSurface(d, observations, {corpus:corpus.summary});
+        const destination = deploymentPath(d.root, ".pages"), observations = await regionalObservations(d), corpus = await (await import("./regional_corpus.js")).regionalCorpusPublication(d), manuscript=await (await import("./regional_manuscript.js")).regionalManuscriptPublication(d), html = renderRegionalSurface(d, observations, {corpus:corpus.summary,manuscriptTitle:manuscript.title});
         const receipt = { schemaVersion: "regional-pages/v1", profile: d.profile, sources: d.config.sources, enabledMonitors: d.config.enabledMonitors, observations, corpus:corpus.summary, htmlSha256: new Bun.CryptoHasher("sha256").update(html).digest("hex") };
         const staging = await mkdtemp(join(d.root,".pages-build-"));
         await writeTextAtomic(join(staging,"index.html"),html);
         for(const [name,bytes] of Object.entries(corpus.files))await writeTextAtomic(join(staging,name),bytes);
+        for(const [name,bytes] of Object.entries(manuscript.files)){await mkdir(join(staging,name,".."),{recursive:true});await Bun.write(join(staging,name),bytes);}
         await writeTextAtomic(join(staging,"region.json"),JSON.stringify(receipt,null,2));
         await promotePublicationDirectory(staging,destination);
         return;
     }
     if (command === "pages:validate") {
-        const target = deploymentPath(d.root, rest.find(a => !a.startsWith("--")) ?? ".pages"), observations = await regionalObservations(d), corpus=await (await import("./regional_corpus.js")).regionalCorpusPublication(d), expectedHtml = renderRegionalSurface(d, observations,{corpus:corpus.summary});
+        const target = deploymentPath(d.root, rest.find(a => !a.startsWith("--")) ?? ".pages"), observations = await regionalObservations(d), corpus=await (await import("./regional_corpus.js")).regionalCorpusPublication(d), manuscript=await (await import("./regional_manuscript.js")).regionalManuscriptPublication(d), expectedHtml = renderRegionalSurface(d, observations,{corpus:corpus.summary,manuscriptTitle:manuscript.title});
         const expected = { schemaVersion: "regional-pages/v1", profile: d.profile, sources: d.config.sources, enabledMonitors: d.config.enabledMonitors, observations, corpus:corpus.summary, htmlSha256: new Bun.CryptoHasher("sha256").update(expectedHtml).digest("hex") };
-        const entries = await readdir(target,{withFileTypes:true});
-        const expectedNames=["region.json","index.html",...Object.keys(corpus.files)];
-        if(entries.length!==expectedNames.length || entries.some(entry=>!entry.isFile()||entry.isSymbolicLink()||!expectedNames.includes(entry.name))) throw new Error("Unexpected regional publication member");
+        const {inventory,sameNames}=await import("./regional_manuscript_members.js");
+        const entries=await inventory(target),expectedNames=["region.json","index.html",...Object.keys(corpus.files),...Object.keys(manuscript.files)];
+        if(!sameNames(Object.keys(entries),expectedNames))throw new Error("Unexpected regional publication member");
+        for(const [name,bytes] of Object.entries(manuscript.files))if(entries[name]!==new Bun.CryptoHasher("sha256").update(bytes).digest("hex"))throw new Error("Published manuscript differs from validated packet");
         const {captureArtifactBytes}=await import("./artifact_custody.js");
         const decode=(bytes:Uint8Array)=>new TextDecoder("utf-8",{fatal:true}).decode(bytes);
         const region=decode(await captureArtifactBytes(join(target,"region.json"),8*1024*1024)),html=decode(await captureArtifactBytes(join(target,"index.html"),8*1024*1024));
@@ -199,6 +223,18 @@ export async function runRegionalCli(options: {
             throw new Error("Published regional bytes differ from configured source-derived edition");
         console.log("Regional Pages exact-byte source replay passed");
         return;
+    }
+    if (command === "gui" && !d.profile.code && await (await import("./regional_documents.js")).documentConfiguration(d)) {
+        await runRegionalCli({root:d.root,args:["pages:export"]});
+        await runRegionalCli({root:d.root,args:["pages:validate"]});
+        const directory=deploymentPath(d.root,".pages"),members=new Set(Object.keys(await (await import("./regional_manuscript_members.js")).inventory(directory)));
+        const server=Bun.serve({hostname:process.env.HOST??"127.0.0.1",port:Number(process.env.PORT??3000),fetch(request){
+          if(!["GET","HEAD"].includes(request.method))return new Response("Method not allowed",{status:405,headers:{Allow:"GET, HEAD"}});
+          let name:string;try{name=decodeURIComponent(new URL(request.url).pathname).replace(/^\//,"")||"index.html";}catch{return new Response("Invalid path",{status:400});}
+          if(!members.has(name))return new Response("Not found",{status:404});
+          const file=Bun.file(deploymentPath(directory,name));return new Response(request.method==="HEAD"?null:file,{headers:{"Content-Type":file.type,"X-Content-Type-Options":"nosniff"}});
+        }});
+        console.log(`Regional document GUI: ${server.url}`);return;
     }
     if (command === "gui") {
         const { handleApiRoute } = await import("./gui/routes.js");

@@ -73,13 +73,15 @@ export async function verifyGitPublication(root: string, paths: readonly string[
 export async function checkRegionalPublication(d: LoadedDeployment, reference: PublicationReference = "HEAD", deploymentFile = "region.json"): Promise<object> {
     const selected = loadDeployment(d.root, deploymentFile);
     if (JSON.stringify([selected.config, selected.profile, selected.policy]) !== JSON.stringify([d.config, d.profile, d.policy])) throw new Error("Selected publication deployment differs");
-    const paths = new Set([deploymentFile, d.config.civicProfile, d.config.regionConfig, "package.json", "bun.lock", "scripts/region.ts", d.config.seedDir + "/publication-input.json"]);
-    for (const name of withCivicProfile(d.profile, publicationCoreFiles)) paths.add(d.config.seedDir + "/" + name);
-    for (const name of PUBLICATION_OPTIONAL_FILES) {
-        const path = d.config.seedDir + "/" + name;
-        try { await captureArtifactBytes(deploymentPath(d.root, path), MAX_FILE); paths.add(path); }
-        catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; }
+    const paths = new Set([deploymentFile,d.config.civicProfile,d.config.regionConfig,"package.json","bun.lock","scripts/region.ts"]);
+    if(!d.profile.code){const docs=await (await import("./regional_documents.js")).readDocuments(d);for(const name of Object.keys(docs.files))paths.add(name);}
+    else {
+      paths.add(d.config.seedDir+"/publication-input.json");
+      for(const name of withCivicProfile(d.profile,publicationCoreFiles))paths.add(d.config.seedDir+"/"+name);
+      for(const name of PUBLICATION_OPTIONAL_FILES){const path=d.config.seedDir+"/"+name;try{await captureArtifactBytes(deploymentPath(d.root,path),MAX_FILE);paths.add(path);}catch(error){if((error as NodeJS.ErrnoException).code!=="ENOENT")throw error;}}
     }
+    const observationPath=d.config.seedDir+"/regional-observations.json";
+    try{await captureArtifactBytes(deploymentPath(d.root,observationPath),4000000);paths.add(observationPath);}catch(e){if((e as NodeJS.ErrnoException).code!=="ENOENT")throw e;}
     let manuscript: { inputFingerprint: string; members: number } | null = null;
     const config = deploymentPath(d.root, "docs/manuscript/config.json");
     if (await Bun.file(config).exists()) {
@@ -91,7 +93,7 @@ export async function checkRegionalPublication(d: LoadedDeployment, reference: P
         for (const name of [...Object.keys(receipt.files), "review-receipt.json"]) paths.add(folder + "/" + name);
         manuscript = { inputFingerprint: input.fingerprint, members: Object.keys(receipt.files).length + 1 };
     }
-    const trackedOptionalPaths = [...PUBLICATION_OPTIONAL_FILES.map(name => d.config.seedDir + "/" + name), "docs/manuscript/config.json"];
+    const trackedOptionalPaths = [...PUBLICATION_OPTIONAL_FILES.map(name => d.config.seedDir + "/" + name), "docs/manuscript/config.json", observationPath, "documents.json"];
     const verified = await verifyGitPublication(d.root, [...paths], reference, trackedOptionalPaths);
     if (manuscript && (await inputs(d)).fingerprint !== manuscript.inputFingerprint)
         throw new Error("Manuscript inputs changed during publication preflight");

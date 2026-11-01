@@ -76,3 +76,11 @@ export async function packageRegionalManuscript(d: LoadedDeployment): Promise<st
     await promotePublicationDirectory(stage, target);
     return target;
 }
+
+/** Reuse the complete validated native packet on Pages, including offline assets. */
+export async function regionalManuscriptPublication(d:LoadedDeployment):Promise<{files:Record<string,Uint8Array>;title:string|null}>{
+ if(!await Bun.file(join(d.root,"docs/manuscript/config.json")).exists())return {files:{},title:null};
+ await validateRegionalRender(d,"bundle");const input=await inputs(d),root=deploymentPath(d.root,"review/"+input.config.version+"-draft"),files:Record<string,Uint8Array>={};
+ for(const name of [...Object.keys(await inventory(root))])files["manuscript/"+name]=await captureArtifactBytes(join(root,name),16000000);
+ return {files,title:input.config.title};
+}

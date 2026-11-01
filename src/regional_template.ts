@@ -11,7 +11,7 @@ export const TEMPLATE_RENDERER_SHA256 = assets.rendererModuleSha256;
 export const templateAssets = assets.assets;
 const directory = fileURLToPath(new URL(".", import.meta.url));
 export async function rendererFingerprint(): Promise<string> {
-    const files = ["regional_manuscript.ts", "regional_manuscript_inputs.ts", "regional_manuscript_projection.ts", "regional_manuscript_members.ts", "regional_corpus_profile.ts", "regional_template.ts", "regional_template.py", "regional_figures.py", "regional_template_assets.json"];
+    const files = ["regional_manuscript.ts", "regional_manuscript_inputs.ts", "regional_manuscript_projection.ts", "regional_manuscript_members.ts", "regional_corpus_profile.ts", "regional_documents.ts", "regional_template.ts", "regional_template.py", "regional_figures.py", "regional_template_assets.json"];
     const hashes: Record<string, string> = {};
     for (const name of files)
         hashes[name] = publicationHash(await readFile(join(directory, name)));

@@ -210,6 +210,7 @@ export async function seedRegionalCorpus(d: LoadedDeployment, sourceRelative = d
 export async function regionalCorpusPublication(d: LoadedDeployment): Promise<{
     files: Record<string, string>;
     summary: {
+        kind?: "documents";
         articleCount: number;
         sectionCount: number;
         verifiedAt: string | null;
@@ -218,6 +219,7 @@ export async function regionalCorpusPublication(d: LoadedDeployment): Promise<{
 }> {
     return scoped(d, async () => {
         corpusRoots(d);
+        if (!d.profile.code && await (await import("./regional_documents.js")).documentConfiguration(d)) return (await import("./regional_documents.js")).documentPublication(d);
         let selected: string | null = null;
         for (const root of [d.output, d.seed]) {
             let present = 0;

@@ -124,3 +124,7 @@ an independent deadline; candidate, active, seed and protected repository roots
 are checked before writes.
 `regional_surface.ts` projects public observations and renders regional pages.
 The package CLI requires a consumer `region.json`; importing modules never starts a process.
+
+## Public PDF collections
+
+`src/regional_documents.ts` owns bounded public PDF acquisition, physical page extraction, replay and publication; it does not certify complete municipal-code coverage.

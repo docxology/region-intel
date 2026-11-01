@@ -1,6 +1,7 @@
 /** Descriptive structure of one accepted corpus, never a measure of civic burden. */
 export type CorpusProfile = {
     schemaVersion: "regional-corpus-profile/v1";
+    units?: { items: string; records: string; identifier: string };
     articles: {
         guid: string;
         number: string;
@@ -38,5 +39,5 @@ export function profileCorpus(value: unknown): CorpusProfile {
 }
 export function profileCsv(profile: CorpusProfile): string {
     const quote = (v: string) => '"' + v.replaceAll('"', '""') + '"';
-    return "guid,article_number,title,section_records\n" + profile.articles.map(a => [quote(a.guid), quote(a.number), quote(a.title), a.sections].join(",")).join("\n") + "\n";
+    return (profile.units ? "guid,pdf_page,title,nonempty_extracted_lines\n" : "guid,article_number,title,section_records\n") + profile.articles.map(a => [quote(a.guid), quote(a.number), quote(a.title), a.sections].join(",")).join("\n") + "\n";
 }

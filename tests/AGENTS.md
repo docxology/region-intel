@@ -140,3 +140,7 @@ and prototype-named members, and exercise structural field-key comparisons.
 
 Regional publication tests create real Git repositories with text and binary
 blobs, ignored nested output assets, staged/unstaged changes and symlinks.
+
+## Public PDF collections
+
+`tests/regional-documents.test.ts` covers real PDF extraction and negative controls.
