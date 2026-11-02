@@ -120,3 +120,5 @@ configuration and Git directories. Failure restores earlier committed batches;
 cancellation cleanup uses its own 60 s deadline. An interrupted process retains a
 journal for the next promotion to recover before accepting new data. Provider access,
 legal sufficiency and complete all-page currentness remain separate evidence.
+
+Shared CLI admission rejects evidence roots overlapping Git metadata, source, configuration, workflows, native review packets or the generated Pages destination before any command writes. The PDF reader/importer applies the same guard. Configuration introspection through the raw loader remains distinct from permission to write.

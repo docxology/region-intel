@@ -99,3 +99,18 @@ export function assertDeploymentMonitorSelection(selected: readonly string[] | u
     if (!selected?.length || selected.some(key => !deployment.config.enabledMonitors.includes(key)))
         throw new Error("Alert selection exceeds configured deployment monitors");
 }
+
+export function assertRegionalEvidenceRoots(d: LoadedDeployment): void {
+    const protectedNames = [".git", ".github", ".pages", "node_modules", ".venv", "src", "scripts", "tests", "docs", "manuscript", "config", "configs", "review"];
+    const protectedPaths = protectedNames.map(name => deploymentPath(d.root, name));
+    for (const file of [d.config.civicProfile, d.config.regionConfig, "documents.json", "region.json"]) {
+        const path = deploymentPath(d.root, file);
+        protectedPaths.push(path);
+        const slash = path.lastIndexOf("/");
+        if (path.slice(0, slash) !== d.root)
+            protectedPaths.push(path.slice(0, slash));
+    }
+    for (const root of [d.output, d.seed])
+        if (protectedPaths.some(path => root === path || root.startsWith(path + "/") || path.startsWith(root + "/")))
+            throw new Error("Regional evidence root overlaps protected repository content");
+}

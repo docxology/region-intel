@@ -474,6 +474,7 @@ Qualified source exports, independent of similarly named symbols in other module
 | [src/curation.ts:97](../../src/curation.ts#L97) | `SummaryResult` | type | `2446b38965bb8c518b120017d285e5070d675f4daee34acb6a290d508a40d6d8` |
 | [src/curation.ts:425](../../src/curation.ts#L425) | `tagWithDomains` | function | `215b16f409b00401b35a6c0bc757955a789350c9b54599c00fdda5967ab5cf46` |
 | [src/deployment.ts:95](../../src/deployment.ts#L95) | `assertDeploymentMonitorSelection` | function | `6c938d90a5a07d3618f95e0dffc2c3cc1d216240bcf9c0b6c25f6e1e3bd08c07` |
+| [src/deployment.ts:103](../../src/deployment.ts#L103) | `assertRegionalEvidenceRoots` | function | `8b46add9cb7d7603df5c10ca20048be2c741fec8987bd108eb7c3445aca09f8a` |
 | [src/deployment.ts:13](../../src/deployment.ts#L13) | `Deployment` | type | `47030483b7e09b92b7e65af8e60b4e0f9109d0dc6dcf585bdd8d277900691fa4` |
 | [src/deployment.ts:88](../../src/deployment.ts#L88) | `deploymentAllowsProducer` | function | `1be3feec419962b5086b5f8856304a598de256ba2160829a9ba8d077c93afdf0` |
 | [src/deployment.ts:30](../../src/deployment.ts#L30) | `deploymentPath` | function | `fb6cbd9d496a61990ef03128da57bc8284656f176033760c86546a809ee9a158` |
@@ -1196,12 +1197,12 @@ Qualified source exports, independent of similarly named symbols in other module
 | [src/regional_corpus.ts:138](../../src/regional_corpus.ts#L138) | `promoteRegionalCorpus` | function | `25164903be09d82ef1e8424ce5f81d510dd614f9eeb90f6b31d9a4b72922eb73` |
 | [src/regional_corpus.ts:210](../../src/regional_corpus.ts#L210) | `regionalCorpusPublication` | function | `23992e821e367a024d6eca8a2c22aaa24bcd8947e317dca808f762fffd6a484a` |
 | [src/regional_corpus.ts:207](../../src/regional_corpus.ts#L207) | `seedRegionalCorpus` | function | `d041cf334ed289f0a446f0bcb6be3e88cba0b6e2dacb323ac0922ef7f21e3c2d` |
-| [src/regional_documents.ts:147](../../src/regional_documents.ts#L147) | `acquireDocuments` | function | `6cb7db1f8a5f99785f410d45ad954c45140ca2ea8b6eda3a7ac3ab513bd710f7` |
-| [src/regional_documents.ts:66](../../src/regional_documents.ts#L66) | `documentConfiguration` | function | `25af345f034afa6163cee066b398c09b42546d6f0ea1b094f8739bc69a26ee74` |
-| [src/regional_documents.ts:229](../../src/regional_documents.ts#L229) | `documentPublication` | function | `15e2de8b0b65f46ac85f69a970d8f054f9872b2c0896930f20fe64751ba61a95` |
-| [src/regional_documents.ts:88](../../src/regional_documents.ts#L88) | `extractDocument` | function | `d28e4514de4a4c5e57b94d29c036beeabcb86b93fdb0ff1539643c1e65b7768c` |
-| [src/regional_documents.ts:160](../../src/regional_documents.ts#L160) | `importDocuments` | function | `e8a1f2581b2692d5ca1a94e5b2b254e1e4845f8e1ad8a19737952860f214245b` |
-| [src/regional_documents.ts:177](../../src/regional_documents.ts#L177) | `readDocuments` | function | `42e6a209be9da1c257a89182031d772ca6fe7d62afafb3c438185575cc25fc95` |
+| [src/regional_documents.ts:133](../../src/regional_documents.ts#L133) | `acquireDocuments` | function | `6cb7db1f8a5f99785f410d45ad954c45140ca2ea8b6eda3a7ac3ab513bd710f7` |
+| [src/regional_documents.ts:52](../../src/regional_documents.ts#L52) | `documentConfiguration` | function | `25af345f034afa6163cee066b398c09b42546d6f0ea1b094f8739bc69a26ee74` |
+| [src/regional_documents.ts:215](../../src/regional_documents.ts#L215) | `documentPublication` | function | `15e2de8b0b65f46ac85f69a970d8f054f9872b2c0896930f20fe64751ba61a95` |
+| [src/regional_documents.ts:74](../../src/regional_documents.ts#L74) | `extractDocument` | function | `d28e4514de4a4c5e57b94d29c036beeabcb86b93fdb0ff1539643c1e65b7768c` |
+| [src/regional_documents.ts:146](../../src/regional_documents.ts#L146) | `importDocuments` | function | `e8a1f2581b2692d5ca1a94e5b2b254e1e4845f8e1ad8a19737952860f214245b` |
+| [src/regional_documents.ts:163](../../src/regional_documents.ts#L163) | `readDocuments` | function | `42e6a209be9da1c257a89182031d772ca6fe7d62afafb3c438185575cc25fc95` |
 | [src/regional_manuscript_inputs.ts:17](../../src/regional_manuscript_inputs.ts#L17) | `Config` | type | `8995817e75fa70c3b5ac8d82389327c811705569775edab99966f1d591a82ed5` |
 | [src/regional_manuscript_inputs.ts:30](../../src/regional_manuscript_inputs.ts#L30) | `Input` | type | `9226c7cca8b1cba1f6d872437b0a729ef7c1ec7c22bf0853f89e9f9515fecc2c` |
 | [src/regional_manuscript_inputs.ts:44](../../src/regional_manuscript_inputs.ts#L44) | `inputs` | function | `ee2b145d254b5a235ac01b8cda929fe6f628f7998164354211de712d604210c7` |

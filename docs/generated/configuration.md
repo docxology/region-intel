@@ -21,7 +21,7 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `APP_VERSION` | [src/shared/orchestration.ts:111](../../src/shared/orchestration.ts#L111) | `process.env.APP_VERSION` | `packageVersion()` |
 | `ARTICLE_DEADLINE_MS` | [src/content.ts:124](../../src/content.ts#L124) | `process.env.ARTICLE_DEADLINE_MS` | not declared at this read |
 | `ARTICLE_DEADLINE_MS` | [src/content.ts:124](../../src/content.ts#L124) | `process.env.ARTICLE_DEADLINE_MS` | not declared at this read |
-| `CC_OUTPUT_DIR` | [src/regional_cli.ts:16](../../src/regional_cli.ts#L16) | `process.env.CC_OUTPUT_DIR` | not declared at this read |
+| `CC_OUTPUT_DIR` | [src/regional_cli.ts:17](../../src/regional_cli.ts#L17) | `process.env.CC_OUTPUT_DIR` | not declared at this read |
 | `CC_OUTPUT_DIR` | [src/shared/paths.ts:29](../../src/shared/paths.ts#L29) | `process.env.CC_OUTPUT_DIR` | not declared at this read |
 | `CC_QUERY_LOGGING` | [src/llm/privacy.ts:21](../../src/llm/privacy.ts#L21) | `process.env.CC_QUERY_LOGGING` | not declared at this read |
 | `CC_QUERY_RETENTION_DAYS` | [src/llm/privacy.ts:27](../../src/llm/privacy.ts#L27) | `process.env.CC_QUERY_RETENTION_DAYS` | not declared at this read |
@@ -33,7 +33,7 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `CI` | [src/shared/orchestration.ts:114](../../src/shared/orchestration.ts#L114) | `process.env.CI` | `process.env.GITHUB_ACTIONS` |
 | `CI_COMMIT_SHA` | [src/shared/orchestration.ts:82](../../src/shared/orchestration.ts#L82) | `process.env.CI_COMMIT_SHA` | not declared at this read |
 | `CIVIC_PROFILE` | [src/civic_profile.ts:79](../../src/civic_profile.ts#L79) | `process.env.CIVIC_PROFILE` | not declared at this read |
-| `CIVIC_PROFILE` | [src/regional_cli.ts:14](../../src/regional_cli.ts#L14) | `process.env.CIVIC_PROFILE` | not declared at this read |
+| `CIVIC_PROFILE` | [src/regional_cli.ts:15](../../src/regional_cli.ts#L15) | `process.env.CIVIC_PROFILE` | not declared at this read |
 | `CLOUDFLARE_WAIT_MS` | [src/constants.ts:41](../../src/constants.ts#L41) | `envInt("CLOUDFLARE_WAIT_MS", 2000)` | `2000` |
 | `CODE_SEED_PATH` | [src/derived_publication.ts:51](../../src/derived_publication.ts#L51) | `process.env.CODE_SEED_PATH` | `join(import.meta.dir, '..', 'pages-data', 'crescent-city-code.json')` |
 | `CODE_SEED_PATH` | [src/gui/analytics.ts:64](../../src/gui/analytics.ts#L64) | `process.env.CODE_SEED_PATH` | not declared at this read |
@@ -60,8 +60,8 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `HOME` | [src/browser_smoke.ts:30](../../src/browser_smoke.ts#L30) | `process.env.HOME` | `"~"` |
 | `HOME` | [src/browser_smoke.ts:31](../../src/browser_smoke.ts#L31) | `process.env.HOME` | `"~"` |
 | `HOME` | [src/browser.ts:55](../../src/browser.ts#L55) | `process.env.HOME` | `""` |
-| `HOST` | [src/regional_cli.ts:231](../../src/regional_cli.ts#L231) | `process.env.HOST` | `"127.0.0.1"` |
-| `HOST` | [src/regional_cli.ts:244](../../src/regional_cli.ts#L244) | `process.env.HOST` | `"127.0.0.1"` |
+| `HOST` | [src/regional_cli.ts:232](../../src/regional_cli.ts#L232) | `process.env.HOST` | `"127.0.0.1"` |
+| `HOST` | [src/regional_cli.ts:245](../../src/regional_cli.ts#L245) | `process.env.HOST` | `"127.0.0.1"` |
 | `LIFEOS_CUSTOMIZATIONS_DIR` | [scripts/lifeos-bridge.ts:19](../../scripts/lifeos-bridge.ts#L19) | `process.env.LIFEOS_CUSTOMIZATIONS_DIR` | `join(home, ".claude", "LIFEOS", "USER", "CUSTOMIZATIONS", "SKILLS", "LocalIntelligence")` |
 | `LIFEOS_DATA_DIR` | [scripts/lifeos-bridge.ts:21](../../scripts/lifeos-bridge.ts#L21) | `process.env.LIFEOS_DATA_DIR` | `join(home, ".claude", "LIFEOS", "MEMORY", "DATA", "LocalIntelligence")` |
 | `LLM_PREFLIGHT_TIMEOUT_MS` | [src/llm/config.ts:50](../../src/llm/config.ts#L50) | `process.env.LLM_PREFLIGHT_TIMEOUT_MS` | `"5000"` |
@@ -99,8 +99,8 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `PLAYWRIGHT_EXECUTABLE_PATH` | [src/browser_smoke.ts:25](../../src/browser_smoke.ts#L25) | `process.env.PLAYWRIGHT_EXECUTABLE_PATH` | not declared at this read |
 | `PORT` | [src/browser_smoke.ts:49](../../src/browser_smoke.ts#L49) | `process.env.PORT` | `"3999"` |
 | `PORT` | [src/gui/server.ts:12](../../src/gui/server.ts#L12) | `process.env.PORT` | `"3000"` |
-| `PORT` | [src/regional_cli.ts:231](../../src/regional_cli.ts#L231) | `process.env.PORT` | `3000` |
-| `PORT` | [src/regional_cli.ts:244](../../src/regional_cli.ts#L244) | `process.env.PORT` | `3000` |
+| `PORT` | [src/regional_cli.ts:232](../../src/regional_cli.ts#L232) | `process.env.PORT` | `3000` |
+| `PORT` | [src/regional_cli.ts:245](../../src/regional_cli.ts#L245) | `process.env.PORT` | `3000` |
 | `PUSH_CONTACT_EMAIL` | [src/notifications/push.ts:19](../../src/notifications/push.ts#L19) | `env("PUSH_CONTACT_EMAIL")` | not declared at this read |
 | `PUSH_CONTACT_EMAIL` | [src/notifications/push.ts:49](../../src/notifications/push.ts#L49) | `env("PUSH_CONTACT_EMAIL")` | not declared at this read |
 | `PUSH_PRIVATE_KEY` | [src/notifications/push.ts:19](../../src/notifications/push.ts#L19) | `env("PUSH_PRIVATE_KEY")` | not declared at this read |
@@ -118,13 +118,13 @@ Parsed from TypeScript source without evaluating modules or reading environment 
 | `PUSH_SUBSCRIBER` | [src/notifications/push.ts:62](../../src/notifications/push.ts#L62) | `env("PUSH_SUBSCRIBER")` | not declared at this read |
 | `RATE_LIMIT_MS` | [src/constants.ts:35](../../src/constants.ts#L35) | `envInt("RATE_LIMIT_MS", 2000)` | `2000` |
 | `REGION_CONFIG` | [src/region_config.ts:272](../../src/region_config.ts#L272) | `process.env.REGION_CONFIG` | not declared at this read |
-| `REGION_CONFIG` | [src/regional_cli.ts:15](../../src/regional_cli.ts#L15) | `process.env.REGION_CONFIG` | not declared at this read |
+| `REGION_CONFIG` | [src/regional_cli.ts:16](../../src/regional_cli.ts#L16) | `process.env.REGION_CONFIG` | not declared at this read |
 | `REGION_DEPLOYMENT` | [src/regional_cli.ts:13](../../src/regional_cli.ts#L13) | `process.env.REGION_DEPLOYMENT` | `"region.json"` |
-| `REGION_DEPLOYMENT` | [src/regional_cli.ts:43](../../src/regional_cli.ts#L43) | `process.env.REGION_DEPLOYMENT` | `"region.json"` |
+| `REGION_DEPLOYMENT` | [src/regional_cli.ts:44](../../src/regional_cli.ts#L44) | `process.env.REGION_DEPLOYMENT` | `"region.json"` |
 | `REGION_ROOT` | [scripts/scheduler-plan.ts:6](../../scripts/scheduler-plan.ts#L6) | `process.env.REGION_ROOT` | `resolve(import.meta.dir, "..")` |
 | `REGION_ROOT` | [scripts/scheduler-plan.ts:13](../../scripts/scheduler-plan.ts#L13) | `process.env.REGION_ROOT` | `resolve(import.meta.dir, "..")` |
-| `REGION_ROOT` | [src/regional_cli.ts:17](../../src/regional_cli.ts#L17) | `process.env.REGION_ROOT` | not declared at this read |
-| `REGION_ROOT` | [src/regional_cli.ts:267](../../src/regional_cli.ts#L267) | `process.env.REGION_ROOT` | `process.cwd()` |
+| `REGION_ROOT` | [src/regional_cli.ts:18](../../src/regional_cli.ts#L18) | `process.env.REGION_ROOT` | not declared at this read |
+| `REGION_ROOT` | [src/regional_cli.ts:268](../../src/regional_cli.ts#L268) | `process.env.REGION_ROOT` | `process.cwd()` |
 | `REGION_TEMPLATE_PYTHON` | [src/regional_template.ts:21](../../src/regional_template.ts#L21) | `process.env.REGION_TEMPLATE_PYTHON` | not declared at this read |
 | `REGION_TEMPLATE_ROOT` | [src/regional_template.ts:21](../../src/regional_template.ts#L21) | `process.env.REGION_TEMPLATE_ROOT` | not declared at this read |
 | `REPO_OUTPUT_DIR` | [scripts/lifeos-bridge.ts:16](../../scripts/lifeos-bridge.ts#L16) | `process.env.REPO_OUTPUT_DIR` | `outputRoot()` |

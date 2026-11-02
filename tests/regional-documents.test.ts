@@ -61,6 +61,9 @@ test("real PDF capture, all-page replay and independent malformed-input controls
         protectedConfig.seedDir = ".git";
         await writeFile(join(root, "protected.json"), JSON.stringify(protectedConfig));
         await expect(documentConfiguration(loadDeployment(root, "protected.json"))).rejects.toThrow("protected");
+        const protectedChild=Bun.spawn([process.execPath,new URL("../src/regional_cli.ts",import.meta.url).pathname,"observations:seed"],{cwd:root,env:{...process.env,REGION_DEPLOYMENT:"protected.json"},stdout:"pipe",stderr:"pipe"});
+        const protectedError=await new Response(protectedChild.stderr).text();await new Response(protectedChild.stdout).text();expect(await protectedChild.exited).not.toBe(0);expect(protectedError).toContain("protected");await expect(readFile(join(root,".git/regional-observations.json"))).rejects.toThrow();
+
         const pdfPath = join(d.seed, "documents/public-pdf.pdf");
         await writeFile(pdfPath, Buffer.concat([bytes, Buffer.from("changed")]));
         await expect(readDocuments(d)).rejects.toThrow("bytes differ");

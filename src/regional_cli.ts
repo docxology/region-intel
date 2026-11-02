@@ -3,7 +3,7 @@ import { resolve, join } from "node:path";
 import { mkdir, writeFile, mkdtemp, readdir } from "node:fs/promises";
 import { writeTextAtomic } from "./shared/source_health.js";
 import { promotePublicationDirectory } from "./publication_bundle.js";
-import { loadDeployment, deploymentPath } from "./deployment.js";
+import { loadDeployment, deploymentPath, assertRegionalEvidenceRoots } from "./deployment.js";
 import { renderRegionalSurface, regionalObservations } from "./regional_surface.js";
 export async function runRegionalCli(options: {
     root: string;
@@ -11,6 +11,7 @@ export async function runRegionalCli(options: {
 }): Promise<void> {
     const args = options.args ?? Bun.argv.slice(2), command = args[0] ?? "status", rest = args.slice(1);
     const d = loadDeployment(options.root, process.env.REGION_DEPLOYMENT ?? "region.json");
+    assertRegionalEvidenceRoots(d);
     process.env.CIVIC_PROFILE = join(d.root, d.config.civicProfile);
     process.env.REGION_CONFIG = join(d.root, d.config.regionConfig);
     process.env.CC_OUTPUT_DIR = d.output;

@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { mkdtemp, rm, mkdir, readdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import type { LoadedDeployment } from "./deployment.js";
-import { deploymentPath } from "./deployment.js";
+import { deploymentPath, assertRegionalEvidenceRoots } from "./deployment.js";
 import { captureArtifactBytes } from "./artifact_custody.js";
 import { publicationHash, promotePublicationDirectory } from "./publication_bundle.js";
 import { boundedHttpFetch } from "./shared/transport.js";
@@ -49,22 +49,8 @@ type Receipt = {
 const decode = (b: Uint8Array) => new TextDecoder("utf-8", { fatal: true }).decode(b);
 function keys(v: unknown, expected: string[]): v is Record<string, unknown> { return !!v && typeof v === "object" && !Array.isArray(v) && Object.keys(v).sort().join("|") === expected.sort().join("|"); }
 function label(v: unknown, max = 1000): v is string { return typeof v === "string" && v.trim() === v && !!v && v.length <= max && !/[\x00-\x1f\x7f]/.test(v); }
-function assertDocumentRoots(d: LoadedDeployment): void {
-    const protectedNames = [".git", ".github", ".pages", "node_modules", ".venv", "src", "scripts", "tests", "docs", "manuscript", "config", "configs", "review"];
-    const protectedPaths = protectedNames.map(name => deploymentPath(d.root, name));
-    for (const file of [d.config.civicProfile, d.config.regionConfig, "documents.json", "region.json"]) {
-        const path = deploymentPath(d.root, file);
-        protectedPaths.push(path);
-        const slash = path.lastIndexOf("/");
-        if (path.slice(0, slash) !== d.root)
-            protectedPaths.push(path.slice(0, slash));
-    }
-    for (const root of [d.output, d.seed])
-        if (protectedPaths.some(path => root === path || root.startsWith(path + "/") || path.startsWith(root + "/")))
-            throw new Error("Document evidence root overlaps protected repository content");
-}
 export async function documentConfiguration(d: LoadedDeployment): Promise<Document[] | null> {
-    assertDocumentRoots(d);
+    assertRegionalEvidenceRoots(d);
     let raw: unknown;
     try {
         raw = JSON.parse(decode(await captureArtifactBytes(deploymentPath(d.root, "documents.json"), 65536)));
