@@ -3,6 +3,10 @@ import { join } from "node:path";
 import { assertSafeFilesystemPath } from "./shared/storage.js";
 import { captureArtifactBytes } from "./artifact_custody.js";
 import type { LoadedDeployment } from "./deployment.js";
+import { ALERT_MONITOR_SOURCE_NAMES, MONITOR_KEYS, type MonitorKey } from "./alerts/composite.js";
+import { isSourceHealthReceipt } from "./shared/source_health.js";
+import { assessSourceClock, SOURCE_CLOCK_POLICIES } from "./source_clocks.js";
+import type { SourceHealth } from "./types.js";
 export function renderRegionalSurface(d: LoadedDeployment, evidence: unknown = null, options: {
     localApi?: boolean;
     manuscriptTitle?: string | null;
@@ -74,8 +78,19 @@ export async function regionalObservations(d: LoadedDeployment, liveOnly = false
     const alerts = await read("alerts/composite/current.json") as Record<string, unknown> | null;
     if (alerts) {
         const available = (alerts.monitors ?? {}) as Record<string, Record<string, unknown>>;
-        const monitors = d.config.enabledMonitors.map(key => { const row = available[key === "airquality" ? "airQuality" : key]; return { key, level: row?.level ?? null, summary: typeof row?.summary === "string" ? row.summary : null, count: typeof row?.count === "number" ? row.count : null, availability: row ? (row.availability ?? "available") : "unavailable" }; });
-        result.alerts = { assessedAt: alerts.assessedAt, eligibleMonitorCount: monitors.length, unavailableMonitorCount: monitors.filter(row => row.availability === "unavailable").length, coverage: "Only enabled monitors are represented; missing observations do not establish calm conditions", monitors };
+        const health = await read("alerts/source-health.json");
+        if (health !== null && (!health || typeof health !== "object" || Array.isArray(health) || !Array.isArray((health as Record<string, unknown>).sources) || ((health as Record<string, unknown>).sources as unknown[]).length > MONITOR_KEYS.length)) throw new Error("Invalid monitor source health roster");
+        const sources = health === null ? [] : (health as { sources: unknown[] }).sources;
+        const monitors = d.config.enabledMonitors.map(value => {
+            const key = value as MonitorKey;
+            const row = available[key === "airquality" ? "airQuality" : key];
+            const expected = monitorSourceName(key);
+            const matches = sources.filter(value => value && typeof value === "object" && (value as Record<string, unknown>).source === expected);
+            if (matches.length > 1) throw new Error("Duplicate monitor source health identity");
+            const sourceHealth = publicMonitorHealth(key, matches[0] ?? null);
+            return { key, level: row?.level ?? null, summary: typeof row?.summary === "string" ? row.summary : null, count: typeof row?.count === "number" ? row.count : null, availability: row && row.availability !== "unavailable" && usableMonitorHealth(key, sourceHealth) ? "available" : "unavailable", sourceHealth };
+        });
+        result.alerts = { assessedAt: alerts.assessedAt, eligibleMonitorCount: monitors.length, unavailableMonitorCount: monitors.filter(row => row.availability === "unavailable").length, coverage: "Only enabled monitors are represented. Source-health clocks and status are retained as originally assessed, not refreshed by publication; missing or stale clock evidence does not establish calm conditions", monitors };
     }
     const meetings = await read("regional-meetings.json") as {
         profileId?: string;
@@ -114,6 +129,18 @@ export async function regionalObservations(d: LoadedDeployment, liveOnly = false
     return result;
 }
 
+const MONITOR_HEALTH_FIELDS = ["source", "sourceId", "status", "checkedAt", "fetchedAt", "observedAt", "productDate", "validUntil", "timestampBasis", "observationAgeMs", "observationFreshness", "itemCount", "url", "provenance", "ageMs", "freshness", "freshnessWindowMs"] as const;
+function monitorSourceName(key: MonitorKey): string { return ALERT_MONITOR_SOURCE_NAMES[MONITOR_KEYS.indexOf(key)]!; }
+/** Preserve the producer's clocks verbatim; no publication-time reassessment. */
+function publicMonitorHealth(key: MonitorKey, value: unknown): SourceHealth | null {
+    if (value === null) return null;
+    if (!isSourceHealthReceipt(value) || value.source !== monitorSourceName(key)) throw new Error("Invalid monitor source health identity or clocks");
+    return Object.fromEntries(MONITOR_HEALTH_FIELDS.filter(field => value[field] !== undefined).map(field => [field, value[field]])) as unknown as SourceHealth;
+}
+function usableMonitorHealth(key: MonitorKey, health: SourceHealth | null): boolean {
+    return health !== null && (health.status === "ok" || health.status === "empty") && health.timestampBasis === SOURCE_CLOCK_POLICIES[key].basis && health.observationFreshness !== "stale" && health.observationFreshness !== "unknown" && health.freshness !== "stale" && health.freshness !== "unknown" && assessSourceClock(key, health, Date.parse(health.checkedAt)).usable;
+}
+
 export function regionalObservationBinding(d:LoadedDeployment):string{return new Bun.CryptoHasher("sha256").update(JSON.stringify({config:d.config,profile:d.profile,policy:d.policy})).digest("hex");}
 
 /** Validate a retained seed even when live output is also present. */
@@ -122,7 +149,15 @@ export function validateRegionalObservationInput(d:LoadedDeployment,value:unknow
  const seed=object(value),obs=object(seed.observations);
  if(Object.keys(seed).sort().join("|")!==["schemaVersion","profileId","configurationSha256","capturedAt","observations"].sort().join("|") || seed.schemaVersion!=="regional-observation-input/v1" || seed.profileId!==d.profile.id || seed.configurationSha256!==regionalObservationBinding(d) || typeof seed.capturedAt!=="string" || !Number.isFinite(Date.parse(seed.capturedAt)) || obs.profileId!==d.profile.id || !Array.isArray(obs.news) || obs.news.length>100)throw new Error("Retained observation identity differs");
  if(obs.meetings!==null && object(obs.meetings).profileId!==d.profile.id)throw new Error("Retained meeting identity differs");
- if(obs.alerts!==null){const alerts=object(obs.alerts);if(!Array.isArray(alerts.monitors)||alerts.monitors.length!==d.config.enabledMonitors.length||alerts.monitors.some((row:unknown,i:number)=>object(row).key!==d.config.enabledMonitors[i]))throw new Error("Retained monitor roster differs");}
+ if(obs.alerts!==null){
+  const alerts=object(obs.alerts);
+  if(!Array.isArray(alerts.monitors)||alerts.monitors.length!==d.config.enabledMonitors.length||alerts.monitors.some((row:unknown,i:number)=>object(row).key!==d.config.enabledMonitors[i]))throw new Error("Retained monitor roster differs");
+  for (const value of alerts.monitors) {
+   const row=object(value),key=row.key as MonitorKey,health=publicMonitorHealth(key,row.sourceHealth);
+   if (health && Object.keys(object(row.sourceHealth)).some(field=>!MONITOR_HEALTH_FIELDS.includes(field as typeof MONITOR_HEALTH_FIELDS[number]))) throw new Error("Unexpected retained monitor health field");
+   if (!["available","unavailable"].includes(String(row.availability)) || row.availability==="available"&&!usableMonitorHealth(key,health)) throw new Error("Retained monitor availability lacks usable source clock evidence");
+  }
+ }
  if(obs.sourceChecks!==null){
   const checks=object(obs.sourceChecks),seen=new Set<string>();
   if(checks.profileId!==d.profile.id||checks.schemaVersion!=="regional-source-checks/v1"||!Array.isArray(checks.sources)||checks.sources.length!==d.config.sources.length)throw new Error("Retained source-check identity differs");

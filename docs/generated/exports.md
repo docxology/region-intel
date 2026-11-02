@@ -219,6 +219,7 @@ Qualified source exports, independent of similarly named symbols in other module
 | [src/alerts/nws_weather.ts:281](../../src/alerts/nws_weather.ts#L281) | `monitorNWSWeatherAlerts` | function | `c0613c00d1519ce507a97e2b9416059df28ceddb764b0e7ca208450039f20d9c` |
 | [src/alerts/nws_weather.ts:7](../../src/alerts/nws_weather.ts#L7) | `NWS_ALERTS_URL` | re-export | `68d37f2d83ef9e0e2f418f920dff374c62aed1639da521304bf4f9f7a1614bf7` |
 | [src/alerts/nws_weather.ts:7](../../src/alerts/nws_weather.ts#L7) | `NWS_FORECAST_ZONE` | re-export | `68d37f2d83ef9e0e2f418f920dff374c62aed1639da521304bf4f9f7a1614bf7` |
+| [src/alerts/nws_weather.ts:28](../../src/alerts/nws_weather.ts#L28) | `nwsAlertsUrl` | function | `3db24e9c88ecd1c3d2f6a9ef2cb904cf291a212f017f8eafa38cdc319369ae60` |
 | [src/alerts/nws_weather.ts:147](../../src/alerts/nws_weather.ts#L147) | `pointInPolygon` | function | `14f7b8060076dec5006d3ac7db09e1f7f342480fdba2f5956de084bc6f01c7e9` |
 | [src/alerts/pacfin.ts:211](../../src/alerts/pacfin.ts#L211) | `appendPacfinHistory` | function | `48d4b250fc7a53c4bf4fe37de4b1950d2feb1424762e5305a80c8145c7546798` |
 | [src/alerts/pacfin.ts:185](../../src/alerts/pacfin.ts#L185) | `buildPacfinReport` | function | `74baccab8a3c1be3679afa9900161547b5ff5d8dc25ce35982558a31f9cb100b` |
@@ -1218,10 +1219,10 @@ Qualified source exports, independent of similarly named symbols in other module
 | [src/regional_publication.ts:73](../../src/regional_publication.ts#L73) | `checkRegionalPublication` | function | `3da7344dd0cec25d4b17fad9d82ab4979504ff8712cf3642495502175d6ef65c` |
 | [src/regional_publication.ts:12](../../src/regional_publication.ts#L12) | `PublicationReference` | type | `b7685516eba1aff20a66aa72b7f7109062a026d2f26d47737bed3cc5ac02c815` |
 | [src/regional_publication.ts:24](../../src/regional_publication.ts#L24) | `verifyGitPublication` | function | `798f62a6576398dad318073497d341966a09ba54403f1ec5f7f78e0d60fcece6` |
-| [src/regional_surface.ts:117](../../src/regional_surface.ts#L117) | `regionalObservationBinding` | function | `611cbfa573cd9459ec0871b8d4e6aae4fba2b8b7019028310cb32a7fc49c9efd` |
-| [src/regional_surface.ts:57](../../src/regional_surface.ts#L57) | `regionalObservations` | function | `1efcb85ad3585f6859cf0bf0953a46cbc28c1a72a28108c3d0f4bd51b80a8224` |
-| [src/regional_surface.ts:6](../../src/regional_surface.ts#L6) | `renderRegionalSurface` | function | `13d3d43c9b8b17713199ff2693f62503d23ef76cfa2655b323d81b37655817f6` |
-| [src/regional_surface.ts:120](../../src/regional_surface.ts#L120) | `validateRegionalObservationInput` | function | `3175dbfbc4fc6de31e7cdecdcfad2000a32968821e8263a3b227f12bc78d0ebe` |
+| [src/regional_surface.ts:144](../../src/regional_surface.ts#L144) | `regionalObservationBinding` | function | `611cbfa573cd9459ec0871b8d4e6aae4fba2b8b7019028310cb32a7fc49c9efd` |
+| [src/regional_surface.ts:61](../../src/regional_surface.ts#L61) | `regionalObservations` | function | `1efcb85ad3585f6859cf0bf0953a46cbc28c1a72a28108c3d0f4bd51b80a8224` |
+| [src/regional_surface.ts:10](../../src/regional_surface.ts#L10) | `renderRegionalSurface` | function | `13d3d43c9b8b17713199ff2693f62503d23ef76cfa2655b323d81b37655817f6` |
+| [src/regional_surface.ts:147](../../src/regional_surface.ts#L147) | `validateRegionalObservationInput` | function | `3175dbfbc4fc6de31e7cdecdcfad2000a32968821e8263a3b227f12bc78d0ebe` |
 | [src/regional_template.ts:13](../../src/regional_template.ts#L13) | `rendererFingerprint` | function | `2ac723e14d1611c9e1815500d7f291b4850c11db728c38bf800852257ee28955` |
 | [src/regional_template.ts:20](../../src/regional_template.ts#L20) | `renderTemplate` | function | `822b5e70b03bbac01d2393ad1ed5639a6a2a6447c0918993103e847712474470` |
 | [src/regional_template.ts:10](../../src/regional_template.ts#L10) | `TEMPLATE_RENDERER_SHA256` | value | `2cbe5db7c2564c98b3581b5b9f12dfffa4edd304cf6227cf7b5da2c8c7da50ef` |

@@ -96,6 +96,7 @@ test("regional publication preserves healthy and unavailable evaluator results",
   for(const available of [true,false]){
    const report=computeAlertSeverity({warningCount:0,watchCount:0},{events:[]},{severities:[],count:0,available},{waterLevelFt:null,available:false},{closureActive:false,available:false});
    writeFileSync(join(root,"output","alerts","composite","current.json"),JSON.stringify(report));
+   writeFileSync(join(root,"output/alerts/source-health.json"),JSON.stringify({sources:[{source:"NWS Weather",status:available?"empty":"unavailable",checkedAt:report.assessedAt,fetchedAt:report.assessedAt,timestampBasis:"retrieval",itemCount:0,url:"https://example.invalid/weather"}]}));
    const observation=await regionalObservations(loadDeployment(root));
    expect(observation.alerts).toMatchObject({eligibleMonitorCount:1,unavailableMonitorCount:available?0:1,monitors:[{key:"weather",availability:available?"available":"unavailable"}]});
   }
@@ -161,4 +162,45 @@ test("long regional lists preserve every item behind expandable summaries", asyn
   expect(meetings.find("details a").length).toBe(100);
   expect(meetings.find("details").attr("open")).toBeUndefined();
  }finally{rmSync(root,{recursive:true,force:true});}
+});
+
+test("regional observation seed preserves source clocks and fails closed on missing or stale evidence", async () => {
+ const root=mkdtempSync(join(tmpdir(),"regional-clock-"));
+ try {
+  writeFileSync(join(root,"civic.json"),JSON.stringify(defaultCivicProfile));
+  writeFileSync(join(root,"policy.json"),readFileSync(new URL("../configs/crescent-city-region.json",import.meta.url)));
+  writeFileSync(join(root,"region.json"),JSON.stringify({schemaVersion:"region-deployment/v1",civicProfile:"civic.json",regionConfig:"policy.json",outputDir:"output",seedDir:"seed",enabledMonitors:["airquality","drought","weather"],sources:[]}));
+  mkdirSync(join(root,"output/alerts/composite"),{recursive:true});
+  const assessedAt="2026-01-06T12:00:00.000Z",fetchedAt="2026-01-06T11:59:00.000Z",observedAt="2026-01-06T11:00:00.000Z";
+  const air={source:"EPA AirNow",sourceId:"epa-airnow",status:"ok",checkedAt:assessedAt,fetchedAt,observedAt,timestampBasis:"observation",observationFreshness:"fresh",observationAgeMs:3600000,itemCount:1,url:"https://example.invalid/air",provenance:"Recorded provider",rawPrivate:"do not publish"};
+  const drought={source:"USDM Drought",status:"ok",checkedAt:assessedAt,fetchedAt,productDate:"2026-01-01",observedAt:"2026-01-01T00:00:00Z",timestampBasis:"product",observationFreshness:"fresh",itemCount:1,url:"https://example.invalid/drought"};
+  const weather={source:"NWS Weather",status:"empty",checkedAt:assessedAt,fetchedAt,timestampBasis:"retrieval",observationFreshness:"fresh",itemCount:0,url:"https://example.invalid/weather"};
+  const healthPath=join(root,"output/alerts/source-health.json");
+  const writeHealth=(sources:unknown[])=>writeFileSync(healthPath,JSON.stringify({checkedAt:assessedAt,sources}));
+  writeHealth([weather,drought,air]);
+  writeFileSync(join(root,"output/alerts/composite/current.json"),JSON.stringify({assessedAt,monitors:{airQuality:{level:"CALM",summary:"AQI 21",count:1,availability:"available"},drought:{level:"WATCH",summary:"D1",count:1,availability:"available"},weather:{level:"CALM",summary:"No alerts",count:0,availability:"available"}}}));
+  const {regionalObservations,regionalObservationBinding,validateRegionalObservationInput}=await import("../src/regional_surface.ts"),d=loadDeployment(root);
+  const observe=async()=>JSON.parse(JSON.stringify(await regionalObservations(d))) as {alerts:{monitors:Array<{sourceHealth:Record<string,unknown>|null;availability:string}>}};
+  const baseline=await observe();
+  expect(baseline.alerts.monitors[0]!.sourceHealth).toMatchObject({source:"EPA AirNow",fetchedAt,observedAt,timestampBasis:"observation",observationFreshness:"fresh",sourceId:"epa-airnow"});
+  expect(baseline.alerts.monitors[0]!.sourceHealth).not.toHaveProperty("rawPrivate");
+  expect(baseline.alerts.monitors[1]!.sourceHealth).toMatchObject({source:"USDM Drought",productDate:"2026-01-01",observedAt:"2026-01-01T00:00:00Z",checkedAt:assessedAt});
+  expect(baseline.alerts.monitors.every(row=>row.availability==="available")).toBe(true);
+  const seed={schemaVersion:"regional-observation-input/v1",profileId:d.profile.id,configurationSha256:regionalObservationBinding(d),capturedAt:assessedAt,observations:baseline};
+  expect(()=>validateRegionalObservationInput(d,seed)).not.toThrow();
+  const crossed=structuredClone(seed);crossed.observations.alerts.monitors[0]!.sourceHealth!.source="USDM Drought";
+  expect(()=>validateRegionalObservationInput(d,crossed)).toThrow("health");
+  const invalid=structuredClone(seed);invalid.observations.alerts.monitors[0]!.sourceHealth!.observedAt="invalid";
+  expect(()=>validateRegionalObservationInput(d,invalid)).toThrow("health");
+  const forged=structuredClone(seed);forged.observations.alerts.monitors[0]!.sourceHealth=null;
+  expect(()=>validateRegionalObservationInput(d,forged)).toThrow("availability");
+  writeHealth([weather,drought,{...air,status:"stale",observedAt:"2026-01-01T00:00:00Z",observationFreshness:"stale"}]);
+  const stale=await observe();expect(stale.alerts.monitors[0]).toMatchObject({availability:"unavailable",sourceHealth:{status:"stale",observedAt:"2026-01-01T00:00:00Z",observationFreshness:"stale",fetchedAt}});
+  writeHealth([weather,drought,{...air,observationFreshness:"unknown"}]);expect((await observe()).alerts.monitors[0]!.availability).toBe("unavailable");
+  const {observedAt:unused,...missingPrimary}=air;writeHealth([weather,drought,{...missingPrimary,status:"unavailable",observationFreshness:"unknown"}]);
+  expect((await observe()).alerts.monitors[0]).toMatchObject({availability:"unavailable",sourceHealth:{observationFreshness:"unknown"}});
+  writeHealth([weather,drought]);expect((await observe()).alerts.monitors[0]).toMatchObject({availability:"unavailable",sourceHealth:null});
+  writeHealth([weather,drought,air,air]);await expect(observe()).rejects.toThrow("Duplicate");
+  writeHealth([weather,drought,{...air,observedAt:"invalid"}]);await expect(observe()).rejects.toThrow("health");
+ } finally {rmSync(root,{recursive:true,force:true});}
 });

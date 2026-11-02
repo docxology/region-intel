@@ -122,3 +122,17 @@ journal for the next promotion to recover before accepting new data. Provider ac
 legal sufficiency and complete all-page currentness remain separate evidence.
 
 Shared CLI admission rejects evidence roots overlapping Git metadata, source, configuration, workflows, native review packets or the generated Pages destination before any command writes. The PDF reader/importer applies the same guard. Configuration introspection through the raw loader remains distinct from permission to write.
+
+
+### Retained monitor clocks
+
+The observation seed joins enabled monitors to their canonical source-health
+identity. Each monitor retains its provider URL, source status, check/retrieval
+clocks, primary observation or product date, timestamp basis, validity window
+and recorded freshness fields when emitted. Publication does not advance those
+clocks or recompute freshness at a new time. The composite assessment time is
+not a substitute for a primary observation time. Missing health is explicit
+`null`; missing primary or stale clock evidence cannot support `available`.
+Malformed, duplicate or crossed health receipts fail validation. Older retained
+alert rows without this evidence require explicit re-seeding from preserved
+producer reports; they are not silently upgraded or re-dated.

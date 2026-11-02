@@ -21,8 +21,8 @@ import { currentRegionConfig } from "../region_config.js";
  */
 import { monitorNOAATsunamiAlerts } from "./noaa_tsunami.ts";
 import { monitorUSGSEarthquakeAlerts } from "./usgs_earthquake.ts";
-import { monitorNWSWeatherAlerts } from "./nws_weather.ts";
-import { NWS_ALERTS_URL, USGS_EARTHQUAKE_URL } from "../constants.js";
+import { monitorNWSWeatherAlerts, nwsAlertsUrl } from "./nws_weather.ts";
+import { USGS_EARTHQUAKE_URL } from "../constants.js";
 import { AIRNOW_PUBLIC_KML_URL, getLastAirQualityError, runAirQualityMonitor } from "./epa_airnow.ts";
 import { CALFIRE_API_URL, getLastWildfireError, runWildfireMonitor } from "./calfire_wildfire.ts";
 import { runMarineMonitor, getLastMarineError } from "./ndbc_marine.ts";
@@ -248,7 +248,7 @@ async function runAlertMonitorsInScope(options: AlertRunOptions): Promise<Source
     const monitorDefinitions: AlertMonitorDefinition[] = [
       { source: "NOAA Tsunami", key: "tsunami", report: tsunami, itemCount: tsunami?.alerts?.length ?? 0, url: `https://api.weather.gov/alerts/active?area=${cfg.tsunami.capArea}`, provenance: "NOAA CAP alerts (tsunami Warning/Watch/Advisory)" },
       { source: "USGS Earthquake", key: "earthquake", report: earthquake, itemCount: earthquake?.events?.length ?? 0, url: USGS_EARTHQUAKE_URL, provenance: `USGS all-earthquakes past-hour GeoJSON feed; M${cfg.earthquake.minMagnitude}+ within ${cfg.earthquake.radiusKm} km` },
-      { source: "NWS Weather", key: "weather", report: weather, itemCount: weather?.alerts?.length ?? 0, url: NWS_ALERTS_URL, provenance: "NWS active alerts" },
+      { source: "NWS Weather", key: "weather", report: weather, itemCount: weather?.alerts?.length ?? 0, url: nwsAlertsUrl(), provenance: "NWS active alerts" },
       { source: "NOAA Tides", key: "tides", report: tidesReport, itemCount: tidesReport?.predictions?.length ?? 0, url: `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?station=${cfg.tides.stationId}`, provenance: `NOAA CO-OPS station ${cfg.tides.stationId}` },
       { source: "CDFW Fishing", key: "fishing", report: fishingReport, itemCount: fishingReport?.bulletins?.length ?? 0, url: cfg.fishing.bulletinUrl, provenance: "CDFW North Coast bulletins" },
       { source: "EPA AirNow", key: "airquality", report: airquality, itemCount: airquality?.readings?.length ?? 0, url: airquality?.provider === "airnow-public-kml" ? AIRNOW_PUBLIC_KML_URL : "https://www.airnowapi.org/aq/observation/zipCode/current/", provenance: airquality?.provider === "airnow-public-kml" ? "EPA AirNow public KML; keyed ZIP API fallback not required" : `EPA AirNow ZIP ${cfg.airQuality.zip} API` },

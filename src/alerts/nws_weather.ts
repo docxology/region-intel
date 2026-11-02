@@ -25,7 +25,7 @@ function nwsCoverageLabel():string{return referenceCivicProfile()?"Del Norte coa
 function nwsForecastZone(): string { return currentRegionConfig().alerts.weather.nwsZone; }
 
 /** The active NWS zone query for the configured forecast zone, resolved per call. */
-function nwsAlertsUrl(): string { return `https://api.weather.gov/alerts/active?zone=${nwsForecastZone()}`; }
+export function nwsAlertsUrl(): string { return `https://api.weather.gov/alerts/active?zone=${nwsForecastZone()}`; }
 
 // Persistent alert history JSONL path
 function HISTORY_DIR(): string { return join(outputRoot(), 'alerts', 'weather'); }

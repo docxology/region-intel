@@ -155,3 +155,11 @@ test("alternate smoke and road summaries preserve selected regional identity",as
   expect(computeAlertSeverity({warningCount:0,watchCount:0},{events:[]},{severities:[],count:0,available:false},{waterLevelFt:null,available:false},{closureActive:false,available:false},undefined,undefined,undefined,undefined,undefined,undefined,{severity:"NONE",incidentCount:0,hasMajorClosure:false,available:true}).monitors.roads.summary).toContain("Example County");
  }));
 });
+
+
+test("weather receipt uses the same per-call regional URL as acquisition", async () => {
+ const {nwsAlertsUrl}=await import("../src/alerts/nws_weather.ts");
+ const config=structuredClone(currentRegionConfig());config.alerts.weather.nwsZone="NVZ003";
+ withRegionConfig(config,()=>expect(nwsAlertsUrl()).toBe("https://api.weather.gov/alerts/active?zone=NVZ003"));
+ expect(nwsAlertsUrl()).toBe("https://api.weather.gov/alerts/active?zone=CAZ101");
+});
