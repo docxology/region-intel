@@ -31,7 +31,7 @@ services:
 
   ollama:
     profiles: [llm]
-    image: ollama/ollama:0.34.2
+    image: ollama/ollama:0.34.2@sha256:da6e0dc5651df159e45686fd663c4dbe1624a52c44d7280eeac1551d8f865532
     ports:
       - "127.0.0.1:${CC_OLLAMA_PORT:-11434}:11434"
     volumes:
@@ -52,7 +52,7 @@ services:
 
   chroma:
     profiles: [llm]
-    image: chromadb/chroma:1.5.9
+    image: chromadb/chroma:1.5.9@sha256:1e0b73a187a28757c572acba508c46f48c9e8b0acaf5c20e6d95cdedce1acdf6
     ports:
       - "127.0.0.1:${CC_CHROMA_PORT:-8001}:8000"
     volumes:
@@ -71,7 +71,7 @@ services:
 
   ollama-models:
     profiles: [llm]
-    image: ollama/ollama:0.34.2
+    image: ollama/ollama:0.34.2@sha256:da6e0dc5651df159e45686fd663c4dbe1624a52c44d7280eeac1551d8f865532
     environment:
       OLLAMA_HOST: http://ollama:11434
       EMBEDDING_MODEL: "${EMBEDDING_MODEL:-nomic-embed-text}"
