@@ -198,65 +198,65 @@ qualified declarations.
 
 ```text
 src/
-  types.ts              # All TypeScript interfaces
-  constants.ts          # Centralized constants + env-overridable params
-  utils.ts              # Pure utilities (hash, flatten, HTML, CSV, filename)
-  logger.ts             # Structured logging (createLogger, setLogLevel)
-  browser.ts            # Playwright lifecycle + Cloudflare bypass
-  toc.ts                # TOC fetcher + tree utilities
-  content.ts            # Page scraper + section extraction
-  scrape.ts             # Scraper orchestrator with resume
-  scraper_utils.ts      # TOC/artifact validation and retry utilities
-  verify.ts             # Verification engine
-  export.ts             # Multi-format exporter
-  domains.ts            # Intelligence domain data + search
-  monitor.ts            # Municipal code change detection
-  news_monitor.ts       # RSS news aggregation
-  gov_meeting_monitor.ts # Government meeting agenda tracker
-  youtube_monitor.ts     # YouTube meeting transcripts + source health
-  triplicate_monitor.ts  # Reference-only Triplicate metadata + citations
-  curation.ts             # Provider-aware news/meeting/YouTube curation
-  monthly_report.ts      # Period-specific civic health report
-  pages_snapshot.ts      # Bounded public GitHub Pages snapshot exporter
-  pages_validation.ts    # Offline artifact and shipped-behavior validator
-  pages_bundle_validation.ts # Owned, bounded shipped-bundle evaluator
-  shared/
-    paths.ts            # Centralized output path constants
-    data.ts             # Data loading layer (loadToc, loadArticle, etc.)
-  gui/
-    server.ts           # Bun.serve() HTTP server (port 3000)
-    routes.ts           # All /api/* route handlers
-    search.ts           # In-memory full-text search engine
-    analytics.ts        # PCA + K-Means + stats computation
-    static/index.html   # Single-page application (no build step)
-  llm/
-    config.ts           # LLM configuration with env var overrides
-    ollama.ts           # Ollama API wrapper
-    chroma.ts           # ChromaDB client
-    embeddings.ts       # Chunk + embed + index pipeline
-    rag.ts              # RAG pipeline (embed → retrieve → generate)
-    index.ts            # CLI entry point
-  pages/
-    static/index.html   # Static Pages dashboard
-    static/404.html     # Static Pages fallback
-  api/
-    middleware.ts       # Rate limiting + API key auth + request logging
-  alerts/
-    noaa_tsunami.ts     # NOAA CAP tsunami alert monitor
-    usgs_earthquake.ts  # USGS GeoJSON earthquake monitor
-    nws_weather.ts      # NWS weather alert monitor (CAZ101)
+│   ├── types.ts              # All TypeScript interfaces
+│   ├── constants.ts          # Centralized constants + env-overridable params
+│   ├── utils.ts              # Pure utilities (hash, flatten, HTML, CSV, filename)
+│   ├── logger.ts             # Structured logging (createLogger, setLogLevel)
+│   ├── browser.ts            # Playwright lifecycle + Cloudflare bypass
+│   ├── toc.ts                # TOC fetcher + tree utilities
+│   ├── content.ts            # Page scraper + section extraction
+│   ├── scrape.ts             # Scraper orchestrator with resume
+│   ├── scraper_utils.ts      # TOC/artifact validation and retry utilities
+│   ├── verify.ts             # Verification engine
+│   ├── export.ts             # Multi-format exporter
+│   ├── domains.ts            # Intelligence domain data + search
+│   ├── monitor.ts            # Municipal code change detection
+│   ├── news_monitor.ts       # RSS news aggregation
+│   ├── gov_meeting_monitor.ts # Government meeting agenda tracker
+│   ├── youtube_monitor.ts     # YouTube meeting transcripts + source health
+│   ├── triplicate_monitor.ts  # Reference-only Triplicate metadata + citations
+│   ├── curation.ts             # Provider-aware news/meeting/YouTube curation
+│   ├── monthly_report.ts      # Period-specific civic health report
+│   ├── pages_snapshot.ts      # Bounded public GitHub Pages snapshot exporter
+│   ├── pages_validation.ts    # Offline artifact and shipped-behavior validator
+│   ├── pages_bundle_validation.ts # Owned, bounded shipped-bundle evaluator
+│   ├── shared/
+│   │   ├── paths.ts            # Centralized output path constants
+│   │   └── data.ts             # Data loading layer (loadToc, loadArticle, etc.)
+│   ├── gui/
+│   │   ├── server.ts           # Bun.serve() HTTP server (port 3000)
+│   │   ├── routes.ts           # All /api/* route handlers
+│   │   ├── search.ts           # In-memory full-text search engine
+│   │   ├── analytics.ts        # PCA + K-Means + stats computation
+│   │   └── static/index.html   # Single-page application (no build step)
+│   ├── llm/
+│   │   ├── config.ts           # LLM configuration with env var overrides
+│   │   ├── ollama.ts           # Ollama API wrapper
+│   │   ├── chroma.ts           # ChromaDB client
+│   │   ├── embeddings.ts       # Chunk + embed + index pipeline
+│   │   ├── rag.ts              # RAG pipeline (embed → retrieve → generate)
+│   │   └── index.ts            # CLI entry point
+│   ├── pages/
+│   │   ├── static/index.html   # Static Pages dashboard
+│   │   └── static/404.html     # Static Pages fallback
+│   ├── api/
+│   │   └── middleware.ts       # Rate limiting + API key auth + request logging
+│   └── alerts/
+│       ├── noaa_tsunami.ts     # NOAA CAP tsunami alert monitor
+│       ├── usgs_earthquake.ts  # USGS GeoJSON earthquake monitor
+│       └── nws_weather.ts      # NWS weather alert monitor (CAZ101)
 scripts/
-  weekly-check.ts       # Weekly health check orchestrator
-  run-monitor.ts        # Change detection script
-  run-alerts.ts         # All alert monitors (concurrent)
-  run-news.ts           # RSS news monitor script
-  run-meetings.ts       # Government meeting monitor script
-  run-youtube.ts        # YouTube meeting transcript pipeline script
-  run-curation.ts       # LLM curation pipeline script
-  export-pages.ts       # Static Pages exporter
-  validate-pages.ts     # Static Pages artifact validator
+│   ├── weekly-check.ts       # Weekly health check orchestrator
+│   ├── run-monitor.ts        # Change detection script
+│   ├── run-alerts.ts         # All alert monitors (concurrent)
+│   ├── run-news.ts           # RSS news monitor script
+│   ├── run-meetings.ts       # Government meeting monitor script
+│   ├── run-youtube.ts        # YouTube meeting transcript pipeline script
+│   ├── run-curation.ts       # LLM curation pipeline script
+│   ├── export-pages.ts       # Static Pages exporter
+│   └── validate-pages.ts     # Static Pages artifact validator
 tests/                  # Deterministic suite discovered by Bun (run bun run validate)
-  *.test.ts             # Module, route, provider, feed, alert, and integration tests
+│   └── *.test.ts             # Module, route, provider, feed, alert, and integration tests
 docs/                   # This documentation
 output/                 # Scraped data (gitignored)
 ```
