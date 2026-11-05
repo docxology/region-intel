@@ -82,7 +82,7 @@
     "publication:check": "bun run src/regional_cli.ts publication:check"
   },
   "dependencies": {
-    "@xmldom/xmldom": "0.8.11",
+    "@xmldom/xmldom": "0.8.15",
     "cheerio": "1.2.0",
     "chromadb": "3.3.3",
     "playwright": "1.58.2",
