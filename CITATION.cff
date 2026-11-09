@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+type: software
+title: "region-intel"
+authors:
+  - family-names: Friedman
+    given-names: Daniel Ari
+    orcid: "https://orcid.org/0000-0001-6232-9096"
+repository-code: "https://github.com/docxology/region-intel"
+abstract: "Shared regional civic intelligence methods, verified acquisition, alert adapters, search, RAG, analytics, publication and manuscript tooling"
