@@ -6,7 +6,7 @@
  * Last run: 2026-03-14T17:09:13.120Z
  */
 import { createLogger } from './logger.js';
-import { computeSha256, htmlToText } from './utils.js';
+import { computeSha256, decodeHtmlEntities, htmlToText, stripTags } from './utils.js';
 import { join } from 'path';
 import { recoverArtifactTransactions, readBoundedArtifact, type ArtifactReplacement } from './shared/artifact_transaction.js';
 import { assertSafeFilesystemPath } from './shared/storage.js';
@@ -96,11 +96,7 @@ export function extractLinkItems(htmlAnchors: string[] | undefined): LinkItem[] 
     const hrefMatch = anchor.match(/href=["']([^"']+)["']/);
     if (!hrefMatch) continue;
     const url = new URL(hrefMatch[1], "https://www.crescentcity.org").toString();
-    const titleText = anchor
-      .replace(/<[^>]*>/g, "")
-      .replace(/&amp;/g, "&")
-      .replace(/&#039;|&apos;/g, "'")
-      .trim();
+    const titleText = decodeHtmlEntities(stripTags(anchor)).trim();
     items.push({ title: titleText || url, url });
   }
   return items;

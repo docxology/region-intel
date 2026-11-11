@@ -72,24 +72,117 @@ export function uniqBy<T>(arr: T[], key: (item: T) => string): T[] {
   });
 }
 
+// ─── HTML helpers (linear-time, no backtracking regexes) ─────────
+
+const HTML_ENTITIES = new Map<string, string>([
+  ["nbsp", " "],
+  ["amp", "&"],
+  ["lt", "<"],
+  ["gt", ">"],
+  ["quot", '"'],
+  ["apos", "'"],
+]);
+
+/**
+ * Decode named (&amp; &lt; &gt; &quot; &apos; &nbsp;) and numeric entities in a
+ * single pass, so "&amp;lt;" becomes "&lt;" rather than "<".
+ */
+export function decodeHtmlEntities(text: string): string {
+  return text.replace(/&(#[0-9]+|#[xX][0-9a-fA-F]+|[a-zA-Z]+);/g, (match, name: string) => {
+    const named = HTML_ENTITIES.get(name);
+    if (named !== undefined) return named;
+    if (name[0] !== "#") return match;
+    const code = name[1] === "x" || name[1] === "X" ? parseInt(name.slice(2), 16) : parseInt(name.slice(1), 10);
+    return Number.isInteger(code) && code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : match;
+  });
+}
+
+/**
+ * Remove markup tags in one scan, writing `replacement` in place of each tag.
+ * Everything from a "<" to the next ">" is a tag; a "<" with no closing ">" is
+ * dropped on its own, so no tag fragment can survive.
+ */
+export function stripTags(html: string, replacement = ""): string {
+  let out = "";
+  let pending = ""; // text after an unclosed "<", kept if no ">" follows
+  let inTag = false;
+  for (const ch of html) {
+    if (ch === "<") {
+      inTag = true;
+    } else if (inTag && ch === ">") {
+      inTag = false;
+      pending = "";
+      out += replacement;
+    } else if (inTag) {
+      pending += ch;
+    } else {
+      out += ch;
+    }
+  }
+  return out + pending;
+}
+
+function isTagNameEnd(ch: string | undefined): boolean {
+  return ch === undefined || ch === ">" || ch === "/" || ch === " " || ch === "\t" || ch === "\n" || ch === "\r" || ch === "\f";
+}
+
+function findTag(lower: string, prefix: string, from: number): number {
+  let at = lower.indexOf(prefix, from);
+  while (at !== -1 && !isTagNameEnd(lower[at + prefix.length])) at = lower.indexOf(prefix, at + 1);
+  return at;
+}
+
+/**
+ * Remove whole elements such as <script>…</script> and <style>…</style>
+ * (case-insensitive; closing tags may carry whitespace or attributes).
+ * An element with no closing tag is left in place, as the old regexes did.
+ */
+export function removeElements(html: string, tags: readonly string[], replacement = ""): string {
+  const lower = html.toLowerCase();
+  const nextOpen = new Map<string, number>();
+  let out = "";
+  let pos = 0;
+  for (;;) {
+    let start = -1;
+    let tag = "";
+    for (const t of tags) {
+      let at = nextOpen.get(t);
+      if (at === undefined || (at !== -1 && at < pos)) {
+        at = findTag(lower, "<" + t, pos);
+        nextOpen.set(t, at);
+      }
+      if (at !== -1 && (start === -1 || at < start)) {
+        start = at;
+        tag = t;
+      }
+    }
+    if (start === -1) break;
+    const close = findTag(lower, "</" + tag, start);
+    const end = close === -1 ? -1 : lower.indexOf(">", close);
+    if (end === -1) {
+      // No closing tag anywhere after this point: leave this tag's elements in place.
+      nextOpen.set(tag, -1);
+      continue;
+    }
+    out += html.slice(pos, start) + replacement;
+    pos = end + 1;
+  }
+  return out + html.slice(pos);
+}
+
+/** Escape every regular-expression metacharacter in `text`. */
+export function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 // ─── Text processing ─────────────────────────────────────────────
 
 /** Convert HTML to plain text with basic formatting preservation */
 export function htmlToText(html: string): string {
-  return html
+  const withBreaks = html
     .replace(/<div class="para[^"]*">/g, "\n")
-    .replace(/<div class="history">/g, "\n[History: ")
-    .replace(/<span class="loclaw">/g, "")
-    .replace(/<\/span>/g, "")
-    .replace(/<\/div>/g, "")
-    .replace(/<[^>]+>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+    .replace(/<div class="history">/g, "\n[History: ");
+  return decodeHtmlEntities(stripTags(withBreaks))
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }

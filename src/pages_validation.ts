@@ -40,6 +40,7 @@ import { isDeepStrictEqual } from "node:util";
 import { captureDirectoryTransforms, buildDirectoryArtifactWithCustody } from "./directory.js";
 import { validateArtifact } from "./artifact_contracts.js";
 import { publicExposureErrors } from "./pages_public.js";
+import { escapeRegExp, removeElements, stripTags } from "./utils.js";
 import { EXPECTED_SOURCE_HEALTH } from "./shared/source_health.js";
 import { auditPagesCss, auditStylesheetBraces, type PageCssInput } from "./pages_css.js";
 import { scanPage } from "./pages_scan.js";
@@ -194,8 +195,8 @@ export async function validatePagesArtifact(destination: string, options: { sour
   }
 
   if (indexHtml.includes("<template data-pages-observations>")) errors.push("Pages observations placeholder was not replaced");
-  if (geoObservationsAvailable && !indexHtml.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "").includes('data-observations-state="published"')) errors.push("Pages index does not render the published hazard observations envelope");
-  if (!geoObservationsAvailable && indexHtml.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "").includes('data-observations-state="published"')) errors.push("Pages index claims published hazard observations but the artifact does not carry a valid envelope");
+  if (geoObservationsAvailable && !removeElements(indexHtml, ["script"]).includes('data-observations-state="published"')) errors.push("Pages index does not render the published hazard observations envelope");
+  if (!geoObservationsAvailable && removeElements(indexHtml, ["script"]).includes('data-observations-state="published"')) errors.push("Pages index claims published hazard observations but the artifact does not carry a valid envelope");
 
   if (snapshot) {
     if (snapshot.events) errors.push(...validateArtifact("events", snapshot.events, { audience: "public" }));
@@ -341,7 +342,6 @@ export async function validatePagesArtifact(destination: string, options: { sour
     } else {
       const mainEntity = Array.isArray(faqPage.mainEntity) ? faqPage.mainEntity : [];
       if (mainEntity.length < 5 || mainEntity.length > 8) errors.push("FAQPage mainEntity should hold 5-8 questions");
-      const stripTags = (text: string) => text.replace(/<[^>]+>/g, "");
       for (const [index, question] of mainEntity.entries()) {
         const q = typeof (question as Record<string, unknown>)?.name === "string" ? String((question as Record<string, unknown>).name).trim() : "";
         if (!q) { errors.push(`FAQ question ${index + 1} has no name`); continue; }
@@ -542,7 +542,7 @@ export async function validatePagesArtifact(destination: string, options: { sour
           errors.push(`snapshot.files.${fileKey} is missing (lane D per-field shard split regressed)`);
           continue;
         }
-        if (!new RegExp(`^${prefix.replace(/\./g, "\\.")}[0-9a-f]{8}\\.json$`).test(shardPath)) {
+        if (!new RegExp(`^${escapeRegExp(prefix)}[0-9a-f]{8}\\.json$`).test(shardPath)) {
           errors.push(`snapshot.files.${fileKey} is not a content-hashed ${prefix} artifact: ${shardPath}`);
           continue;
         }
@@ -795,7 +795,7 @@ export async function validatePagesArtifact(destination: string, options: { sour
   {
     const html404 = pageHtmlCache.get("404.html");
     if (html404 !== undefined) {
-      const markupOnly = html404.replace(/<script[\s\S]*?<\/script>/g, "");
+      const markupOnly = removeElements(html404, ["script"]);
       const hrefs = [...markupOnly.matchAll(/href="([^"]*)"/g)].map(match => match[1]);
       for (const href of hrefs) {
         if (href.startsWith("/") || href.startsWith("#") || /^(https?:|mailto:|data:)/i.test(href)) continue;

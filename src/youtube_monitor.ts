@@ -19,6 +19,7 @@
  * Output: JSON transcripts written to output/youtube/<video-id>.json
  */
 import { createLogger } from './logger.js';
+import { stripTags } from './utils.js';
 import { IdempotencyStore } from './shared/idempotency.js';
 import { mkdir, writeFile, readFile, unlink, readdir } from 'fs/promises';
 import { existsSync } from 'fs';
@@ -261,9 +262,7 @@ export function parseVtt(vttContent: string): TranscriptSegment[] {
 
   const flush = () => {
     if (currentStart === null) return;
-    const text = currentTextLines
-      .join(' ')
-      .replace(/<[^>]+>/g, '') // strip inline <c>word</c> / word-timestamp tags
+    const text = stripTags(currentTextLines.join(' ')) // strip inline <c>word</c> / word-timestamp tags
       .replace(/\s+/g, ' ')
       .trim();
     if (text) rawCues.push({ start: currentStart, text });

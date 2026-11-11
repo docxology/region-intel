@@ -27,6 +27,7 @@ import { writeJsonAtomic } from "./shared/source_health.js";
 import { boundedHttpFetch, type TransportOptions } from "./shared/transport.js";
 import { classify, extractTimeNote as sanitizeTimeNote, MAX_SOURCE_LINKS, parseEventDate, isCivilDate } from "./events.js";
 import { createLogger } from "./logger.js";
+import { stripTags } from "./utils.js";
 import { expandCalendar } from "./calendar_recurrence.js";
 
 const logger = createLogger("event-discovery");
@@ -621,7 +622,7 @@ export async function discoverFromSource(
           publicationAt: item.pubDate && Number.isFinite(Date.parse(item.pubDate)) ? new Date(item.pubDate).toISOString() : null,
           location: null,
           organizer: source.name,
-          description: item.description.replace(/<[^>]*>/g, "").trim(),
+          description: stripTags(item.description).trim(),
           sourceUrl: item.link,
           sourceName: source.name,
           sourceLinks: [item.link],
@@ -662,7 +663,7 @@ export async function discoverFromSource(
           timeNote: listing.startTime,
           location: listing.location,
           organizer: listing.organizer ?? source.name,
-          description: listing.description.replace(/<[^>]*>/g, "").trim(),
+          description: stripTags(listing.description).trim(),
           sourceUrl: source.url,
           sourceName: source.name,
           sourceLinks: [source.url],

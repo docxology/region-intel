@@ -32,6 +32,7 @@ import { createLogger } from './logger.js';
 import { newPage, navigateWithCloudflare, closeBrowser, withPageDeadline, closePageBounded } from './browser.js';
 import { boundedHttpFetch as fetch } from './shared/transport.js';
 import { withRetry, detectCloudflareStall } from './scraper_utils.js';
+import { decodeHtmlEntities, stripTags } from './utils.js';
 import { replaceArtifacts, recoverArtifactTransactions, type ArtifactReplacement } from './shared/artifact_transaction.js';
 import { IdempotencyStore } from './shared/idempotency.js';
 import { normalizeUrl } from './news_monitor.js';
@@ -355,12 +356,7 @@ function articleNodeData(raw: string): unknown[] | null {
 }
 
 function stripHtml(html: string): string {
-  return html
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
+  return decodeHtmlEntities(stripTags(html, ' '))
     .replace(/\s+/g, ' ')
     .trim();
 }
