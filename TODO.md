@@ -90,3 +90,7 @@ a paid-provider budget or permanent service operation.
 - **Remaining evidence:** A separately owned clean environment reproduces the release's declared deterministic outputs and research metrics, and each intended external consumer exercises its actual integration path beyond any narrower loader-only acceptance.
 - **Acceptance:** Name source/lock/template/model/consumer revisions and input/output hashes. Separate deterministic replay from model sampling, extraction/semantic review, hosted checks and live deployment. Preserve missing prerequisites and observed failures; a prior-version receipt or byte-identical static bundle does not certify a new runtime or full package initializer.
 - **Ownership/dependencies:** Independent operator/research/consumer owners; L03/L06 interpretation and M29 production conditions remain distinct evidence planes.
+
+## Workflowz review — 2026-11-10
+
+Coverage note: Reviewed the bounded evidence packet for project guidance, README, existing TODO, package/runtime pins, and the supplied GUI, LLM runtime, run-scope, and orchestration excerpts. No actionable finding is added because the packet does not expose enough surrounding source, callers, tests, or runtime behavior to establish a concrete defect and a valid behavioral acceptance probe. Re-review on a concrete failure or when the relevant source and test context changes.
