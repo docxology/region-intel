@@ -17,6 +17,7 @@ import { outputRoot } from "../shared/paths.js";
  * Output: output/alerts/roads/current.json + history.jsonl
  */
 import { createLogger } from "../logger.js";
+import { decodeHtmlEntities, removeElements, stripTags } from "../utils.js";
 import { currentRegionConfig } from "../region_config.js";
 import { existsSync, readFileSync, mkdirSync } from "fs";
 import { mkdir } from "fs/promises";
@@ -147,13 +148,8 @@ export async function fetchRouteConditionsText(route: string): Promise<string> {
     throw new Error("Caltrans highway-conditions returned " + response.status + " for route " + route);
   }
   const raw = await response.text();
-  const noScripts = raw.replace(/<script[\s\S]*?<\/script>/gi, " ");
-  const text = noScripts
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&#39;/g, "'")
-    .replace(/&quot;/g, '"');
+  const noScripts = removeElements(raw, ["script"], " ");
+  const text = decodeHtmlEntities(stripTags(noScripts, " "));
   const asOf = text.indexOf("reported as of");
   if (asOf === -1) {
     throw new Error("Caltrans highway-conditions response for route " + route + " had no condition report");

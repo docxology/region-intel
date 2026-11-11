@@ -17,6 +17,7 @@ import { outputRoot } from "../shared/paths.js";
  * Output: output/alerts/schools/current.json + history.jsonl
  */
 import { createLogger } from "../logger.js";
+import { removeElements, stripTags } from "../utils.js";
 import { currentRegionConfig } from "../region_config.js";
 import { existsSync, readFileSync, mkdirSync } from "fs";
 import { mkdir } from "fs/promises";
@@ -169,7 +170,7 @@ function extractHeadlineText(html: string): string {
 /** A current acquisition cannot turn an undated announcement into today's closure. */
 export function parseSchoolClosurePage(html: string, sourceUrl: string, asOf: Date = new Date()): SchoolClosureItem[] {
   const today = pacificDay(asOf);
-  const visible = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const visible = stripTags(removeElements(html, ['script', 'style']), ' ').replace(/\s+/g, ' ').trim();
   if (visible.length < 40 || !/del norte|dnusd|dusd/i.test(visible) || /(?:sign in|log in) to (?:continue|view)|access denied|just a moment/i.test(extractHeadlineText(html))) throw new Error('District response does not establish a usable announcement page');
   const blocks = [...html.matchAll(/<article\b[^>]*>([\s\S]*?)<\/article>/gi)].map(match => match[1]!);
   const candidates = blocks.length ? blocks : [html];

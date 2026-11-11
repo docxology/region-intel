@@ -16,6 +16,7 @@ import { boundedHttpFetch as fetch, type TransportOptions } from "../shared/tran
  * Output: output/fishing/fishing-<timestamp>.json
  */
 import { createLogger } from "../logger.js";
+import { decodeHtmlEntities, stripTags } from "../utils.js";
 import { currentRegionConfig } from "../region_config.js";
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
@@ -95,18 +96,11 @@ export function extractBulletinBody(html: string): string {
     text = pMatches.map(m => m[1]).join("\n\n");
   } else {
     // Fallback: strip all HTML tags
-    text = body.replace(/<[^>]+>/g, "").trim();
+    text = stripTags(body).trim();
   }
 
   // Decode common HTML entities
-  text = text
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+  text = decodeHtmlEntities(text)
     .replace(/\s*\n\s*/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();

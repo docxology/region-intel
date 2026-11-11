@@ -29,7 +29,7 @@ import { createLogger } from "../logger.js";
 import { currentRegionConfig } from "../region_config.js";
 import { mkdir } from "fs/promises";
 import { join } from "path";
-import { computeSha256 } from "../utils.js";
+import { computeSha256, decodeHtmlEntities } from "../utils.js";
 import {
   writeJsonAtomic,
   appendBoundedJsonlSync,
@@ -103,13 +103,7 @@ export interface PermitsReport {
 
 /** Decode the handful of entities the MyGov page uses. */
 function decodeEntities(text: string): string {
-  return text
-    .replace(/&amp;/g, "&")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&#39;/g, "'")
-    .replace(/&quot;/g, '"')
+  return decodeHtmlEntities(text)
     .replace(/\s+/g, " ")
     .trim();
 }

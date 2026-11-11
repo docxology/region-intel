@@ -34,6 +34,7 @@ import { boundedHttpFetch as fetch } from "../shared/transport.js";
  * Output: output/alerts/uscg/current.json + history.jsonl
  */
 import { createLogger } from "../logger.js";
+import { decodeHtmlEntities, removeElements, stripTags as stripMarkup } from "../utils.js";
 import { currentRegionConfig } from "../region_config.js";
 import { existsSync, mkdirSync, readFileSync } from "fs";
 import { mkdir } from "fs/promises";
@@ -122,19 +123,13 @@ export const NORTH_COAST_KEYWORDS = [
 
 /** Strip tags and decode the handful of entities NAVCEN pages use. */
 function stripTags(html: string): string {
-  return html
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&#\d+;/g, " ")
+  return decodeHtmlEntities(stripMarkup(html, " "))
     .replace(/\s+/g, " ")
     .trim();
 }
 
 function removeScriptBlocks(html: string): string {
-  return html.replace(/<(script|style)[\s\S]*?<\/\1>/gi, "");
+  return removeElements(html, ["script", "style"]);
 }
 
 /**
