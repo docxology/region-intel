@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build:
     name: Collect, validate and stage public edition
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # Playwright 1.58 cannot install on Ubuntu 26.04; unpin after the Playwright upgrade (#3)
     if: github.repository == 'docxology/crescent-city-intel'
     timeout-minutes: 60
     env:
