@@ -19,7 +19,7 @@ env:
 jobs:
   weekly-health-check:
     name: Tests and current-run monitor health
-    runs-on: ubuntu-24.04  # Playwright 1.58 cannot install on Ubuntu 26.04; unpin after the Playwright upgrade (#3)
+    runs-on: ubuntu-latest
     if: github.repository == 'docxology/crescent-city-intel'
     timeout-minutes: 35
     steps:
@@ -27,6 +27,7 @@ jobs:
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # oven-sh/setup-bun@v2.2.0
         with:
           bun-version: ${{ env.BUN_VERSION }}
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends poppler-utils
       - run: bun install --frozen-lockfile
       - name: Install Chromium for real browser tests
         run: bunx playwright install --with-deps chromium
@@ -56,7 +57,7 @@ jobs:
           retention-days: 30
   full-scrape:
     name: Acquire verified corpus (manual)
-    runs-on: ubuntu-24.04  # Playwright 1.58 cannot install on Ubuntu 26.04; unpin after the Playwright upgrade (#3)
+    runs-on: ubuntu-latest
     timeout-minutes: 120
     if: github.event_name == 'workflow_dispatch' && inputs.run_scrape
     needs: weekly-health-check
@@ -87,7 +88,7 @@ jobs:
   verify-data-integrity:
     name: Verify transported corpus
     needs: full-scrape
-    runs-on: ubuntu-24.04  # Playwright 1.58 cannot install on Ubuntu 26.04; unpin after the Playwright upgrade (#3)
+    runs-on: ubuntu-latest
     if: github.repository == 'docxology/crescent-city-intel'
     timeout-minutes: 15
     steps:

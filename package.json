@@ -85,7 +85,7 @@
     "@xmldom/xmldom": "0.8.15",
     "cheerio": "1.2.0",
     "chromadb": "3.3.3",
-    "playwright": "1.58.2",
+    "playwright": "1.65.0",
     "typescript": "5.9.3"
   },
   "devDependencies": {
