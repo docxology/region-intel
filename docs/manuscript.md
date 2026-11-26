@@ -67,7 +67,7 @@ legal-importance score or civic-impact outcome is computed.
 
 The [scholarship record](scholarship.md) maps ten contextual references to the
 limited claims they support. Literature results never substitute for a regional
-evaluation. The [generic methods manuscript](region-methods-manuscript.md)
+evaluation. The [generic methods manuscript](manuscript/README.md)
 describes the shared/local boundary without relabelling Crescent observations.
 
 ## Complete native packet and replay
@@ -96,41 +96,36 @@ approval. Do not edit generated members to make them agree with prose.
 
 ## Retained reference manuscript
 
-The numbered sources under this repository's docs/manuscript directory retain
-the Crescent reference study and its own claim/evidence scope. They are not
-the Davis manuscript. Existing reference hydration remains available through
-the thin Python adapter; the route below is retained for that reference edition.
+The [Crescent reference sources](archive/crescent-manuscript/README.md) retain the original claim ledger and dated publication metadata. The compatibility hydrator still uses the analytics overview and writes a run-specific copy. Set `reference_output` to an absolute output root containing the intended reference overview so that hydrated reference files cannot shadow the shared methods manuscript.
 
-## Rendering with the shared template repository
+```bash
+bun run manuscript:check --reference
+CC_OUTPUT_DIR="$reference_output" bun run manuscript:hydrate
+CC_OUTPUT_DIR="$reference_output" bun run manuscript:check --hydrated
+```
 
-The external template renderer can consume this project through a temporary
-link. Set both paths to existing absolute checkouts; the example refuses to
-replace an existing link or directory:
+## Rendering the shared methods manuscript
 
-~~~bash
-CCI_TEMPLATE_CHECKOUT=/path/to/template
-CCI_PROJECT_CHECKOUT=/path/to/region-intel
-(
-  cd "$CCI_TEMPLATE_CHECKOUT" || exit 1
-  CCI_RENDER_LINK="$PWD/projects/working/region-intel"
-  if [ -e "$CCI_RENDER_LINK" ] || [ -L "$CCI_RENDER_LINK" ]; then
-    echo "Renderer link already exists; select an unused project slot." >&2
-    exit 1
-  fi
-  mkdir -p "$PWD/projects/working"
-  ln -s "$CCI_PROJECT_CHECKOUT" "$CCI_RENDER_LINK" || exit 1
-  trap 'unlink "$CCI_RENDER_LINK"' EXIT
-  uv run python scripts/pipeline/stage_03_render.py --project working/region-intel
-)
-~~~
+From a clean project checkout with Bun 1.4.2, use the locked dependencies and run the offline profile example. The fixture contains fictional municipal document metadata. The command checks the counts, writes the CSV and JSON to `output/offline-corpus/`, and stages the existing architecture figure and registry in `output/figures/`.
 
-The renderer invokes `scripts/z_generate_manuscript_variables.py`, which
-delegates to Bun, then compiles `output/manuscript/` into PDF and HTML. The
-link must be removed after the render; the template repository is not a
-project dependency and no template source is changed by this workflow. Record
-the exact template commit, runtime/toolchain, hydration fingerprint, and actual
-PDF/HTML outputs for each acceptance run. Regenerate and render again when the
-analytics inputs change; a prior compile does not verify the latest metrics.
+```bash
+bun install --frozen-lockfile
+bun run docs:check
+bun run manuscript:check
+bun docs/manuscript/prepare-offline.ts
+```
+
+Use a separate [Template checkout](https://github.com/docxology/template/tree/87704feae0a4490ef7dad9c931d268e8c30273c2) pinned at `87704feae0a4490ef7dad9c931d268e8c30273c2`, with Pandoc, pandoc-crossref, and LaTeX installed as described in its [run guide](https://github.com/docxology/template/blob/87704feae0a4490ef7dad9c931d268e8c30273c2/docs/RUN_GUIDE.md). Set `region_checkout` to the absolute project checkout path and run these commands from the Template checkout. Use a fresh project output directory so the runner reads the checked-in manuscript.
+
+```bash
+uv sync --locked --no-dev
+mkdir -p projects/working
+ln -s "$region_checkout" projects/working/region-intel
+uv run --no-sync python scripts/pipeline/stage_03_render.py --project working/region-intel --skip-manuscript-hydration
+uv run --no-sync python scripts/pipeline/stage_04_validate.py --project working/region-intel
+```
+
+Find the combined PDF in `output/pdf/`, HTML at `output/web/index.html`, and validation and provenance reports in `output/reports/` within the project checkout. The shared methods manuscript uses the synthetic fixture and conceptual diagram. Its checks measure artifact integrity and observed fixture structure.
 
 ## Publication checks
 

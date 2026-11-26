@@ -11,9 +11,9 @@ This is the only item-level backlog. It contains acceptance that requires real
 source access, external consumers, independent interpretation or production
 operation.
 Implementation descriptions and measured receipts live in the
-[current-state review](docs/project-review.md) and module guides; release
-history lives only in [CHANGELOG.md](CHANGELOG.md). The
-[roadmap](docs/roadmap.md) gives the delivery sequence without duplicating tasks.
+[current-state review](project-review.md) and module guides; release
+history lives only in [CHANGELOG.md](../CHANGELOG.md). The
+[roadmap](roadmap.md) gives the delivery sequence without duplicating tasks.
 
 Size describes the remaining work, not urgency. **Medium** crosses an external
 integration or operating boundary; **major** requires representative collection
@@ -50,7 +50,7 @@ a paid-provider budget or permanent service operation.
 ### M30 · P2 · Accept another explicitly configured civic deployment
 
 - **Existing contract:** Validated immutable public profiles (`civic-profile/v1`) and regional adapter policy (`region-config/v1`, `src/region_config.ts`), isolated roots and namespaces, municipal source identity admission, generic geography/calendar/news/coverage methods and profile-bound lexical/vector receipts. The 20 hazard/operational monitors read their zones, stations, counties, FIPS codes, route lists, watch boxes, endpoints and thresholds from the region document at call time. Synthetic non-Pacific tests exercise contamination and invalid-configuration failures.
-- **Completed implementation:** The public Davis consumer pins the same shared package as Crescent, uses independent inland configuration and namespaces, and has a complete accepted 290-article/2541-section seed. Its [edition receipt](https://github.com/docxology/davis-ca-intel/blob/main/docs/edition.md) and hosted workflows retain their exact evidence scope; the shared [deployment contract](docs/deployments.md) describes the generic dashboard and routing.
+- **Completed implementation:** The public Davis consumer pins the same shared package as Crescent, uses independent inland configuration and namespaces, and has a complete accepted 290-article/2541-section seed. Its [edition receipt](https://github.com/docxology/davis-ca-intel/blob/main/docs/edition.md) and hosted workflows retain their exact evidence scope; the shared [deployment contract](deployments.md) describes the generic dashboard and routing.
 - **Remaining evidence:** Independently reviewed local domain/legal interpretation, representative live-source coverage and an independently owned persistent scheduler/host plan. Regional hazard/utility/road/fisheries adapters need their actual geographic policy and coverage; supplying region parameters is not evidence a provider or local coverage exists, and they are not enabled by changing labels.
 - **Acceptance:** Capture source/seed/configuration fingerprints; verify native indexes, calendar timezone evidence, no cross-jurisdiction records, public artifact/browser/replay identity and distinct scheduler ownership. Validate real provider availability and source rights, and record unsupported capabilities. Synthetic fixtures do not establish deployment or request-level multitenancy.
 
@@ -58,7 +58,7 @@ a paid-provider budget or permanent service operation.
 
 ### L03 · P2 · Independently assess semantic support and civic usefulness
 
-- **Existing contract:** Versioned retrieval/context evaluations and private claim/source/span-bound annotation packages. The [dated native receipt](docs/evidence/rag-native-2026-10-01.json) records 6/6 applicable listed-section retrieval hits, 6/8 mechanical disposition matches, zero generation errors, and context replay with 16/16 generated answers and 14/16 expected diagnostics. Mismatches remain retained; semantic support, source independence and legal currency remain unassessed.
+- **Existing contract:** Versioned retrieval/context evaluations and private claim/source/span-bound annotation packages. The [dated native receipt](evidence/rag-native-2026-10-01.json) records 6/6 applicable listed-section retrieval hits, 6/8 mechanical disposition matches, zero generation errors, and context replay with 16/16 generated answers and 14/16 expected diagnostics. Mismatches remain retained; semantic support, source independence and legal currency remain unassessed.
 - **Remaining evidence:** Independent human review of representative source-backed answers, abstentions, negation, quantities, conditions, dependent copies and stale/poisoned context, plus useful reader tasks.
 - **Acceptance:** Bind each review to exact corpus/context/answer/model/configuration bytes and named review provenance; record disagreement and failure cases. Imported reviewer labels and literal citation presence cannot establish reviewer identity, factuality, legal currency or independent corroboration.
 - **Ownership/dependencies:** Review and evaluation owners; explicit budget ownership before paid providers, and L05/L06 primary-source interpretation where applicable.

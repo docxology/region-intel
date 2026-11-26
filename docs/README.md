@@ -13,10 +13,7 @@ Documentation for the pipeline covers scraping, verification,
 export, web viewer, RAG chat, streaming, monitoring, alerting, structured
 queries, legal analysis, and civic intelligence domains.
 
-The [full project guide](../README.md) is also the authority for the
-[GitHub landing README](../.github/README.md). Run `bun run docs:generate` after
-editing it or the source-derived inventories, and `bun run docs:check` to verify
-the generated copies and repository links before publication.
+The [Crescent compatibility guide](reference-application.md) documents the retained reference application. The [root README](../README.md) supplies the generated [GitHub landing page](../.github/README.md). Run `bun run docs:generate` after editing the root README or inventory inputs, and `bun run docs:check` for generated-document drift.
 
 ## Contents
 
@@ -24,7 +21,7 @@ the generated copies and repository links before publication.
 | :--- | :--- |
 | [Deployment contract](deployments.md) | Installed-package ownership, command routing, regional configuration and upgrades |
 | [Operations](operations.md) | Fresh-clone checks, candidate promotion, delivery and troubleshooting |
-| [Regional methods manuscript](region-methods-manuscript.md) | Shared architecture without inherited empirical findings |
+| [Regional methods manuscript](manuscript/README.md) | Shared architecture without inherited empirical findings |
 | [Setup Guide](setup.md) | Step-by-step installation and first-run instructions |
 | [Architecture](architecture.md) | System design, data flow diagrams, full module dependency graph |
 | [Configuration](configuration.md) | All env vars, constants, and tuning parameters |
@@ -35,8 +32,10 @@ the generated copies and repository links before publication.
 | [Region-Intel](region-intel.md) | Completed repository split and shared versus consumer ownership |
 | [Project Review](project-review.md) | Current-state findings, cleanup decisions, and verification receipts |
 | [Roadmap](roadmap.md) | Future priorities, dependencies, and delivery sequence |
-| [Open Backlog](../TODO.md) | Minor, medium, and major improvement scopes with acceptance criteria |
-| [Manuscript](manuscript.md) | Independent regional review manuscripts and the retained reference study; evidence, hydration and native rendering |
+| [Open Backlog](TODO.md) | Minor, medium, and major improvement scopes with acceptance criteria |
+| [Manuscript rendering and verification](manuscript.md) | Shared offline example, regional review packets, and the retained reference hydration path |
+| [Crescent reference study](archive/crescent-manuscript/README.md) | Historical source edition with its original claim ledger |
+| [Contributing](CONTRIBUTING.md) | Development practices for the shared package |
 | **Module Guides** | |
 | [Scraping](modules/scraping.md) | Browser, TOC, content extraction, and scraper orchestrator |
 | [Verification](modules/verification.md) | Local custody/replay, current TOC, live sample, and publication binding |
@@ -83,7 +82,7 @@ When modifying source code:
 - [Region-intel: generic core and configured orchestration](region-intel.md) —
   the completed extraction and shared versus consumer ownership.
 
-- [Regional methods manuscript](region-methods-manuscript.md) — shared architecture without inherited empirical findings.
+- [Regional methods manuscript](manuscript/README.md) — shared architecture without inherited empirical findings.
 - [Deployment contract](deployments.md) — thin consumers and installed-package ownership.
 
 - [Scholarship and claim use](scholarship.md) — primary-source reading scope and bibliographic decisions.

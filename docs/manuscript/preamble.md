@@ -15,4 +15,3 @@ The shared renderer injects the following packages into the PDF:
 \newtheorem{remark}{Remark}
 \newtheorem{example}{Example}
 ```
-~~~

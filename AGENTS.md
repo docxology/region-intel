@@ -291,11 +291,11 @@ enables the optional keyed ZIP endpoint.
 
 - `docs/` — module docs (`docs/modules/`), architecture, setup, configuration,
   api-reference. Repo conventions live there too.
-- [TODO.md](TODO.md) — the single item-level backlog.
+- [TODO.md](docs/TODO.md) — the single item-level backlog.
 - `docs/roadmap.md` — strategy.
 - `docs/project-review.md` — current-state audit, cleanup decisions, and verification receipts.
 - [CHANGELOG.md](CHANGELOG.md) — the ONLY version history.
-- [ISA.md](ISA.md) — frozen 2026-07 build archive, not current guidance.
+- [ISA.md](docs/archive/crescent-implementation-2026-07.md) — frozen 2026-07 build archive, not current guidance.
 
 ## Known limitations
 

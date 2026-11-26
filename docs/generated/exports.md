@@ -949,7 +949,7 @@ Qualified source exports, independent of similarly named symbols in other module
 | [src/logger.ts:13](../../src/logger.ts#L13) | `LogLevel` | type | `8467f02a562f0fd4013052351da2575080fd2e3e58d2fca41bd2ff9a02ea1328` |
 | [src/logger.ts:57](../../src/logger.ts#L57) | `redactLogValue` | function | `b343f6dfd5e8323ba2832436292232237abdf48051f4a8f01132322addb08efc` |
 | [src/logger.ts:47](../../src/logger.ts#L47) | `setLogLevel` | function | `fde4db1b6ed809119d6d57e7250fedeff889092207f65fb564e2f4bde7424d60` |
-| [src/manuscript_document.ts:9](../../src/manuscript_document.ts#L9) | `validateManuscript` | function | `c3f5e16519f6166ff33c5ecc31dfc7d522bf74941e34c07fb87c37b9f14b9391` |
+| [src/manuscript_document.ts:9](../../src/manuscript_document.ts#L9) | `validateManuscript` | function | `b5f861dcce6efcb96694b556ed6c79e3347dc6792048e196c9ec9965d55f65b7` |
 | [src/manuscript_hydration.ts:11](../../src/manuscript_hydration.ts#L11) | `hydrateManuscript` | function | `8f97d84a1bd41d2f4020aac7d9d99c66240c709fe635e8d6bc9f3a444d4b38fb` |
 | [src/manuscript_variables.ts:10](../../src/manuscript_variables.ts#L10) | `MANUSCRIPT_VARIABLE_NAMES` | value | `31e45566e7c34329dfaa753194629087139f9d473de911292d86434927982f70` |
 | [src/manuscript_variables.ts:72](../../src/manuscript_variables.ts#L72) | `renderableManuscriptTokenNames` | function | `e97f0fd2f059223365f92ebb225b62d67e9668ed6cef407be594b5d00b6d7692` |

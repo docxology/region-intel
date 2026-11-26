@@ -108,5 +108,5 @@ They do not substitute for native Chroma/model or live alternate-source evidence
 Another deployed civic platform requires reviewed provider descriptors and local
 domain content, municipality-specific presentation and scheduler ownership,
 independent namespace/root admission, and actual source/host/publication
-acceptance. The open acceptance scope belongs in [TODO.md](../TODO.md), alongside
+acceptance. The open acceptance scope belongs in [TODO.md](TODO.md), alongside
 the existing live-source, human interpretation and production-operation scopes.

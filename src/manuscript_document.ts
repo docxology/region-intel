@@ -6,9 +6,9 @@ import { MANUSCRIPT_VARIABLE_NAMES } from "./manuscript_variables.js";
 import { publicationHash } from "./publication_bundle.js";
 import { paths } from "./shared/paths.js";
 
-export async function validateManuscript(options: { root?: string; hydrated?: boolean; variableNames?: ReadonlySet<string> } = {}): Promise<string[]> {
+export async function validateManuscript(options: { root?: string; sourceDir?: string; hydrated?: boolean; variableNames?: ReadonlySet<string> } = {}): Promise<string[]> {
 const root = options.root ?? process.cwd();
-const sourceDir = join(root, "docs", "manuscript");
+const sourceDir = options.sourceDir ?? join(root, "docs", "manuscript");
 const hydrated = options.hydrated ?? false;
 const errors: string[] = [];
 

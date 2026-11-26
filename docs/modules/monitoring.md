@@ -180,7 +180,7 @@ outcome. Discovered PDF attachments retain document/context dates and cannot
 independently schedule a meeting; only an explicitly occurrence-eligible dated
 non-PDF notice can supply an event. Empty, blocked or unrecognized archives do
 not establish completeness. Additional access and coverage acceptance remains
-source-specific under [TODO L05](../../TODO.md).
+source-specific under [TODO L05](../TODO.md).
 
 ### County CivicClerk acquisition
 

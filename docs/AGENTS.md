@@ -11,7 +11,7 @@ Comprehensive project documentation covering architecture, all src/ modules, API
 | `README.md` | Documentation index with links to all sections |
 | `deployments.md` | Installed-package ownership, deployment contract and command routing |
 | `operations.md` | Consumer acceptance, safe corpus promotion, publication and troubleshooting |
-| `region-methods-manuscript.md` | Generic architectural methods without regional empirical claims |
+| `manuscript/` | Generic architectural methods without regional empirical claims |
 | `architecture.md` | System architecture, data flow diagram, module dependency graph |
 | `region-intel.md` | Completed extraction and shared versus consumer ownership |
 | `api-reference.md` | Selected module exports; OpenAPI is the HTTP route authority |
@@ -54,6 +54,6 @@ When modifying source code:
 2. Update `docs/api-reference.md` if adding new exports.
 3. Update `docs/configuration.md` if adding new env vars or constants.
 4. Update `docs/architecture.md` if module relationships change.
-5. Edit root `README.md` for project guidance and run `bun run docs:generate`.
-   GitHub displays its complete generated `.github/README.md` projection;
+5. Edit root `README.md` for the project entry point and run `bun run docs:generate`.
+   GitHub displays the generated `.github/README.md` projection;
    the release gate checks exact drift alongside the generated inventories.
