@@ -9,7 +9,7 @@ Delivery proceeds from measured reliability to useful coverage. The operating
 platform uses bounded owned producers, current-cycle source validity, shared
 versioned artifact/API definitions, explicit GUI modules and retained input/
 transformation/output custody. The [current-state review](project-review.md)
-states these contracts and their evidence limits. [TODO.md](../TODO.md) is the
+states these contracts and their evidence limits. [TODO.md](TODO.md) is the
 only item-level backlog; [CHANGELOG.md](../CHANGELOG.md) is the only version
 history.
 

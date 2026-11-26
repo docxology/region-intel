@@ -62,12 +62,7 @@ must not be described as Davis coverage.
 
 ## Manuscript and documentation
 
-All generic method/module documentation and manuscript tooling are maintained
-here. `docs/manuscript/` is the retained evidence-bound reference manuscript;
-its numerical claims concern its recorded Crescent edition only. Regional
-manuscript notes must cite their own input artifacts. Do not relabel the
-reference manuscript's findings as Davis results. Native PDF/DOCX rendering is
-an optional external toolchain and requires inspection of its own outputs.
+The [shared methods manuscript](manuscript/README.md) covers package architecture and the offline synthetic corpus example. The [retained Crescent study](archive/crescent-manuscript/README.md) has its own evidence ledger and dated scope. Regional manuscripts cite their own input artifacts. [Manuscript verification](manuscript.md) documents the external renderer and the distinct regional publication receipts.
 
 ## Workflows and publication
 

@@ -50,4 +50,4 @@ personal destinations remain private and outside Pages artifacts.
 Real local HTTP/encryption fixtures exercise the delivery protocol. They do not
 establish an actual user's browser display, remote destination delivery or
 permanent subscriptions. Opted-in destination acceptance is the narrow remaining
-notification scope in [TODO.md](../../TODO.md).
+notification scope in [TODO.md](../TODO.md).

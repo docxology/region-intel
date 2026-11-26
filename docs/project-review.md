@@ -32,7 +32,7 @@ city.
 The [release acceptance receipt](release-acceptance.json) names measured checks
 and snapshot identity: read its version, date and scope before attributing a
 result to the current tree. A receipt for an older release does not certify a
-later source change. [TODO.md](../TODO.md) is the only open item-level backlog;
+later source change. [TODO.md](TODO.md) is the only open item-level backlog;
 [CHANGELOG.md](../CHANGELOG.md) is the only version history.
 
 ## Source-discovery review, 2026-10-28

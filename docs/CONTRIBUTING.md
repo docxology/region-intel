@@ -5,14 +5,14 @@ Thank you for your interest in contributing! This project is licensed under **CC
 Generic adapters, algorithms, APIs, interfaces, contracts, tests and method
 documentation belong in this repository. Regional identity, policy, evidence,
 source rights and delivery workflows belong in the corresponding thin consumer.
-Read the [deployment contract](docs/deployments.md) before changing that seam.
+Read the [deployment contract](deployments.md) before changing that seam.
 Keep the two consumers on reviewed immutable package commits; a local core edit
 does not update their installed dependencies.
 
 ## Getting Started
 
 1. Fork and clone the repository
-2. Follow [docs/setup.md](docs/setup.md) to set up your environment
+2. Follow [docs/setup.md](setup.md) to set up your environment
 3. Run `bun run validate` to verify strict types, deterministic tests, contracts, and generated state
 
 ## Development Workflow
@@ -66,7 +66,7 @@ When modifying source code:
 5. Run `bun run docs:generate` and `bun run docs:check`; commit the generated
    `.github/README.md` with its root authority and any changed inventories
 6. Check the affected installed consumers and freshly exported Pages artifacts;
-   see [operations](docs/operations.md) for the separate acceptance scopes
+   see [operations](operations.md) for the separate acceptance scopes
 
 ## Pull Request Guidelines
 
@@ -78,4 +78,4 @@ When modifying source code:
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the [CC BY-SA 4.0](LICENSE) license. You must give appropriate attribution and share derivative works under the same terms.
+By contributing, you agree that your contributions will be licensed under the [CC BY-SA 4.0](../LICENSE) license. You must give appropriate attribution and share derivative works under the same terms.

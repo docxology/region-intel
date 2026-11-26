@@ -285,6 +285,7 @@ export async function runReleaseGate(options: { only?: "contracts" | "all" } = {
   run({ name: "TypeScript strict check", args: ["bunx", "tsc", "--noEmit"] });
   run({ name: "Strict test TypeScript", args: ["bunx", "tsc", "--project", "tsconfig.tests.json", "--noEmit"] });
   run({ name: "Manuscript source contract", args: ["bun", "run", "manuscript:check"] });
+  run({ name: "Crescent reference source contract", args: ["bun", "run", "manuscript:check", "--reference"] });
   if (!contractsOnly && existsSync(paths.analyticsOverview)) {
     run({ name: "Manuscript evidence hydration", args: ["bun", "run", "manuscript:hydrate"] });
     run({ name: "Hydrated manuscript contract", args: ["bun", "run", "scripts/validate-manuscript.ts", "--hydrated"] });

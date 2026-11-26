@@ -15,6 +15,8 @@ explains operational choices; the generated inventory is the exhaustive literal
 source reference. `bun run scripts/generate-docs.ts --check` rejects drift with
 the affected filename; `--write` regenerates current inventories.
 
+The [offline manuscript example](manuscript.md#rendering-the-shared-methods-manuscript) uses the checked-in fixture and project-local output. It needs Bun and a local renderer.
+
 ## Civic jurisdiction configuration
 
 `CIVIC_PROFILE` selects a strictly validated public JSON profile once per process.

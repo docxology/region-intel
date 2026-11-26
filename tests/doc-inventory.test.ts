@@ -17,7 +17,7 @@ import { documentedSourcePaths } from "../src/doc_inventory.ts";
 const root = process.cwd();
 const read = (relative: string): string => readFileSync(join(root, relative), "utf8");
 
-const DOC_FILES = ["README.md", ".github/README.md", "AGENTS.md", "docs/README.md", "docs/architecture.md", "docs/roadmap.md", "docs/modules/alerts.md", "docs/modules/monitoring.md", "docs/modules/pages.md", "docs/modules/events.md", "docs/modules/gui.md"];
+const DOC_FILES = ["README.md", "docs/reference-application.md", ".github/README.md", "AGENTS.md", "docs/README.md", "docs/architecture.md", "docs/roadmap.md", "docs/modules/alerts.md", "docs/modules/monitoring.md", "docs/modules/pages.md", "docs/modules/events.md", "docs/modules/gui.md"];
 
 describe("documented version numbers match the shipped version", () => {
   const version = (JSON.parse(read("package.json")) as { version: string }).version;
@@ -61,10 +61,10 @@ describe("documented inventories match the code", () => {
     expect(SEVERITY_MONITOR_KEYS.map(key => key.toLowerCase()).sort()).toEqual([...MONITOR_KEYS].sort());
   });
 
-  test("the domain count in the README sample matches src/domains.ts", async () => {
+  test("the domain count in the compatibility guide sample matches src/domains.ts", async () => {
     const { domains } = await import("../src/domains.ts");
     const count = Array.isArray(domains) ? domains.length : Object.keys(domains).length;
-    const readme = read("README.md");
+    const readme = read("docs/reference-application.md");
     const sample = /\/api\/domains\s+HTTP 200\s+array len=(\d+)/.exec(readme);
     expect(sample).not.toBeNull();
     expect(`README sample domain count: ${sample![1]}`).toBe(`README sample domain count: ${count}`);
@@ -75,7 +75,7 @@ describe("documented inventories match the code", () => {
 
   test("every module the docs list under src/ actually exists", () => {
     const listed = new Set<string>();
-    for (const file of ["README.md", "AGENTS.md"]) {
+    for (const file of ["docs/reference-application.md", "AGENTS.md"]) {
       for (const match of read(file).matchAll(/^\s*([a-z_0-9]+\.ts)\s+#/gm)) listed.add(match[1]!);
     }
     expect(listed.size).toBeGreaterThan(10);

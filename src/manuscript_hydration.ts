@@ -10,7 +10,7 @@ import { writeJsonAtomic, writeTextAtomic } from "./shared/source_health.js";
 import { promotePublicationDirectory, publicationHash } from "./publication_bundle.js";
 export async function hydrateManuscript(options: { root?: string; allowDraft?: boolean } = {}): Promise<{ fileCount: number; inputFingerprint: string }> {
 const root = options.root ?? process.cwd();
-const sourceDir = join(root, "docs", "manuscript");
+const sourceDir = join(root, "docs", "archive", "crescent-manuscript");
 const allowDraft = options.allowDraft ?? false;
 
 async function readOverview(): Promise<AnalyticsOverview> {
@@ -63,7 +63,7 @@ async function main(): Promise<{ fileCount: number; inputFingerprint: string }> 
   const variables = valuesFromOverview(overview);
   await mkdir(dirname(paths.manuscriptOutput), { recursive: true });
   const staging = await mkdtemp(join(dirname(paths.manuscriptOutput), ".manuscript-build-"));
-  const sourceFiles = (await readdir(sourceDir)).filter(file => file.endsWith(".md") && !["AGENTS.md", "README.md", "SYNTAX.md"].includes(file)).sort();
+  const sourceFiles = (await readdir(sourceDir)).filter(file => file.endsWith(".md") && !["AGENTS.md", "README.md", "SYNTAX.md", "MANUSCRIPT_STATUS.md"].includes(file)).sort();
   try {
   for (const file of sourceFiles) {
     const source = await readFile(join(sourceDir, file), "utf8");

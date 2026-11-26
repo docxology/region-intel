@@ -1,0 +1,22 @@
+{
+  "articles": [
+    {
+      "guid": "fixture-a",
+      "number": "A",
+      "title": "Public library schedules",
+      "sections": [{ "id": "A1" }, { "id": "A2" }]
+    },
+    {
+      "guid": "fixture-b",
+      "number": "B",
+      "title": "Community garden notices",
+      "sections": []
+    },
+    {
+      "guid": "fixture-c",
+      "number": "C",
+      "title": "Parks volunteer calendar",
+      "sections": [{ "id": "C1" }, { "id": "C2" }]
+    }
+  ]
+}
