@@ -115,7 +115,7 @@ bun run manuscript:check
 bun docs/manuscript/prepare-offline.ts
 ```
 
-Use a separate [Template checkout](https://github.com/docxology/template/tree/87704feae0a4490ef7dad9c931d268e8c30273c2) pinned at `87704feae0a4490ef7dad9c931d268e8c30273c2`, with Pandoc, pandoc-crossref, and LaTeX installed as described in its [run guide](https://github.com/docxology/template/blob/87704feae0a4490ef7dad9c931d268e8c30273c2/docs/RUN_GUIDE.md). Set `region_checkout` to the absolute project checkout path and run these commands from the Template checkout. Use a fresh project output directory so the runner reads the checked-in manuscript.
+Use a separate [Template checkout](https://github.com/docxology/template/tree/87704feae0a4490ef7dad9c931d268e8c30273c2) pinned at `87704feae0a4490ef7dad9c931d268e8c30273c2`, with Pandoc, pandoc-crossref, and LaTeX installed as described in its [run guide](https://github.com/docxology/template/blob/87704feae0a4490ef7dad9c931d268e8c30273c2/docs/RUN_GUIDE.md). Set `region_checkout` to the absolute path of the physical checkout directory named `region-intel` and run these commands from the Template checkout. Use a fresh project output directory so the runner reads the checked-in manuscript.
 
 ```bash
 uv sync --locked --no-dev
